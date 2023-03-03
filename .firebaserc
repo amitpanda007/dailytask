@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "task2tick": {
+      "hosting": {
+        "today-ui": [
+          "task2tick"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "task2tick"
+  }
+}

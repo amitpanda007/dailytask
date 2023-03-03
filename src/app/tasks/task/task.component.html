@@ -1,0 +1,119 @@
+<div class="container">
+  <mat-card class="card">
+    <div class="header">
+      <h2 *ngIf="!isDateChanged" (click)="showCalender()" class="pointer">
+        Today
+      </h2>
+      <h2 *ngIf="isDateChanged" (click)="showCalender()" class="pointer">
+        {{ selectedDate | date : "MMM d, y" }}
+      </h2>
+      <div class="calender" *ngIf="isShowingCalender">
+        <mat-calendar
+          [selected]="selectedDate"
+          (selectedChange)="dateChanged($event)"
+        ></mat-calendar>
+        <mat-icon
+          [style.color]="selectedTheme"
+          aria-hidden="false"
+          aria-label="close"
+          class="pointer"
+          (click)="closeCalender()"
+          >close</mat-icon
+        >
+      </div>
+    </div>
+    <div class="content">
+      <input
+        cdkFocusInitial
+        class="text-input"
+        name="taskText"
+        type="email"
+        placeholder="Call Sam for discussion"
+        [(ngModel)]="taskText"
+        autocomplete="off"
+        (keyup.enter)="onEnter()"
+      />
+      <div cdkDropList class="listdata" (cdkDropListDropped)="drop($event)">
+        <div class="data" *ngFor="let task of tasks" cdkDrag>
+          <div class="task-data">
+            <!-- <svg viewBox="0 0 36 36" class="circular-chart">
+              <path
+                class="circle"
+                [attr.stroke-dasharray]="percentage"
+                d="M18 2.0845
+      a 15.9155 15.9155 0 0 1 0 31.831
+      a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg> -->
+            <mat-icon
+              aria-hidden="false"
+              aria-label="unchecked"
+              *ngIf="!task.status"
+              (click)="changeStatus(task)"
+              >radio_button_unchecked</mat-icon
+            >
+            <mat-icon
+              [style.color]="selectedTheme"
+              aria-hidden="false"
+              aria-label="checked"
+              *ngIf="task.status"
+              (click)="changeStatus(task)"
+              >check</mat-icon
+            >
+            <!-- <span class="task-text">{{ task.text }}</span> -->
+            <input
+              [(ngModel)]="task.text"
+              class="input"
+              (focus)="focusBoardTitle(task)"
+              (focusout)="focusOutBoardTitle(task)"
+            />
+            <div class="actions">
+              <mat-icon
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteTask(task)"
+                >delete</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <!-- <svg viewBox="0 0 36 36" class="circular-chart">
+        <path
+          class="circle"
+          [attr.stroke-dasharray]="percentage"
+          d="M18 2.0845
+      a 15.9155 15.9155 0 0 1 0 31.831
+      a 15.9155 15.9155 0 0 1 0 -31.831"
+        />
+      </svg> -->
+      <div *ngIf="enableTheme">
+        <span
+          class="circle"
+          [style.color]="selectedTheme"
+          (click)="toggleTheme()"
+        ></span>
+      </div>
+      <div *ngIf="!enableTheme">
+        <span class="circle-red1" (click)="selectTheme('red1')"></span>
+        <span class="circle-orange1" (click)="selectTheme('orange1')"></span>
+        <span class="circle-green1" (click)="selectTheme('green1')"></span>
+        <span class="circle-pink1" (click)="selectTheme('pink1')"></span>
+        <span class="circle-green2" (click)="selectTheme('green2')"></span>
+        <span class="circle-blue1" (click)="selectTheme('blue1')"></span>
+        <span class="circle-red2" (click)="selectTheme('red2')"></span>
+        <span class="circle-blue2" (click)="selectTheme('blue2')"></span>
+        <span class="close"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            (click)="toggleTheme()"
+            >close</mat-icon
+          ></span
+        >
+      </div>
+    </div>
+  </mat-card>
+</div>
