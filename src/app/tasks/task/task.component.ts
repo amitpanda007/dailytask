@@ -33,6 +33,19 @@ export class TaskComponent implements OnInit {
     blue2: '#609ef2',
   };
 
+  myHolidayFilter = (d: Date): boolean => {
+    const today = new Date();
+    return !(
+      new Date(
+        today.getFullYear() +
+          '-' +
+          (today.getMonth() + 1) +
+          '-' +
+          today.getDate()
+      ).getTime() <= d.getTime()
+    );
+  };
+
   // selectedTheme = this.themeColors.red2;
 
   tasks: Task[] = [];

@@ -9,17 +9,19 @@
       </h2>
       <div class="calender" *ngIf="isShowingCalender">
         <mat-calendar
+          class="calender-card"
+          [dateFilter]="myHolidayFilter"
           [selected]="selectedDate"
           (selectedChange)="dateChanged($event)"
         ></mat-calendar>
-        <mat-icon
+        <button
+          mat-button
           [style.color]="selectedTheme"
-          aria-hidden="false"
-          aria-label="close"
-          class="pointer"
+          [style.width.%]="100"
           (click)="closeCalender()"
-          >close</mat-icon
         >
+          close
+        </button>
       </div>
     </div>
     <div class="content">
