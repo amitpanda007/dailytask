@@ -1,0 +1,115 @@
+<div class="top-spacing">
+  <div class="container" *ngIf="!isResettingPassword">
+    <div class="title">Login</div>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off">
+      <div class="fields">
+        <div class="username">
+          <input
+            formControlName="email"
+            name="email"
+            type="email"
+            placeholder="email"
+            email
+          />
+        </div>
+        <div
+          *ngIf="
+            !f.email.errors &&
+            !loginForm.hasError('emailError') &&
+            (f.email.dirty || f.email.touched)
+          "
+          class="alert alert-valid"
+        >
+          <mat-icon>check</mat-icon>
+          Valid
+        </div>
+        <div
+          *ngIf="f.email.errors && (f.email.dirty || f.email.touched)"
+          class="alert alert-danger"
+        >
+          <div *ngIf="f.email.errors?.required">Email is required</div>
+        </div>
+        <div
+          *ngIf="
+            loginForm.hasError('emailError') &&
+            (f.email.dirty || f.email.touched)
+          "
+          class="alert alert-danger"
+        >
+          Not a valid email
+        </div>
+        <div class="password">
+          <div>
+            <input
+              formControlName="password"
+              name="password"
+              type="password"
+              placeholder="password"
+            />
+          </div>
+        </div>
+        <div
+          *ngIf="!f.password.errors && (f.password.dirty || f.password.touched)"
+          class="alert alert-valid"
+        >
+          <mat-icon>check</mat-icon>
+          Valid
+        </div>
+        <div
+          *ngIf="f.password.errors && (f.password.dirty || f.password.touched)"
+          class="alert alert-danger"
+        >
+          <div *ngIf="f.password.errors?.required">password is required</div>
+          <div *ngIf="f.password.errors?.minlength">
+            Password must be at least 8 characters long
+          </div>
+        </div>
+      </div>
+      <button
+        [ngClass]="{
+          'signin-button': loginForm.status == 'INVALID',
+          'signin-button-active': loginForm.status == 'VALID'
+        }"
+        type="submit"
+        [disabled]="loginForm.status == 'INVALID'"
+      >
+        Login
+      </button>
+      <div class="link">
+        <a (click)="toggleResetView()" class="pointer">Forgot password?</a> or
+        <a href="/register">Sign up</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="top-spacing">
+  <div class="container" *ngIf="isResettingPassword">
+    <div class="title">Password Reset</div>
+    <div class="fields">
+      <div class="username">
+        <input
+          name="email"
+          type="email"
+          placeholder="email"
+          required
+          [(ngModel)]="resetEmail"
+          (ngModelChange)="resetEmailChange()"
+        />
+      </div>
+      <button
+        [ngClass]="{
+          'signin-button': !resetEmailValid,
+          'signin-button-active': resetEmailValid
+        }"
+        [disabled]="!resetEmailValid"
+        (click)="passwordReset()"
+      >
+        Reset
+      </button>
+      <div class="link">
+        <a href="/login">Login</a> or <a href="/register">Sign up</a>
+      </div>
+    </div>
+  </div>
+</div>

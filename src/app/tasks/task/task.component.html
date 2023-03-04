@@ -1,10 +1,20 @@
 <div class="container">
   <mat-card class="card">
     <div class="header">
-      <h2 *ngIf="!isDateChanged" (click)="showCalender()" class="pointer">
+      <h2
+        *ngIf="!isDateChanged"
+        (click)="showCalender()"
+        class="pointer"
+        [style.color]="selectedTheme"
+      >
         Today
       </h2>
-      <h2 *ngIf="isDateChanged" (click)="showCalender()" class="pointer">
+      <h2
+        *ngIf="isDateChanged"
+        (click)="showCalender()"
+        class="pointer"
+        [style.color]="selectedTheme"
+      >
         {{ selectedDate | date : "MMM d, y" }}
       </h2>
       <div class="calender" *ngIf="isShowingCalender">
@@ -36,8 +46,11 @@
         (keyup.enter)="onEnter()"
       />
       <div cdkDropList class="listdata" (cdkDropListDropped)="drop($event)">
+        <div *ngIf="tasks.length == 0" class="no-task">
+          <p>No Task</p>
+        </div>
         <div class="data" *ngFor="let task of tasks" cdkDrag>
-          <div class="task-data">
+          <div class="task-data" *ngIf="tasks.length > 0">
             <!-- <svg viewBox="0 0 36 36" class="circular-chart">
               <path
                 class="circle"
@@ -66,11 +79,16 @@
             <input
               [(ngModel)]="task.text"
               class="input"
+              *ngIf="!task.status"
               (focus)="focusBoardTitle(task)"
               (focusout)="focusOutBoardTitle(task)"
             />
+            <p *ngIf="task.status" class="task-text">
+              <s>{{ task.text }}</s>
+            </p>
             <div class="actions">
               <mat-icon
+                [style.color]="selectedTheme"
                 aria-hidden="false"
                 aria-label="close"
                 (click)="deleteTask(task)"
@@ -91,14 +109,18 @@
       a 15.9155 15.9155 0 0 1 0 -31.831"
         />
       </svg> -->
-      <div *ngIf="enableTheme">
-        <span
-          class="circle"
-          [style.color]="selectedTheme"
-          (click)="toggleTheme()"
-        ></span>
-      </div>
-      <div *ngIf="!enableTheme">
+
+      <mat-icon
+        *ngIf="enableTheme"
+        [style.color]="selectedTheme"
+        aria-hidden="false"
+        aria-label="close"
+        class="mat-click"
+        [style.color]="selectedTheme"
+        (click)="toggleTheme()"
+        >add_circle</mat-icon
+      >
+      <span *ngIf="!enableTheme" class="color-select">
         <span class="circle-red1" (click)="selectTheme('red1')"></span>
         <span class="circle-orange1" (click)="selectTheme('orange1')"></span>
         <span class="circle-green1" (click)="selectTheme('green1')"></span>
@@ -107,15 +129,16 @@
         <span class="circle-blue1" (click)="selectTheme('blue1')"></span>
         <span class="circle-red2" (click)="selectTheme('red2')"></span>
         <span class="circle-blue2" (click)="selectTheme('blue2')"></span>
-        <span class="close"
+        <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
           ><mat-icon
             aria-hidden="false"
             aria-label="close"
+            class="mat-click"
             (click)="toggleTheme()"
-            >close</mat-icon
+            >cancel</mat-icon
           ></span
         >
-      </div>
+      </span>
     </div>
   </mat-card>
 </div>

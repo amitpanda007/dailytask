@@ -1,0 +1,30 @@
+<!-- Toolbar -->
+<div class="toolbar flex-display" role="banner">
+  <div>
+    <a href="/" class="flex-display"><mat-icon class="icon">home</mat-icon></a>
+  </div>
+  <div class="right">
+    <div class="bar" *ngIf="authService.loggedIn$ | async">
+      <span>Welcome, {{ authService.getUsername() }}</span>
+    </div>
+
+    <div class="bar">
+      <button
+        mat-icon-button
+        matTooltip="login"
+        *ngIf="!(authService.loggedIn$ | async)"
+        (click)="openLogin()"
+      >
+        <mat-icon>login</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="logout"
+        *ngIf="authService.loggedIn$ | async"
+        (click)="authService.logout()"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

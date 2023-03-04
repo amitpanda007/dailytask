@@ -26,7 +26,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  height: 480px;
+  max-height: 480px;
 }
 
 .listdata {
@@ -120,6 +120,16 @@
   width: 100%;
   background-color: #0000;
   color: #969696;
+  font-weight: 500;
+  font-size: 14px;
+  height: 24px !important;
+  border: 0;
+  margin: 0 0 0 1rem;
+  padding: 0;
+}
+
+.task-text {
+  width: 100%;
   font-weight: 500;
   font-size: 14px;
   height: 24px !important;
@@ -244,5 +254,26 @@
 }
 
 .pointer {
+  cursor: pointer;
+}
+
+.no-task {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  height: 4rem;
+}
+
+.no-task p {
+  font-size: 3rem;
+  color: #373737;
+}
+
+.color-select {
+  display: flex;
+  align-items: center;
+}
+
+.mat-click {
   cursor: pointer;
 }

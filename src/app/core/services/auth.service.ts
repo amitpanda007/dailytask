@@ -4,15 +4,35 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
-import { Observable } from 'rxjs';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from '@angular/fire/compat/firestore';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from 'src/app/auth/user';
 
 @Injectable()
 export class AuthService {
+  private usersCollection!: AngularFirestoreCollection<User>;
+
+  loggedIn = new BehaviorSubject<boolean>(false);
+  loggedIn$ = this.loggedIn.asObservable();
+
   constructor(
     private router: Router,
     private snackBar: MatSnackBar,
-    private auth: AngularFireAuth
-  ) {}
+    private auth: AngularFireAuth,
+    private afs: AngularFirestore
+  ) {
+    this.auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.loggedIn.next(true);
+      } else {
+        // not logged in
+        this.loggedIn.next(false);
+      }
+    });
+  }
 
   async register(user: any) {
     const { fullName, email, password } = user;
@@ -22,21 +42,22 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // Signed in
-        var user = userCredential.user;
+        let user = userCredential.user;
 
-        // resp.user.updateProfile({ displayName: fullName });
+        userCredential.user?.updateProfile({ displayName: fullName });
 
         // Save data to firebase collection
-        //   const UID = resp.user.uid;
-        //   const newUser: User = {
-        //     id: UID,
-        //     name: fullName,
-        //     email: resp.user.email,
-        //     creationDate: new Date(),
-        //   };
-        //   this._store.collection('users').doc(UID).set(newUser);
+        const UID = user?.uid;
+        const newUser: User = {
+          id: UID as string,
+          name: fullName,
+          email: user?.email as string,
+          creationDate: new Date(),
+        };
+        this.usersCollection = this.afs.collection<User>('users');
+        this.usersCollection.doc(UID).set(newUser);
 
-        this.router.navigate(['']);
+        this.router.navigate(['tasks']);
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -52,7 +73,7 @@ export class AuthService {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        this.router.navigate(['']);
+        this.router.navigate(['tasks']);
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -65,8 +86,21 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  resetUserPassword(email: string) {
+    return;
+  }
+
+  getUID() {
+    return firebase.auth().currentUser?.uid;
+  }
+
   isLoggedIn() {
     const currentUser = firebase.auth().currentUser;
     return !!currentUser;
+  }
+
+  getUsername() {
+    const displayName = firebase.auth().currentUser?.displayName;
+    return displayName;
   }
 }

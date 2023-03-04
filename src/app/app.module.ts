@@ -18,6 +18,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { TasksModule } from './tasks/tasks.module';
 import { CoreModule } from './core/core.module';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    AuthModule,
     CoreModule,
     TasksModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

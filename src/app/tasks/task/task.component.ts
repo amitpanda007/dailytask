@@ -42,7 +42,7 @@ export class TaskComponent implements OnInit {
           (today.getMonth() + 1) +
           '-' +
           today.getDate()
-      ).getTime() <= d.getTime()
+      ).getTime() < d.getTime()
     );
   };
 

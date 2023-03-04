@@ -1,0 +1,45 @@
+a,
+a:visited,
+a:hover {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.nav-padding {
+  padding: 0px 10px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.flex-display {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.bar {
+  margin: 0 1rem;
+}
+
+.bar span {
+  color: #969696;
+  font-weight: 700;
+}
+
+.bar mat-icon {
+  color: #969696;
+}
+
+.icon {
+  color: #969696;
+}

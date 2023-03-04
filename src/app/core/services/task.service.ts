@@ -5,6 +5,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Task } from 'src/app/tasks/task/task.component';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class TaskService {
@@ -15,7 +16,10 @@ export class TaskService {
   private allTasks: Task[] = [];
   public tasksChanged = new BehaviorSubject<Task[]>([]);
 
-  constructor(private afs: AngularFirestore) {}
+  constructor(
+    private afs: AngularFirestore,
+    private authService: AuthService
+  ) {}
 
   getTasks() {
     const date = new Date();
@@ -29,13 +33,17 @@ export class TaskService {
         '-' +
         (date.getDate() + 1)
     );
-    this.tasksCollection = this.afs.collection<Task>('tasks', (ref) => {
-      let query = ref
-        .where('created', '>', startDate)
-        .where('created', '<', endDate)
-        .orderBy('created');
-      return query;
-    });
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(
+      `tasks/${uid}/usertask`,
+      (ref) => {
+        let query = ref
+          .where('created', '>', startDate)
+          .where('created', '<', endDate)
+          .orderBy('created');
+        return query;
+      }
+    );
 
     // this.items = this.tasksCollection.valueChanges({ idField: 'id' });
 
@@ -59,13 +67,17 @@ export class TaskService {
         (date.getDate() + 1)
     );
 
-    this.tasksCollection = this.afs.collection<Task>('tasks', (ref) => {
-      let query = ref
-        .where('created', '>', startDate)
-        .where('created', '<', endDate)
-        .orderBy('created');
-      return query;
-    });
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(
+      `tasks/${uid}/usertask`,
+      (ref) => {
+        let query = ref
+          .where('created', '>', startDate)
+          .where('created', '<', endDate)
+          .orderBy('created');
+        return query;
+      }
+    );
 
     // this.items = this.tasksCollection.valueChanges({
     //   idField: 'id',
@@ -79,17 +91,20 @@ export class TaskService {
   }
 
   addTask(task: Task) {
-    this.tasksCollection = this.afs.collection<Task>('tasks');
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
     this.tasksCollection.add(task);
   }
 
   updateTask(task: Task) {
-    this.tasksCollection = this.afs.collection<Task>('tasks');
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
     this.tasksCollection.doc(task.id).set(task);
   }
 
   deleteTask(task: Task) {
-    this.tasksCollection = this.afs.collection<Task>('tasks');
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
     this.tasksCollection.doc(task.id).delete();
   }
 }
