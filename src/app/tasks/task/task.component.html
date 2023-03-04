@@ -53,7 +53,7 @@
           <div class="task-data" *ngIf="tasks.length > 0">
             <!-- <svg viewBox="0 0 36 36" class="circular-chart">
               <path
-                class="circle"
+                class="circle-svg"
                 [attr.stroke-dasharray]="percentage"
                 d="M18 2.0845
       a 15.9155 15.9155 0 0 1 0 31.831
@@ -110,27 +110,101 @@
         />
       </svg> -->
 
-      <mat-icon
-        *ngIf="enableTheme"
-        [style.color]="selectedTheme"
-        aria-hidden="false"
-        aria-label="close"
-        class="mat-click"
-        [style.color]="selectedTheme"
-        (click)="toggleTheme()"
-        >add_circle</mat-icon
-      >
+      <span>
+        <mat-icon
+          *ngIf="enableTheme"
+          [style.color]="selectedTheme"
+          aria-hidden="false"
+          aria-label="close"
+          class="mat-click"
+          matTooltip="change theme"
+          [style.color]="selectedTheme"
+          (click)="toggleTheme()"
+          >add_circle</mat-icon
+        >
+      </span>
       <span *ngIf="!enableTheme" class="color-select">
-        <span class="circle-red1" (click)="selectTheme('red1')"></span>
-        <span class="circle-orange1" (click)="selectTheme('orange1')"></span>
-        <span class="circle-green1" (click)="selectTheme('green1')"></span>
-        <span class="circle-pink1" (click)="selectTheme('pink1')"></span>
-        <span class="circle-green2" (click)="selectTheme('green2')"></span>
-        <span class="circle-blue1" (click)="selectTheme('blue1')"></span>
-        <span class="circle-red2" (click)="selectTheme('red2')"></span>
-        <span class="circle-blue2" (click)="selectTheme('blue2')"></span>
+        <span class="red1"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('red1')"
+            >trip_origin</mat-icon
+          >
+        </span>
+
+        <span class="orange1"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('orange1')"
+            >trip_origin</mat-icon
+          >
+        </span>
+
+        <span class="green1"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('green1')"
+            >trip_origin</mat-icon
+          >
+        </span>
+
+        <span class="pink1"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('pink1')"
+            >trip_origin</mat-icon
+          >
+        </span>
+
+        <span class="green2"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('green2')"
+            >trip_origin</mat-icon
+          >
+        </span>
+
+        <span class="blue1"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('blue1')"
+            >trip_origin</mat-icon
+          >
+        </span>
+        <span class="red2"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('red2')"
+            >trip_origin</mat-icon
+          >
+        </span>
+        <span class="blue2"
+          ><mat-icon
+            aria-hidden="false"
+            aria-label="close"
+            class="mat-click"
+            (click)="selectTheme('blue2')"
+            >trip_origin</mat-icon
+          >
+        </span>
+
         <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
           ><mat-icon
+            matTooltip="cancel"
             aria-hidden="false"
             aria-label="close"
             class="mat-click"

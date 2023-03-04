@@ -8,7 +8,7 @@
 
 .card {
   max-width: 450px;
-  max-height: 550px;
+  max-height: 80%;
   background: #191919;
   color: #dddddd;
   font: 400 16px/24px Inter, sans-serif;
@@ -16,6 +16,13 @@
   border: 1px solid rgb(255 255 255 / 10%);
   box-shadow: rgb(0 0 0 / 25%) 0px 2px 4px 0px,
     rgb(255 255 255 / 25%) 0px 2px 16px 0px;
+}
+
+@media screen and (max-width: 575px) {
+  .card {
+    max-width: 300px;
+    max-height: 80%;
+  }
 }
 
 .header {
@@ -170,60 +177,36 @@
   font-size: 50px;
 }
 
-.circle-red1:before {
-  cursor: pointer;
+.red1 {
   color: #fe1045;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-orange1:before {
-  cursor: pointer;
+.orange1 {
   color: #ed5728;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-green1:before {
-  cursor: pointer;
+.green1 {
   color: #40c19d;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-pink1:before {
-  cursor: pointer;
+.pink1 {
   color: #f86ca6;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-green2:before {
-  cursor: pointer;
+.green2 {
   color: #25b560;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-blue1:before {
-  cursor: pointer;
+.blue1 {
   color: #5a59ff;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-red2:before {
-  cursor: pointer;
+.red2 {
   color: #fc0f43;
-  content: " \25CF";
-  font-size: 50px;
 }
 
-.circle-blue2:before {
-  cursor: pointer;
+.blue2 {
   color: #609ef2;
-  content: " \25CF";
-  font-size: 50px;
 }
 
 .circular-chart {
@@ -234,7 +217,7 @@
   max-height: 30px;
 }
 
-.circle {
+.circle-svg {
   stroke: #4cc790;
   fill: none;
   stroke-width: 2.8;

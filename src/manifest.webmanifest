@@ -1,8 +1,8 @@
 {
-  "name": "today-ui",
-  "short_name": "today-ui",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Task 2 Tick",
+  "short_name": "Task",
+  "theme_color": "#191919",
+  "background_color": "#6c757d",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
