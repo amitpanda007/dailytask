@@ -44,6 +44,7 @@
         [(ngModel)]="taskText"
         autocomplete="off"
         (keyup.enter)="onEnter()"
+        [disabled]="isDateChanged"
       />
       <div cdkDropList class="listdata" (cdkDropListDropped)="drop($event)">
         <div *ngIf="tasks.length == 0" class="no-task">

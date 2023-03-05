@@ -3,6 +3,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Task } from 'src/app/tasks/task/task.component';
 import { AuthService } from './auth.service';
@@ -106,5 +107,19 @@ export class TaskService {
     const uid = this.authService.getUID();
     this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
     this.tasksCollection.doc(task.id).delete();
+  }
+
+  updateTaskSequence(tasks: Task[]) {
+    const uid = this.authService.getUID();
+    const db = firebase.firestore();
+    const batch = db.batch();
+
+    const taskRefs = tasks.map((t) =>
+      db.collection(`tasks/${uid}/usertask`).doc(t.id)
+    );
+    taskRefs.forEach((ref, idx) => {
+      batch.update(ref, { rank: tasks[idx].rank });
+    });
+    batch.commit();
   }
 }

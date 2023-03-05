@@ -77,6 +77,7 @@ export class TaskComponent implements OnInit {
     // });
     this.taskService.tasksChanged.subscribe((tasks: Task[]) => {
       console.log(tasks);
+      tasks.sort(this.compare);
       this.tasks = tasks;
     });
   }
@@ -85,15 +86,27 @@ export class TaskComponent implements OnInit {
     this.paramSubscription.unsubscribe();
   }
 
+  compare(a: any, b: any) {
+    if (a.rank < b.rank) {
+      return -1;
+    }
+    if (a.rank > b.rank) {
+      return 1;
+    }
+    return 0;
+  }
+
   onEnter() {
     if (this.taskText && this.taskText.trim().length > 0) {
       console.log(this.taskText);
+      const rank = this.tasks.length;
       const taskData: Task = {
         taskId: this.randomId(10),
         text: this.taskText,
         status: false,
         created: new Date(),
         modified: new Date(),
+        rank: rank,
       };
       this.tasks.push(taskData);
       this.taskText = '';
@@ -102,7 +115,20 @@ export class TaskComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    const changedTasks: Task[] = [];
+    const taskCopy = cloneDeep(this.tasks);
     moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+    taskCopy.forEach((tsk, i) => {
+      this.tasks.forEach((tsk1, j) => {
+        if (tsk.id == tsk1.id && i != j) {
+          const task = tsk;
+          task.rank = j;
+          changedTasks.push(task);
+        }
+      });
+    });
+    console.log(changedTasks);
+    this.taskService.updateTaskSequence(changedTasks);
   }
 
   changeStatus(task: Task) {
@@ -211,4 +237,5 @@ export interface Task {
   status: boolean;
   created: Date;
   modified: Date;
+  rank: number;
 }
