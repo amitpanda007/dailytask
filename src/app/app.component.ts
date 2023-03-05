@@ -20,6 +20,14 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.loggedIn$.subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.router.navigate(['tasks'], { relativeTo: this.route });
+      } else {
+        this.router.navigate(['']);
+      }
+    });
+
     if (navigator.onLine) {
       this.isOffline = false;
     } else {
@@ -38,12 +46,6 @@ export class AppComponent implements OnInit {
       this._snackBar.open('Back online', 'Cancel', {
         duration: 2000,
       });
-    });
-
-    this.authService.loggedIn$.subscribe((isLoggedIn) => {
-      if (isLoggedIn) {
-        this.router.navigate(['tasks'], { relativeTo: this.route });
-      }
     });
 
     if ((navigator as any).standalone == false) {

@@ -8,11 +8,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { TaskService } from './services/task.service';
 import { NavComponent } from './nav/nav.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   imports: [CommonModule, SharedModule],
-  exports: [NavComponent],
-  declarations: [NavComponent],
+  exports: [NavComponent, HomeComponent],
+  declarations: [NavComponent, HomeComponent],
   providers: [
     AuthService,
     TaskService,
