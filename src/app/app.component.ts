@@ -23,9 +23,10 @@ export class AppComponent implements OnInit {
     this.authService.loggedIn$.subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         this.router.navigate(['tasks'], { relativeTo: this.route });
-      } else {
-        this.router.navigate(['']);
       }
+      // else {
+      //   this.router.navigate(['']);
+      // }
     });
 
     if (navigator.onLine) {
