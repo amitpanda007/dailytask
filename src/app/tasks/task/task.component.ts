@@ -4,8 +4,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { TaskService } from 'src/app/core/services/task.service';
-import { MatCalendar } from '@angular/material/datepicker';
-import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'task',
@@ -36,8 +34,6 @@ export class TaskComponent implements OnInit {
     );
   };
 
-  // selectedTheme = this.themeColors.red2;
-
   tasks: Task[] = [];
 
   constructor(
@@ -56,14 +52,12 @@ export class TaskComponent implements OnInit {
     this.paramSubscription = this.route.paramMap.subscribe(
       (params: ParamMap) => {
         this.taskId = params.get('taskId') as string;
-        console.log(this.taskId);
       }
     );
 
     const today = new Date();
     this.taskService.getTasksByDate(today);
     this.taskService.tasksChanged.subscribe((tasks: Task[]) => {
-      console.log(tasks);
       tasks.sort(this.compare);
       this.tasks = tasks;
     });
@@ -85,7 +79,6 @@ export class TaskComponent implements OnInit {
 
   onEnter() {
     if (this.taskText && this.taskText.trim().length > 0) {
-      console.log(this.taskText);
       const rank = this.tasks.length;
       const taskData: Task = {
         taskId: this.randomId(10),
@@ -114,7 +107,6 @@ export class TaskComponent implements OnInit {
         }
       });
     });
-    console.log(changedTasks);
     this.taskService.updateTaskSequence(changedTasks);
   }
 
@@ -144,14 +136,11 @@ export class TaskComponent implements OnInit {
   }
 
   focusBoardTitle(task: Task) {
-    console.log('Focus ON');
     task.backupText = cloneDeep(task.text);
   }
 
   focusOutBoardTitle(task: Task) {
-    console.log(`Focus OUT`);
     if (task.backupText !== task.text) {
-      console.log('Text Changed');
       delete task.backupText;
       task.modified = new Date();
       this.taskService.updateTask(task);
