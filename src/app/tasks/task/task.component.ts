@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { TaskService } from 'src/app/core/services/task.service';
 import { MatCalendar } from '@angular/material/datepicker';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'task',
@@ -21,17 +22,6 @@ export class TaskComponent implements OnInit {
   isShowingCalender: boolean = false;
   isDateChanged: boolean = false;
   private paramSubscription!: Subscription;
-
-  themeColors = {
-    red1: '#fe1045',
-    orange1: '#ed5728',
-    green1: '#40c19d',
-    pink1: '#f86ca6',
-    green2: '#25b560',
-    blue1: '#5a59ff',
-    red2: '#fc0f43',
-    blue2: '#609ef2',
-  };
 
   myHolidayFilter = (d: Date): boolean => {
     const today = new Date();
@@ -60,7 +50,7 @@ export class TaskComponent implements OnInit {
     if (theme) {
       this.selectedTheme = theme;
     } else {
-      this.selectedTheme = this.themeColors.red2;
+      this.selectedTheme = '#fe387b';
     }
 
     this.paramSubscription = this.route.paramMap.subscribe(
@@ -70,11 +60,8 @@ export class TaskComponent implements OnInit {
       }
     );
 
-    this.taskService.getTasks();
-    // this.taskService.items.subscribe((tasks: Task[]) => {
-    //   console.log(tasks);
-    //   this.tasks = tasks;
-    // });
+    const today = new Date();
+    this.taskService.getTasksByDate(today);
     this.taskService.tasksChanged.subscribe((tasks: Task[]) => {
       console.log(tasks);
       tasks.sort(this.compare);
@@ -132,7 +119,6 @@ export class TaskComponent implements OnInit {
   }
 
   changeStatus(task: Task) {
-    console.log(task);
     task.status = !task.status;
     task.modified = new Date();
     this.taskService.updateTask(task);
@@ -148,34 +134,7 @@ export class TaskComponent implements OnInit {
   }
 
   selectTheme(theme: string) {
-    switch (theme) {
-      case 'red1':
-        this.selectedTheme = this.themeColors.red1;
-        break;
-      case 'orange1':
-        this.selectedTheme = this.themeColors.orange1;
-        break;
-      case 'green1':
-        this.selectedTheme = this.themeColors.green1;
-        break;
-      case 'pink1':
-        this.selectedTheme = this.themeColors.pink1;
-        break;
-      case 'green2':
-        this.selectedTheme = this.themeColors.green2;
-        break;
-      case 'blue1':
-        this.selectedTheme = this.themeColors.blue1;
-        break;
-      case 'red2':
-        this.selectedTheme = this.themeColors.red2;
-        break;
-      case 'blue2':
-        this.selectedTheme = this.themeColors.blue2;
-        break;
-      default:
-        this.selectedTheme = this.themeColors.blue2;
-    }
+    this.selectedTheme = theme;
     localStorage.setItem('themeColor', this.selectedTheme);
     this.toggleTheme();
   }

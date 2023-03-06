@@ -125,7 +125,7 @@
         >
       </span>
       <span *ngIf="!enableTheme" class="color-select">
-        <span class="red1"
+        <!-- <span class="red1"
           ><mat-icon
             aria-hidden="false"
             aria-label="close"
@@ -133,75 +133,68 @@
             (click)="selectTheme('red1')"
             >trip_origin</mat-icon
           >
-        </span>
+        </span> -->
 
-        <span class="orange1"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('orange1')"
-            >trip_origin</mat-icon
-          >
-        </span>
-
-        <span class="green1"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('green1')"
-            >trip_origin</mat-icon
-          >
-        </span>
-
-        <span class="pink1"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('pink1')"
-            >trip_origin</mat-icon
-          >
-        </span>
-
-        <span class="green2"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('green2')"
-            >trip_origin</mat-icon
-          >
-        </span>
-
-        <span class="blue1"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('blue1')"
-            >trip_origin</mat-icon
-          >
-        </span>
-        <span class="red2"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('red2')"
-            >trip_origin</mat-icon
-          >
-        </span>
-        <span class="blue2"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('blue2')"
-            >trip_origin</mat-icon
-          >
-        </span>
+        <color-icon
+          [theme]="'red1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'orange1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'green1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'green2'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'green3'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'pink1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'pink2'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'blue1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'blue2'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'blue3'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'yellow1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'yellow2'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'purple1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'purple2'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
+        <color-icon
+          [theme]="'cream1'"
+          (changedTheme)="selectTheme($event)"
+        ></color-icon>
 
         <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
           ><mat-icon

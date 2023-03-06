@@ -4,7 +4,7 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { Task } from 'src/app/tasks/task/task.component';
 import { AuthService } from './auth.service';
 
@@ -15,46 +15,13 @@ export class TaskService {
   private tasksSubscription!: Subscription;
 
   private allTasks: Task[] = [];
-  public tasksChanged = new BehaviorSubject<Task[]>([]);
+  // public tasksChanged = new BehaviorSubject<Task[]>([]);
+  public tasksChanged = new Subject<Task[]>();
 
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService
   ) {}
-
-  getTasks() {
-    const date = new Date();
-    const startDate = new Date(
-      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-    );
-    const endDate = new Date(
-      date.getFullYear() +
-        '-' +
-        (date.getMonth() + 1) +
-        '-' +
-        (date.getDate() + 1)
-    );
-    const uid = this.authService.getUID();
-    this.tasksCollection = this.afs.collection<Task>(
-      `tasks/${uid}/usertask`,
-      (ref) => {
-        let query = ref
-          .where('created', '>', startDate)
-          .where('created', '<', endDate)
-          .orderBy('created');
-        return query;
-      }
-    );
-
-    // this.items = this.tasksCollection.valueChanges({ idField: 'id' });
-
-    this.tasksSubscription = this.tasksCollection
-      .valueChanges({ idField: 'id' })
-      .subscribe((tasks) => {
-        this.allTasks = tasks;
-        this.tasksChanged.next([...this.allTasks]);
-      });
-  }
 
   getTasksByDate(date: Date) {
     const startDate = new Date(
@@ -80,9 +47,6 @@ export class TaskService {
       }
     );
 
-    // this.items = this.tasksCollection.valueChanges({
-    //   idField: 'id',
-    // });
     this.tasksSubscription = this.tasksCollection
       .valueChanges({ idField: 'id' })
       .subscribe((tasks) => {

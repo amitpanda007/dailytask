@@ -7,6 +7,7 @@ import {
   redirectUnauthorizedTo,
   redirectLoggedInTo,
 } from '@angular/fire/compat/auth-guard';
+import { ColorIconComponent } from './task/color.icon.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToTasks = () => redirectLoggedInTo(['tasks']);
@@ -33,5 +34,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class TasksRoutingModule {
-  static components = [TaskListComponent, TaskComponent];
+  static components = [TaskListComponent, TaskComponent, ColorIconComponent];
 }
