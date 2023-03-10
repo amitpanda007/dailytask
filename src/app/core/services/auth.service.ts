@@ -8,14 +8,14 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { User } from 'src/app/auth/user';
 
 @Injectable()
 export class AuthService {
   private usersCollection!: AngularFirestoreCollection<User>;
 
-  loggedIn = new BehaviorSubject<boolean>(false);
+  loggedIn = new Subject<boolean>();
   loggedIn$ = this.loggedIn.asObservable();
 
   constructor(

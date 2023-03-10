@@ -1,0 +1,148 @@
+.container {
+  margin: 1rem;
+}
+
+.card {
+  background-color: #191919;
+  color: #969696;
+}
+
+.theme-section {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  grid-auto-rows: minmax(200px, auto);
+}
+
+.one {
+  grid-column: 1/2;
+  grid-row: 1/3;
+}
+
+.two {
+  grid-column: 2/2;
+  grid-row: 1;
+}
+
+.three {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.four {
+  grid-column: 1/3;
+  grid-row: 3;
+}
+
+.five {
+  grid-column: 1/2;
+  grid-row: 4;
+}
+
+.six {
+  grid-column: 2/2;
+  grid-row: 4;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.text-input {
+  -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+  -webkit-appearance: none !important;
+  -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+  background: #272727;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+  color: #6c757d;
+  font-size: 0.9rem;
+  height: 1.2rem;
+  outline: none;
+  padding: 0.4rem 0.4rem 0.4rem 0.8rem;
+  width: 92%;
+}
+
+.input {
+  width: 100%;
+  background-color: #0000;
+  color: #969696;
+  font-weight: 500;
+  font-size: 14px;
+  height: 24px !important;
+  border: 0;
+  margin: 0 0 0 1rem;
+  padding: 0;
+}
+
+.data {
+  padding: 10px 0;
+  color: #969696;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: #191919;
+  font-size: 14px;
+}
+
+.text-data {
+  display: flex;
+  width: 100%;
+}
+
+.data-text {
+  margin-left: 1rem;
+  width: 100%;
+}
+
+.text-data mat-icon {
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  opacity: 0;
+}
+
+.text-data:hover .actions {
+  opacity: 1;
+}
+
+.chip-container {
+  display: flex;
+  margin-left: 2.6rem;
+}
+
+.my-chip {
+  background-color: #191919;
+  color: #fff;
+  min-height: 10px;
+  transition: min-height 2s;
+  border: 2px solid;
+  margin: 1px !important;
+  font-size: 10px;
+}
+
+.separate {
+  padding: 0 2px;
+}

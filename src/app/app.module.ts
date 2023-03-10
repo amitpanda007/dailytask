@@ -19,16 +19,21 @@ import { TasksModule } from './tasks/tasks.module';
 import { CoreModule } from './core/core.module';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { AuthModule } from './auth/auth.module';
+import { SharedModule } from './shared/shared.module';
+import { ScheduleDialogComponent } from './common/schedule-dialog/schedule-dialog.component';
+import { DiaryModule } from './diary/diary.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ScheduleDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    SharedModule,
     AuthModule,
     CoreModule,
     TasksModule,
+    DiaryModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000',
@@ -43,6 +48,7 @@ import { AuthModule } from './auth/auth.module';
     UserTrackingService,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
+  entryComponents: [ScheduleDialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

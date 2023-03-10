@@ -13,6 +13,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
@@ -32,6 +35,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatNativeDateModule,
     MatBadgeModule,
     MatDatepickerModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonToggleModule,
   ],
   declarations: [],
   providers: [],

@@ -88,14 +88,57 @@
               <s>{{ task.text }}</s>
             </p>
             <div class="actions">
-              <mat-icon
-                [style.color]="selectedTheme"
-                aria-hidden="false"
-                aria-label="close"
-                (click)="deleteTask(task)"
-                >delete</mat-icon
-              >
+              <span #createBoardElm>
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="scheduleTask(task)"
+                  >schedule</mat-icon
+                >
+              </span>
+              <span>
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="deleteTask(task)"
+                  >delete</mat-icon
+                >
+              </span>
             </div>
+          </div>
+          <div class="chip-container" *ngIf="task.start || task.end">
+            <mat-chip-list>
+              <mat-chip
+                class="my-chip"
+                [style.border-color]="selectedTheme"
+                *ngIf="!task.status"
+              >
+                <span>{{ task.start }}</span>
+                <span
+                  [style.color]="selectedTheme"
+                  class="separate"
+                  *ngIf="task.end"
+                  >-</span
+                >
+                <span>{{ task.end }}</span>
+              </mat-chip>
+              <mat-chip
+                class="my-chip"
+                [style.border-color]="'#969696'"
+                *ngIf="task.status"
+              >
+                <span [style.color]="'#969696'">{{ task.start }}</span>
+                <span
+                  class="separate"
+                  [style.color]="'#969696'"
+                  *ngIf="task.end"
+                  >-</span
+                >
+                <span [style.color]="'#969696'">{{ task.end }}</span>
+              </mat-chip>
+            </mat-chip-list>
           </div>
         </div>
       </div>

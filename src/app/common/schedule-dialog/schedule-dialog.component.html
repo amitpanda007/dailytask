@@ -1,0 +1,49 @@
+<p class="header">Schedule</p>
+
+<div class="section">
+  <mat-label class="label">START:</mat-label>
+  <select [(ngModel)]="startSelectedHour">
+    <option *ngFor="let hour of hours" [value]="hour.value">
+      {{ hour.viewValue }}
+    </option>
+  </select>
+
+  <select [(ngModel)]="startSelectedMin">
+    <option *ngFor="let min of mins" [value]="min.value">
+      {{ min.viewValue }}
+    </option>
+  </select>
+
+  <div>
+    <mat-button-toggle-group class="toggle" [(ngModel)]="startTime">
+      <mat-button-toggle value="AM" class="toggle-btn">AM</mat-button-toggle>
+      <mat-button-toggle value="PM" class="toggle-btn">PM</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>
+<div class="section">
+  <mat-label class="label">END:</mat-label>
+  <select [(ngModel)]="endSelectedHour">
+    <option *ngFor="let hour of hours" [value]="hour.value">
+      {{ hour.viewValue }}
+    </option>
+  </select>
+
+  <select [(ngModel)]="endSelectedMin">
+    <option *ngFor="let min of mins" [value]="min.value">
+      {{ min.viewValue }}
+    </option>
+  </select>
+
+  <div>
+    <mat-button-toggle-group class="toggle" [(ngModel)]="endTime">
+      <mat-button-toggle value="AM" class="toggle-btn">AM</mat-button-toggle>
+      <mat-button-toggle value="PM" class="toggle-btn">PM</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>
+
+<div mat-dialog-actions class="options">
+  <button mat-stroked-button (click)="save()">OK</button>
+  <button mat-stroked-button (click)="cancel()">Cancel</button>
+</div>

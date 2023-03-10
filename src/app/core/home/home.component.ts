@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   moduleId: module.id,
@@ -9,9 +9,22 @@ import { Router } from '@angular/router';
   styleUrls: ['home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private router: Router) {}
+  isLoading: boolean = true;
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.loggedIn$.subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.router.navigate(['tasks'], { relativeTo: this.route });
+        this.isLoading = false;
+      }
+      this.isLoading = false;
+    });
+  }
 
   ngOnDestroy(): void {}
 

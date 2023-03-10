@@ -1,0 +1,290 @@
+<div class="container">
+  <div class="theme-section">
+    <span>
+      <mat-icon
+        *ngIf="enableTheme"
+        [style.color]="selectedTheme"
+        aria-hidden="false"
+        aria-label="close"
+        class="pointer"
+        matTooltip="change theme"
+        [style.color]="selectedTheme"
+        (click)="toggleTheme()"
+        >add_circle</mat-icon
+      >
+    </span>
+    <span *ngIf="!enableTheme" class="color-select">
+      <color-icon
+        [theme]="'red1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'orange1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'green1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'green2'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'green3'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'pink1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'pink2'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'blue1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'blue2'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'blue3'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'yellow1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'yellow2'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'purple1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'purple2'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+      <color-icon
+        [theme]="'cream1'"
+        (changedTheme)="selectTheme($event)"
+      ></color-icon>
+
+      <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
+        ><mat-icon
+          matTooltip="cancel"
+          aria-hidden="false"
+          aria-label="close"
+          class="pointer"
+          (click)="toggleTheme()"
+          >cancel</mat-icon
+        ></span
+      >
+    </span>
+  </div>
+  <div class="wrapper">
+    <mat-card class="card one">
+      <p class="header flex-center">Work</p>
+      <input
+        cdkFocusInitial
+        class="text-input"
+        name="workText"
+        type="email"
+        placeholder="Call Sam for discussion"
+        [(ngModel)]="workText"
+        autocomplete="off"
+        (keyup.enter)="onWorkEnter()"
+      />
+      <div class="data" *ngFor="let work of works" cdkDrag>
+        <div class="text-data" *ngIf="works.length > 0">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="unchecked"
+            *ngIf="!work.status"
+            (click)="changeWorkStatus(work)"
+            >radio_button_unchecked</mat-icon
+          >
+          <mat-icon
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="checked"
+            *ngIf="work.status"
+            (click)="changeWorkStatus(work)"
+            >check</mat-icon
+          >
+          <input
+            [(ngModel)]="work.text"
+            class="input"
+            *ngIf="!work.status"
+            (focus)="focusBoardTitle(work)"
+            (focusout)="focusOutBoardTitle(work)"
+          />
+          <p *ngIf="work.status" class="data-text">
+            <s>{{ work.text }}</s>
+          </p>
+          <div class="actions">
+            <span #workScheduleElm>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleTask(work)"
+                >schedule</mat-icon
+              >
+            </span>
+            <span>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteWork(work)"
+                >delete</mat-icon
+              >
+            </span>
+          </div>
+        </div>
+        <div class="chip-container" *ngIf="work.start || work.end">
+          <mat-chip-list>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="selectedTheme"
+              *ngIf="!work.status"
+            >
+              <span>{{ work.start }}</span>
+              <span
+                [style.color]="selectedTheme"
+                class="separate"
+                *ngIf="work.end"
+                >-</span
+              >
+              <span>{{ work.end }}</span>
+            </mat-chip>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="'#969696'"
+              *ngIf="work.status"
+            >
+              <span [style.color]="'#969696'">{{ work.start }}</span>
+              <span class="separate" [style.color]="'#969696'" *ngIf="work.end"
+                >-</span
+              >
+              <span [style.color]="'#969696'">{{ work.end }}</span>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="card two">
+      <p class="header flex-center">Family</p>
+
+      <input
+        cdkFocusInitial
+        class="text-input"
+        name="familyText"
+        type="email"
+        placeholder="Call Sam for discussion"
+        [(ngModel)]="familyText"
+        autocomplete="off"
+        (keyup.enter)="onFamilyEnter()"
+      />
+      <div class="data" *ngFor="let family of families" cdkDrag>
+        <div class="text-data" *ngIf="families.length > 0">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="unchecked"
+            *ngIf="!family.status"
+            (click)="changeFamilyStatus(family)"
+            >radio_button_unchecked</mat-icon
+          >
+          <mat-icon
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="checked"
+            *ngIf="family.status"
+            (click)="changeFamilyStatus(family)"
+            >check</mat-icon
+          >
+          <input
+            [(ngModel)]="family.text"
+            class="input"
+            *ngIf="!family.status"
+            (focus)="focusFamilyTitle(family)"
+            (focusout)="focusOutFamilyTitle(family)"
+          />
+          <p *ngIf="family.status" class="data-text">
+            <s>{{ family.text }}</s>
+          </p>
+          <div class="actions">
+            <span #familyScheduleElm>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleFamilyTask(family)"
+                >schedule</mat-icon
+              >
+            </span>
+            <span>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteFamily(family)"
+                >delete</mat-icon
+              >
+            </span>
+          </div>
+        </div>
+        <div class="chip-container" *ngIf="family.start || family.end">
+          <mat-chip-list>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="selectedTheme"
+              *ngIf="!family.status"
+            >
+              <span>{{ family.start }}</span>
+              <span
+                [style.color]="selectedTheme"
+                class="separate"
+                *ngIf="family.end"
+                >-</span
+              >
+              <span>{{ family.end }}</span>
+            </mat-chip>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="'#969696'"
+              *ngIf="family.status"
+            >
+              <span [style.color]="'#969696'">{{ family.start }}</span>
+              <span
+                class="separate"
+                [style.color]="'#969696'"
+                *ngIf="family.end"
+                >-</span
+              >
+              <span [style.color]="'#969696'">{{ family.end }}</span>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="card three">
+      <p class="header flex-center">Self Care</p>
+    </mat-card>
+    <mat-card class="card four">
+      <p class="header flex-center">Suggestion</p>
+    </mat-card>
+    <mat-card class="card five">
+      <p class="header flex-center">Notes</p>
+    </mat-card>
+    <mat-card class="card six">
+      <p class="header flex-center">Ratings</p>
+    </mat-card>
+  </div>
+</div>

@@ -1,9 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { TaskService } from 'src/app/core/services/task.service';
+import {
+  ScheduleDialogComponent,
+  ScheduleDialogResult,
+} from 'src/app/common/schedule-dialog/schedule-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'task',
@@ -21,6 +27,9 @@ export class TaskComponent implements OnInit {
   isDateChanged: boolean = false;
   private paramSubscription!: Subscription;
 
+  @ViewChild('createBoardElm', { static: false })
+  public createBoardRef!: ElementRef;
+
   myHolidayFilter = (d: Date): boolean => {
     const today = new Date();
     return !(
@@ -37,8 +46,10 @@ export class TaskComponent implements OnInit {
   tasks: Task[] = [];
 
   constructor(
+    private dialog: MatDialog,
     private route: ActivatedRoute,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -81,7 +92,7 @@ export class TaskComponent implements OnInit {
     if (this.taskText && this.taskText.trim().length > 0) {
       const rank = this.tasks.length;
       const taskData: Task = {
-        taskId: this.randomId(10),
+        taskId: this.commonService.randomId(10),
         text: this.taskText,
         status: false,
         created: new Date(),
@@ -116,14 +127,14 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTask(task);
   }
 
-  randomId(length: number) {
-    const chars =
-      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let result = '';
-    for (let i = length; i > 0; --i)
-      result += chars[Math.floor(Math.random() * chars.length)];
-    return result;
-  }
+  // randomId(length: number) {
+  //   const chars =
+  //     '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  //   let result = '';
+  //   for (let i = length; i > 0; --i)
+  //     result += chars[Math.floor(Math.random() * chars.length)];
+  //   return result;
+  // }
 
   selectTheme(theme: string) {
     this.selectedTheme = theme;
@@ -175,6 +186,29 @@ export class TaskComponent implements OnInit {
   deleteTask(task: Task) {
     this.taskService.deleteTask(task);
   }
+
+  scheduleTask(task: Task) {
+    console.log(task);
+
+    const dialogRef = this.dialog.open(ScheduleDialogComponent, {
+      width: '270px',
+      height: '210px',
+      data: {
+        positionRelativeToElement: this.createBoardRef,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: ScheduleDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      if (result.start) task.start = result.start;
+      if (result.end) task.end = result.end;
+      this.taskService.updateTask(task);
+    });
+  }
 }
 
 export interface Task {
@@ -185,5 +219,7 @@ export interface Task {
   status: boolean;
   created: Date;
   modified: Date;
+  start?: string;
+  end?: string;
   rank: number;
 }
