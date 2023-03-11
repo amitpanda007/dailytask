@@ -1,11 +1,11 @@
 <div class="overlay" *ngIf="isLoading">
   <mat-spinner class="spinner"></mat-spinner>
 </div>
-<div *ngIf="!isLoading">
+<!-- <div *ngIf="!isLoading && !(authService.loggedIn$ | async)">
   <div class="info-section">
     <p>Plan your daily task</p>
     <p class="small">Log into start working with tasks</p>
-    <button mat-flat-button class="login" (click)="navigateLogin()">
+    <button mat-flat-button class="bg-gray" (click)="navigate('login')">
       login
     </button>
   </div>
@@ -18,5 +18,38 @@
   <div class="section img-section">
     <p class="p2">Chnage dates to view tasks you planned in past</p>
     <img src="assets/images/task_1.png" />
+  </div>
+</div> -->
+
+<div *ngIf="!isLoading && !(authService.loggedIn$ | async)">
+  <div class="info-section">
+    <p>Plan your daily task</p>
+    <p class="small">Log into start working with tasks</p>
+    <button mat-flat-button class="bg-gray" (click)="navigate('login')">
+      login
+    </button>
+  </div>
+</div>
+
+<div *ngIf="authService.loggedIn$ | async">
+  <div class="info-section">
+    <p>Plan Life</p>
+    <p>Daily</p>
+    <div class="btn-section">
+      <button
+        mat-flat-button
+        class="bg-gray big-btn"
+        (click)="navigate('tasks')"
+      >
+        Tasks
+      </button>
+      <button
+        mat-flat-button
+        class="bg-gray big-btn"
+        (click)="navigate('diary')"
+      >
+        Diary
+      </button>
+    </div>
   </div>
 </div>

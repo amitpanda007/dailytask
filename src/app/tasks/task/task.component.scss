@@ -28,13 +28,6 @@
   height: 40px;
 }
 
-@media screen and (max-width: 575px) {
-  .card {
-    max-width: 300px;
-    max-height: 80%;
-  }
-}
-
 .header {
   display: flex;
   justify-content: center;
@@ -241,7 +234,8 @@
 .color-select {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
 }
 
 .mat-click {
@@ -266,4 +260,11 @@
 
 .separate {
   padding: 0 2px;
+}
+
+@media screen and (max-width: 575px) {
+  .card {
+    max-width: 300px;
+    max-height: 80%;
+  }
 }

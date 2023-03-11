@@ -119,8 +119,9 @@
     </span>
   </div>
   <div class="wrapper">
-    <div id="infoi" *ngIf="isDateChanged"></div>
+    <!-- <div id="infoi" *ngIf="isDateChanged"></div> -->
     <mat-card class="card one">
+      <div id="disable-overlay" *ngIf="isDateChanged"></div>
       <p class="header flex-center">Work</p>
       <input
         cdkFocusInitial
@@ -212,6 +213,7 @@
       </div>
     </mat-card>
     <mat-card class="card two">
+      <div id="disable-overlay" *ngIf="isDateChanged"></div>
       <p class="header flex-center">Family</p>
 
       <input
@@ -307,6 +309,7 @@
       </div>
     </mat-card>
     <mat-card class="card three">
+      <div id="disable-overlay" *ngIf="isDateChanged"></div>
       <p class="header flex-center">Self Care</p>
 
       <input
@@ -402,6 +405,7 @@
       </div>
     </mat-card>
     <mat-card class="card four">
+      <div id="disable-overlay" *ngIf="isDateChanged"></div>
       <p class="header flex-center">Suggestion</p>
 
       <input
@@ -478,6 +482,7 @@
       </div>
     </mat-card>
     <mat-card class="card five">
+      <div id="disable-overlay" *ngIf="isDateChanged"></div>
       <p class="header flex-center">Notes</p>
 
       <input
@@ -569,6 +574,7 @@
       </div>
     </mat-card>
     <mat-card class="card six">
+      <div id="disable-overlay" *ngIf="isDateChanged"></div>
       <p class="header flex-center">Rate your day</p>
       <div class="rating-section">
         <span class="rating-text">Work</span>

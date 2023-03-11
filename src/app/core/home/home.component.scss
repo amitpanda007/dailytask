@@ -15,7 +15,8 @@ img {
 }
 
 .info-section {
-  height: 150px;
+  margin-top: 3rem;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,8 +37,24 @@ img {
   margin-top: 1rem;
 }
 
-.login {
+.btn-section {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 10rem;
+}
+
+.bg-gray {
   background: #969696;
+}
+
+.big-btn {
+  width: 80%;
+  height: 70%;
+  font-size: 2.5rem;
+  margin: 1rem;
 }
 
 .spinner {
