@@ -3,8 +3,32 @@
 </div>
 
 <div class="container">
-  <div class="date-header" [style.color]="selectedTheme">
-    {{ todayDate | date : "MMM d, y" }}
+  <div>
+    <p
+      class="pointer date-header"
+      [style.color]="selectedTheme"
+      (click)="showCalender()"
+    >
+      {{ selectedDate | date : "MMM d, y" }}
+    </p>
+  </div>
+  <div class="calender-section">
+    <div class="calender" *ngIf="isShowingCalender">
+      <mat-calendar
+        class="calender-card"
+        [dateFilter]="myHolidayFilter"
+        [selected]="selectedDate"
+        (selectedChange)="dateChanged($event)"
+      ></mat-calendar>
+      <button
+        mat-button
+        [style.color]="selectedTheme"
+        [style.width.%]="100"
+        (click)="closeCalender()"
+      >
+        close
+      </button>
+    </div>
   </div>
   <div class="theme-section">
     <span>
@@ -95,6 +119,7 @@
     </span>
   </div>
   <div class="wrapper">
+    <div id="infoi" *ngIf="isDateChanged"></div>
     <mat-card class="card one">
       <p class="header flex-center">Work</p>
       <input

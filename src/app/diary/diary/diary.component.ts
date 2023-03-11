@@ -16,12 +16,26 @@ import { DiaryService } from 'src/app/core/services/diary.service';
   styleUrls: ['diary.component.scss'],
 })
 export class DiaryComponent implements OnInit {
-  todayDate: Date = new Date();
   isLoading: boolean = true;
   taskId!: string;
   selectedTheme!: string;
   enableTheme: boolean = true;
   private paramSubscription!: Subscription;
+  isShowingCalender: boolean = false;
+  isDateChanged: boolean = false;
+  selectedDate: Date = new Date();
+  myHolidayFilter = (d: Date): boolean => {
+    const today = new Date();
+    return !(
+      new Date(
+        today.getFullYear() +
+          '-' +
+          (today.getMonth() + 1) +
+          '-' +
+          today.getDate()
+      ).getTime() < d.getTime()
+    );
+  };
 
   diary: Diary = {};
 
@@ -104,6 +118,31 @@ export class DiaryComponent implements OnInit {
 
   toggleTheme() {
     this.enableTheme = !this.enableTheme;
+  }
+
+  dateChanged(date: any) {
+    this.selectedDate = date;
+    const today = new Date();
+    if (
+      today.getDate() == date.getDate() &&
+      today.getMonth() == date.getMonth() &&
+      today.getFullYear() == date.getFullYear()
+    ) {
+      this.isDateChanged = false;
+      this.diaryService.getDiaryByDate(date);
+    } else {
+      this.isDateChanged = true;
+      this.diaryService.getDiaryByDate(date);
+    }
+    this.isShowingCalender = false;
+  }
+
+  showCalender() {
+    this.isShowingCalender = true;
+  }
+
+  closeCalender() {
+    this.isShowingCalender = false;
   }
 
   // Work Related Functions

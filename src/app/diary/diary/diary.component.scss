@@ -1,6 +1,29 @@
+::ng-deep.mat-calendar-body-cell-content {
+  color: #969696;
+}
+
+::ng-deep.mat-calendar-table-header {
+  color: #969696;
+}
+
+::ng-deep.mat-calendar-body-label {
+  color: #969696;
+}
+
 .container {
   margin: 1rem;
   height: 100%;
+}
+
+#infoi {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 205px;
+  left: 0;
+}
+#infoi {
+  z-index: 10;
 }
 
 .overlay {
@@ -40,6 +63,27 @@
 
 .pointer {
   cursor: pointer;
+}
+
+.calender {
+  z-index: 999;
+  position: absolute;
+  background: #343333;
+  color: #969696;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  max-width: 425px;
+}
+
+.calender-card {
+  width: 340px;
+}
+
+.calender-section {
+  display: flex;
+  justify-content: center;
 }
 
 .wrapper {
