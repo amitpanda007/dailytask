@@ -54,10 +54,19 @@ export class ScheduleDialogComponent implements OnInit {
     const rect: DOMRect =
       this.positionRelativeToElement.nativeElement.getBoundingClientRect();
 
-    matDialogConfig.position = {
-      top: `${rect.top - 200}px`,
-      left: `${rect.left - 50}px`,
-    };
+    console.log(rect);
+
+    if (rect.right > window.innerWidth - 270) {
+      matDialogConfig.position = {
+        top: `${rect.top - 50}px`,
+        left: `${rect.left - 250}px`,
+      };
+    } else {
+      matDialogConfig.position = {
+        top: `${rect.top - 50}px`,
+        left: `${rect.left - 50}px`,
+      };
+    }
     this.dialogRef.updatePosition(matDialogConfig.position);
   }
 

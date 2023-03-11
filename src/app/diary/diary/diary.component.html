@@ -187,7 +187,7 @@
         class="text-input"
         name="familyText"
         type="email"
-        placeholder="Call Sam for discussion"
+        placeholder="Cook chicken for lunch"
         [(ngModel)]="familyText"
         autocomplete="off"
         (keyup.enter)="onFamilyEnter()"
@@ -276,15 +276,390 @@
     </mat-card>
     <mat-card class="card three">
       <p class="header flex-center">Self Care</p>
+
+      <input
+        cdkFocusInitial
+        class="text-input"
+        name="selfcareText"
+        type="email"
+        placeholder="Exercise from 7AM"
+        [(ngModel)]="selfcareText"
+        autocomplete="off"
+        (keyup.enter)="onSelfcareEnter()"
+      />
+      <div class="data" *ngFor="let selfcare of selfcares" cdkDrag>
+        <div class="text-data" *ngIf="selfcares.length > 0">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="unchecked"
+            *ngIf="!selfcare.status"
+            (click)="changeSelfcareStatus(selfcare)"
+            >radio_button_unchecked</mat-icon
+          >
+          <mat-icon
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="checked"
+            *ngIf="selfcare.status"
+            (click)="changeSelfcareStatus(selfcare)"
+            >check</mat-icon
+          >
+          <input
+            [(ngModel)]="selfcare.text"
+            class="input"
+            *ngIf="!selfcare.status"
+            (focus)="focusFamilyTitle(selfcare)"
+            (focusout)="focusOutFamilyTitle(selfcare)"
+          />
+          <p *ngIf="selfcare.status" class="data-text">
+            <s>{{ selfcare.text }}</s>
+          </p>
+          <div class="actions">
+            <span #selfcareScheduleElm>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleSelfcareTask(selfcare)"
+                >schedule</mat-icon
+              >
+            </span>
+            <span>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteSelfcare(selfcare)"
+                >delete</mat-icon
+              >
+            </span>
+          </div>
+        </div>
+        <div class="chip-container" *ngIf="selfcare.start || selfcare.end">
+          <mat-chip-list>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="selectedTheme"
+              *ngIf="!selfcare.status"
+            >
+              <span>{{ selfcare.start }}</span>
+              <span
+                [style.color]="selectedTheme"
+                class="separate"
+                *ngIf="selfcare.end"
+                >-</span
+              >
+              <span>{{ selfcare.end }}</span>
+            </mat-chip>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="'#969696'"
+              *ngIf="selfcare.status"
+            >
+              <span [style.color]="'#969696'">{{ selfcare.start }}</span>
+              <span
+                class="separate"
+                [style.color]="'#969696'"
+                *ngIf="selfcare.end"
+                >-</span
+              >
+              <span [style.color]="'#969696'">{{ selfcare.end }}</span>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
     </mat-card>
     <mat-card class="card four">
       <p class="header flex-center">Suggestion</p>
+
+      <input
+        cdkFocusInitial
+        class="text-input"
+        name="suggestionText"
+        type="email"
+        placeholder="How could i have made today better ?"
+        [(ngModel)]="suggestionText"
+        autocomplete="off"
+        (keyup.enter)="onSuggestionEnter()"
+      />
+      <div class="data" *ngFor="let suggestion of suggestions" cdkDrag>
+        <div class="text-data" *ngIf="suggestions.length > 0">
+          <!-- <mat-icon
+            aria-hidden="false"
+            aria-label="unchecked"
+            *ngIf="!suggestion.status"
+            (click)="changeSuggestionStatus(suggestion)"
+            >radio_button_unchecked</mat-icon
+          >
+          <mat-icon
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="checked"
+            *ngIf="selfcare.status"
+            (click)="changeSuggestionStatus(suggestion)"
+            >check</mat-icon
+          > -->
+          <input
+            [(ngModel)]="suggestion.text"
+            class="input"
+            (focus)="focusSuggestionTitle(suggestion)"
+            (focusout)="focusOutSuggestionTitle(suggestion)"
+          />
+          <!-- <p *ngIf="suggestion.status" class="data-text">
+            <s>{{ suggestion.text }}</s>
+          </p> -->
+          <div class="actions">
+            <span #suggestionScheduleElm>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleSuggestionTask(suggestion)"
+                >schedule</mat-icon
+              >
+            </span>
+            <span>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteSuggestion(suggestion)"
+                >delete</mat-icon
+              >
+            </span>
+          </div>
+        </div>
+        <div class="chip-container" *ngIf="suggestion.start || suggestion.end">
+          <mat-chip-list>
+            <mat-chip class="my-chip" [style.border-color]="selectedTheme">
+              <span>{{ suggestion.start }}</span>
+              <span
+                [style.color]="selectedTheme"
+                class="separate"
+                *ngIf="suggestion.end"
+                >-</span
+              >
+              <span>{{ suggestion.end }}</span>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
     </mat-card>
     <mat-card class="card five">
       <p class="header flex-center">Notes</p>
+
+      <input
+        cdkFocusInitial
+        class="text-input"
+        name="noteText"
+        type="email"
+        placeholder="Remember to..."
+        [(ngModel)]="noteText"
+        autocomplete="off"
+        (keyup.enter)="onNoteEnter()"
+      />
+      <div class="data" *ngFor="let note of notes" cdkDrag>
+        <div class="text-data" *ngIf="notes.length > 0">
+          <!-- <mat-icon
+            aria-hidden="false"
+            aria-label="unchecked"
+            *ngIf="!note.status"
+            (click)="changeNoteStatus(note)"
+            >radio_button_unchecked</mat-icon
+          >
+          <mat-icon
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="checked"
+            *ngIf="note.status"
+            (click)="changeNoteStatus(note)"
+            >check</mat-icon
+          > -->
+          <input
+            [(ngModel)]="note.text"
+            class="input"
+            (focus)="focusNoteTitle(note)"
+            (focusout)="focusOutNoteTitle(note)"
+          />
+          <!-- <p *ngIf="note.status" class="data-text">
+            <s>{{ note.text }}</s>
+          </p> -->
+          <div class="actions">
+            <!-- <span #noteScheduleElm>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleNoteTask(note)"
+                >schedule</mat-icon
+              >
+            </span> -->
+            <span>
+              <mat-icon
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteNote(note)"
+                >delete</mat-icon
+              >
+            </span>
+          </div>
+        </div>
+        <!-- <div class="chip-container" *ngIf="note.start || note.end">
+          <mat-chip-list>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="selectedTheme"
+              *ngIf="!note.status"
+            >
+              <span>{{ note.start }}</span>
+              <span
+                [style.color]="selectedTheme"
+                class="separate"
+                *ngIf="note.end"
+                >-</span
+              >
+              <span>{{ note.end }}</span>
+            </mat-chip>
+            <mat-chip
+              class="my-chip"
+              [style.border-color]="'#969696'"
+              *ngIf="note.status"
+            >
+              <span [style.color]="'#969696'">{{ note.start }}</span>
+              <span class="separate" [style.color]="'#969696'" *ngIf="note.end"
+                >-</span
+              >
+              <span [style.color]="'#969696'">{{ note.end }}</span>
+            </mat-chip>
+          </mat-chip-list>
+        </div> -->
+      </div>
     </mat-card>
     <mat-card class="card six">
-      <p class="header flex-center">Ratings</p>
+      <p class="header flex-center">Rate your day</p>
+      <div class="rating-section">
+        <span class="rating-text">Work</span>
+        <div>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: workRating === 1 }"
+            (click)="setWorkRating(1)"
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: workRating === 2 }"
+            (click)="setWorkRating(2)"
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: workRating === 3 }"
+            (click)="setWorkRating(3)"
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: workRating === 4 }"
+            (click)="setWorkRating(4)"
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: workRating === 5 }"
+            (click)="setWorkRating(5)"
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="rating-section">
+        <span class="rating-text">Family</span>
+        <div>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: familyRating === 1 }"
+            (click)="setFamilyRating(1)"
+          >
+            <mat-icon>grade</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: familyRating === 2 }"
+            (click)="setFamilyRating(2)"
+          >
+            <mat-icon>grade</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: familyRating === 3 }"
+            (click)="setFamilyRating(3)"
+          >
+            <mat-icon>grade</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: familyRating === 4 }"
+            (click)="setFamilyRating(4)"
+          >
+            <mat-icon>grade</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: familyRating === 5 }"
+            (click)="setFamilyRating(5)"
+          >
+            <mat-icon>grade</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="rating-section">
+        <span class="rating-text">Self Care</span>
+        <div>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: selfcareRating === 1 }"
+            (click)="setSelfcareRating(1)"
+          >
+            <mat-icon>circle</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: selfcareRating === 2 }"
+            (click)="setSelfcareRating(2)"
+          >
+            <mat-icon>circle</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: selfcareRating === 3 }"
+            (click)="setSelfcareRating(3)"
+          >
+            <mat-icon>circle</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: selfcareRating === 4 }"
+            (click)="setSelfcareRating(4)"
+          >
+            <mat-icon>circle</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [ngClass]="{ highlight: selfcareRating === 5 }"
+            (click)="setSelfcareRating(5)"
+          >
+            <mat-icon>circle</mat-icon>
+          </button>
+        </div>
+      </div>
     </mat-card>
   </div>
 </div>

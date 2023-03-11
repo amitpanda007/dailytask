@@ -21,14 +21,36 @@ export class DiaryComponent implements OnInit {
   enableTheme: boolean = true;
   private paramSubscription!: Subscription;
 
-  @ViewChild('workScheduleElm', { static: false })
-  public createBoardRef!: ElementRef;
+  diary: Diary = {};
 
+  @ViewChild('workScheduleElm', { static: false })
+  public workScheduleRef!: ElementRef;
   workText: string = '';
   works: Work[] = [];
 
+  @ViewChild('familyScheduleElm', { static: false })
+  public familyScheduleRef!: ElementRef;
   familyText: string = '';
   families: Family[] = [];
+
+  @ViewChild('selfcareScheduleElm', { static: false })
+  public selfcareScheduleRef!: ElementRef;
+  selfcareText: string = '';
+  selfcares: SelfCare[] = [];
+
+  @ViewChild('suggestionScheduleElm', { static: false })
+  public suggestionScheduleRef!: ElementRef;
+  suggestionText: string = '';
+  suggestions: Suggestion[] = [];
+
+  // @ViewChild('noteScheduleElm', { static: false })
+  // public noteScheduleRef!: ElementRef;
+  noteText: string = '';
+  notes: Note[] = [];
+
+  workRating: number = 0;
+  familyRating: number = 0;
+  selfcareRating: number = 0;
 
   constructor(
     private dialog: MatDialog,
@@ -50,6 +72,21 @@ export class DiaryComponent implements OnInit {
         this.taskId = params.get('diaryId') as string;
       }
     );
+
+    const today = new Date();
+    this.diaryService.getDiaryByDate(today);
+    this.diaryService.diaryChanged.subscribe((diary: Diary) => {
+      console.log(diary);
+      this.diary = diary;
+      this.works = this.diary.work as Work[];
+      this.families = this.diary.families as Family[];
+      this.selfcares = this.diary.selfcares as SelfCare[];
+      this.suggestions = this.diary.suggestions as Suggestion[];
+      this.notes = this.diary.notes as Note[];
+      this.workRating = this.diary.workRating as number;
+      this.familyRating = this.diary.familyRating as number;
+      this.selfcareRating = this.diary.selfcareRating as number;
+    });
   }
 
   ngOnDestroy() {
@@ -66,6 +103,7 @@ export class DiaryComponent implements OnInit {
     this.enableTheme = !this.enableTheme;
   }
 
+  // Work Related Functions
   onWorkEnter() {
     if (this.workText && this.workText.trim().length > 0) {
       const workData: Work = {
@@ -77,13 +115,16 @@ export class DiaryComponent implements OnInit {
       };
       this.works.push(workData);
       this.workText = '';
-      // this.diaryService.updateDiary(workData);
+
+      this.diary.work = this.works;
+      this.diaryService.addUpdateDiary(this.diary);
     }
   }
 
   changeWorkStatus(work: Work) {
     console.log(work);
     work.status = !work.status;
+    this.diaryService.addUpdateDiary(this.diary);
   }
 
   focusBoardTitle(work: Work) {
@@ -94,7 +135,7 @@ export class DiaryComponent implements OnInit {
     if (work.backupWorkText !== work.text) {
       delete work.backupWorkText;
       work.modified = new Date();
-      // this.diaryService.updateDiary(work);
+      this.diaryService.addUpdateDiary(this.diary);
     }
   }
 
@@ -105,7 +146,7 @@ export class DiaryComponent implements OnInit {
       width: '270px',
       height: '210px',
       data: {
-        positionRelativeToElement: this.createBoardRef,
+        positionRelativeToElement: this.workScheduleRef,
       },
     });
 
@@ -117,16 +158,20 @@ export class DiaryComponent implements OnInit {
 
       if (result.start) work.start = result.start;
       if (result.end) work.end = result.end;
-      // this.diaryService.updateTask(work);
+      this.diaryService.addUpdateDiary(this.diary);
     });
   }
 
   deleteWork(work: Work) {
-    this.works.splice(this.works.findIndex((w) => w.id === work.id));
+    this.works.splice(
+      this.works.findIndex((w) => w.id === work.id),
+      1
+    );
     console.log(this.works);
-    // this.diaryService.deleteWork(work);
+    this.diaryService.addUpdateDiary(this.diary);
   }
 
+  // Family Related Functions
   onFamilyEnter() {
     if (this.familyText && this.familyText.trim().length > 0) {
       const familyData: Family = {
@@ -136,16 +181,21 @@ export class DiaryComponent implements OnInit {
         created: new Date(),
         modified: new Date(),
       };
+      if (!this.families) {
+        this.families = [];
+      }
       this.families.push(familyData);
       this.familyText = '';
-      // this.diaryService.updateDiary(workData);
+
+      this.diary.families = this.families;
+      this.diaryService.addUpdateDiary(this.diary);
     }
   }
 
   changeFamilyStatus(family: Family) {
     console.log(family);
     family.status = !family.status;
-    // this.diaryService.updateDiary(family);
+    this.diaryService.addUpdateDiary(this.diary);
   }
 
   focusFamilyTitle(family: Family) {
@@ -156,7 +206,7 @@ export class DiaryComponent implements OnInit {
     if (family.backupFamilyText !== family.text) {
       delete family.backupFamilyText;
       family.modified = new Date();
-      // this.diaryService.updateDiary(family);
+      this.diaryService.addUpdateDiary(this.diary);
     }
   }
 
@@ -167,7 +217,7 @@ export class DiaryComponent implements OnInit {
       width: '270px',
       height: '210px',
       data: {
-        positionRelativeToElement: this.createBoardRef,
+        positionRelativeToElement: this.familyScheduleRef,
       },
     });
 
@@ -179,27 +229,280 @@ export class DiaryComponent implements OnInit {
 
       if (result.start) family.start = result.start;
       if (result.end) family.end = result.end;
-      // this.diaryService.updateDiary(family);
+      this.diaryService.addUpdateDiary(this.diary);
     });
   }
 
   deleteFamily(family: Family) {
-    this.families.splice(this.families.findIndex((w) => w.id === family.id));
+    this.families.splice(
+      this.families.findIndex((w) => w.id === family.id),
+      1
+    );
     console.log(this.families);
-    // this.diaryService.deleteWork(work);
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  // Selfcare Related Functions
+  onSelfcareEnter() {
+    if (this.selfcareText && this.selfcareText.trim().length > 0) {
+      const selfcareData: SelfCare = {
+        id: this.commonService.randomId(10),
+        text: this.selfcareText,
+        status: false,
+        created: new Date(),
+        modified: new Date(),
+      };
+      if (!this.selfcares) {
+        this.selfcares = [];
+      }
+      this.selfcares.push(selfcareData);
+      this.selfcareText = '';
+
+      this.diary.selfcares = this.selfcares;
+      this.diaryService.addUpdateDiary(this.diary);
+    }
+  }
+
+  changeSelfcareStatus(selfcare: SelfCare) {
+    console.log(selfcare);
+    selfcare.status = !selfcare.status;
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  focusSelfcareTitle(selfcare: SelfCare) {
+    selfcare.backupSelfcareText = cloneDeep(selfcare.text);
+  }
+
+  focusOutSelfcareTitle(selfcare: SelfCare) {
+    if (selfcare.backupSelfcareText !== selfcare.text) {
+      delete selfcare.backupSelfcareText;
+      selfcare.modified = new Date();
+      this.diaryService.addUpdateDiary(this.diary);
+    }
+  }
+
+  scheduleSelfcareTask(selfcare: SelfCare) {
+    console.log(selfcare);
+
+    const dialogRef = this.dialog.open(ScheduleDialogComponent, {
+      width: '270px',
+      height: '210px',
+      data: {
+        positionRelativeToElement: this.selfcareScheduleRef,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: ScheduleDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      if (result.start) selfcare.start = result.start;
+      if (result.end) selfcare.end = result.end;
+      this.diaryService.addUpdateDiary(this.diary);
+    });
+  }
+
+  deleteSelfcare(selfcare: SelfCare) {
+    this.selfcares.splice(
+      this.selfcares.findIndex((w) => w.id === selfcare.id),
+      1
+    );
+    console.log(this.selfcares);
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  // Suggestion Related Functions
+  onSuggestionEnter() {
+    if (this.suggestionText && this.suggestionText.trim().length > 0) {
+      const suggestionData: SelfCare = {
+        id: this.commonService.randomId(10),
+        text: this.suggestionText,
+        status: false,
+        created: new Date(),
+        modified: new Date(),
+      };
+
+      if (!this.suggestions) {
+        this.suggestions = [];
+      }
+      this.suggestions.push(suggestionData);
+      this.suggestionText = '';
+
+      this.diary.suggestions = this.suggestions;
+      this.diaryService.addUpdateDiary(this.diary);
+    }
+  }
+
+  // changeSuggestionStatus(suggestion: Suggestion) {
+  //   console.log(suggestion);
+  //   suggestion.status = !suggestion.status;
+  //   // this.diaryService.updateDiary(selfcare);
+  // }
+
+  focusSuggestionTitle(suggestion: Suggestion) {
+    suggestion.backupSuggestionText = cloneDeep(suggestion.text);
+  }
+
+  focusOutSuggestionTitle(suggestion: Suggestion) {
+    if (suggestion.backupSuggestionText !== suggestion.text) {
+      delete suggestion.backupSuggestionText;
+      suggestion.modified = new Date();
+      this.diaryService.addUpdateDiary(this.diary);
+    }
+  }
+
+  scheduleSuggestionTask(suggestion: Suggestion) {
+    console.log(suggestion);
+
+    const dialogRef = this.dialog.open(ScheduleDialogComponent, {
+      width: '270px',
+      height: '210px',
+      data: {
+        positionRelativeToElement: this.suggestionScheduleRef,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: ScheduleDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      if (result.start) suggestion.start = result.start;
+      if (result.end) suggestion.end = result.end;
+      this.diaryService.addUpdateDiary(this.diary);
+    });
+  }
+
+  deleteSuggestion(suggestion: Suggestion) {
+    this.suggestions.splice(
+      this.suggestions.findIndex((w) => w.id === suggestion.id),
+      1
+    );
+    console.log(this.suggestions);
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  // Note Related Functions
+  onNoteEnter() {
+    if (this.noteText && this.noteText.trim().length > 0) {
+      const noteData: SelfCare = {
+        id: this.commonService.randomId(10),
+        text: this.noteText,
+        status: false,
+        created: new Date(),
+        modified: new Date(),
+      };
+      if (!this.notes) {
+        this.notes = [];
+      }
+      this.notes.push(noteData);
+      this.noteText = '';
+
+      this.diary.notes = this.notes;
+      this.diaryService.addUpdateDiary(this.diary);
+    }
+  }
+
+  // changeSuggestionStatus(suggestion: Suggestion) {
+  //   console.log(suggestion);
+  //   suggestion.status = !suggestion.status;
+  //   // this.diaryService.updateDiary(selfcare);
+  // }
+
+  focusNoteTitle(note: Note) {
+    note.backupNoteText = cloneDeep(note.text);
+  }
+
+  focusOutNoteTitle(note: Note) {
+    if (note.backupNoteText !== note.text) {
+      delete note.backupNoteText;
+      note.modified = new Date();
+      this.diaryService.addUpdateDiary(this.diary);
+    }
+  }
+
+  // scheduleNoteTask(note: Note) {
+  //   console.log(note);
+
+  //   const dialogRef = this.dialog.open(ScheduleDialogComponent, {
+  //     width: '270px',
+  //     height: '210px',
+  //     data: {
+  //       positionRelativeToElement: this.noteScheduleRef,
+  //     },
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((result: ScheduleDialogResult) => {
+  //     console.log(result);
+  //     if (!result) {
+  //       return;
+  //     }
+
+  //     if (result.start) note.start = result.start;
+  //     if (result.end) note.end = result.end;
+  //     // this.diaryService.updateTask(work);
+  //   });
+  // }
+
+  deleteNote(note: Note) {
+    this.notes.splice(
+      this.notes.findIndex((w) => w.id === note.id),
+      1
+    );
+    console.log(this.notes);
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  // Rating related functions
+  setWorkRating(rating: number) {
+    console.log(rating);
+    if (rating == this.workRating) {
+      this.workRating = 0;
+      return;
+    }
+    this.workRating = rating;
+    this.diary.workRating = this.workRating;
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  setFamilyRating(rating: number) {
+    console.log(rating);
+    if (rating == this.familyRating) {
+      this.familyRating = 0;
+      return;
+    }
+    this.familyRating = rating;
+    this.diary.familyRating = this.familyRating;
+    this.diaryService.addUpdateDiary(this.diary);
+  }
+
+  setSelfcareRating(rating: number) {
+    console.log(rating);
+    if (rating == this.selfcareRating) {
+      this.selfcareRating = 0;
+      return;
+    }
+    this.selfcareRating = rating;
+    this.diary.selfcareRating = this.selfcareRating;
+    this.diaryService.addUpdateDiary(this.diary);
   }
 }
 
 export interface Diary {
   id?: string;
   work?: Work[];
-  family?: Family[];
-  selfcare?: SelfCare[];
-  suggestion?: Suggestion[];
-  notes?: Notes[];
-  ratings?: Ratings;
-  created: Date;
-  modified: Date;
+  families?: Family[];
+  selfcares?: SelfCare[];
+  suggestions?: Suggestion[];
+  notes?: Note[];
+  workRating?: number;
+  familyRating?: number;
+  selfcareRating?: number;
+  created?: Date;
+  modified?: Date;
 }
 
 export interface Work {
@@ -225,6 +528,7 @@ export interface Family {
 export interface SelfCare {
   id: string;
   text: string;
+  backupSelfcareText?: string;
   status: boolean;
   start?: string;
   end?: string;
@@ -234,18 +538,21 @@ export interface SelfCare {
 export interface Suggestion {
   id: string;
   text: string;
+  backupSuggestionText?: string;
+  start?: string;
+  end?: string;
   created: Date;
   modified: Date;
 }
-export interface Notes {
+export interface Note {
   id: string;
   text: string;
+  backupNoteText?: string;
   created: Date;
   modified: Date;
 }
 export interface Ratings {
-  id: string;
-  text: string;
-  created: Date;
-  modified: Date;
+  workRating: number;
+  familyRating: number;
+  selfcareRating: number;
 }
