@@ -1,4 +1,11 @@
+<div class="overlay" *ngIf="isLoading">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>
+
 <div class="container">
+  <div class="date-header" [style.color]="selectedTheme">
+    {{ todayDate | date : "MMM d, y" }}
+  </div>
   <div class="theme-section">
     <span>
       <mat-icon
@@ -6,7 +13,7 @@
         [style.color]="selectedTheme"
         aria-hidden="false"
         aria-label="close"
-        class="pointer"
+        class="icon pointer"
         matTooltip="change theme"
         [style.color]="selectedTheme"
         (click)="toggleTheme()"
@@ -75,12 +82,12 @@
         (changedTheme)="selectTheme($event)"
       ></color-icon>
 
-      <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
+      <span [style.color]="selectedTheme"
         ><mat-icon
           matTooltip="cancel"
           aria-hidden="false"
           aria-label="close"
-          class="pointer"
+          class="icon pointer"
           (click)="toggleTheme()"
           >cancel</mat-icon
         ></span

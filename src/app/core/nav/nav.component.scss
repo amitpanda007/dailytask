@@ -7,6 +7,10 @@ a:hover {
   font-weight: 700;
 }
 
+.toolbar {
+  height: 4rem;
+}
+
 .nav-padding {
   padding: 0px 10px;
 }
@@ -34,12 +38,26 @@ a:hover {
 .bar span {
   color: #969696;
   font-weight: 700;
+  font-size: 24px;
 }
 
 .bar mat-icon {
   color: #969696;
+  font-size: 36px;
 }
 
 .icon {
   color: #969696;
+}
+
+.username {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 575px) {
+  .bar span {
+    color: #969696;
+    font-weight: 700;
+    font-size: 18px;
+  }
 }

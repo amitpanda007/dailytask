@@ -53,16 +53,26 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
       .mat-click {
         cursor: pointer;
       }
+
+      .icon {
+        margin-left: 2rem;
+      }
+
+      .mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+      }
     </style>
-    <span class="mat-click" [ngClass]="theme"
-      ><mat-icon
-        aria-hidden="false"
-        aria-label="close"
-        class="mat-click"
-        (click)="selectTheme()"
-        >trip_origin</mat-icon
-      >
-    </span>
+    <mat-icon
+      class="icon mat-click"
+      [ngClass]="theme"
+      aria-hidden="false"
+      aria-label="close"
+      class="mat-click"
+      (click)="selectTheme()"
+      >trip_origin</mat-icon
+    >
   `,
 })
 export class ColorIconComponent implements OnInit {

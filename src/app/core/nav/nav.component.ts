@@ -22,4 +22,8 @@ export class NavComponent implements OnInit {
   openRegister() {
     this.router.navigate(['/register']);
   }
+
+  openHome() {
+    this.router.navigate(['/']);
+  }
 }

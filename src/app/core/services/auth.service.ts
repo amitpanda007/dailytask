@@ -15,7 +15,7 @@ import { User } from 'src/app/auth/user';
 export class AuthService {
   private usersCollection!: AngularFirestoreCollection<User>;
 
-  loggedIn = new Subject<boolean>();
+  loggedIn = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedIn.asObservable();
 
   constructor(

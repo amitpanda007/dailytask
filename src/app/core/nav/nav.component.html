@@ -1,8 +1,12 @@
 <!-- Toolbar -->
 <div class="toolbar flex-display" role="banner">
-  <div>
-    <a href="/" class="flex-display"><mat-icon class="icon">home</mat-icon></a>
+  <div class="bar">
+    <!-- <a href="/" class="flex-display"><mat-icon class="icon">home</mat-icon></a> -->
+    <button mat-icon-button (click)="openHome()">
+      <mat-icon>home</mat-icon>
+    </button>
   </div>
+
   <div class="right">
     <div class="bar" *ngIf="authService.loggedIn$ | async">
       <span>Welcome, {{ authService.getUsername() }}</span>

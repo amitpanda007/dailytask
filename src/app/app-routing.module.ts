@@ -9,6 +9,16 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
   },
+  // {
+  //   path: 'tasks',
+  //   loadChildren: () =>
+  //     import('./tasks/tasks.module').then((m) => m.TasksModule),
+  // },
+  // {
+  //   path: 'diary',
+  //   loadChildren: () =>
+  //     import('./diary/diary.module').then((m) => m.DiaryModule),
+  // },
 ];
 
 @NgModule({

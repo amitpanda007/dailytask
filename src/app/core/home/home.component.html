@@ -1,4 +1,6 @@
-<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+<div class="overlay" *ngIf="isLoading">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>
 <div *ngIf="!isLoading">
   <div class="info-section">
     <p>Plan your daily task</p>

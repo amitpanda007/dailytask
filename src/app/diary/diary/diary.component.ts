@@ -16,6 +16,8 @@ import { DiaryService } from 'src/app/core/services/diary.service';
   styleUrls: ['diary.component.scss'],
 })
 export class DiaryComponent implements OnInit {
+  todayDate: Date = new Date();
+  isLoading: boolean = true;
   taskId!: string;
   selectedTheme!: string;
   enableTheme: boolean = true;
@@ -86,6 +88,7 @@ export class DiaryComponent implements OnInit {
       this.workRating = this.diary.workRating as number;
       this.familyRating = this.diary.familyRating as number;
       this.selfcareRating = this.diary.selfcareRating as number;
+      this.isLoading = false;
     });
   }
 
@@ -113,6 +116,9 @@ export class DiaryComponent implements OnInit {
         created: new Date(),
         modified: new Date(),
       };
+      if (!this.works) {
+        this.works = [];
+      }
       this.works.push(workData);
       this.workText = '';
 
