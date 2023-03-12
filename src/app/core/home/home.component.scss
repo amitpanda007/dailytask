@@ -27,6 +27,10 @@ img {
   font-size: 40px;
 }
 
+.info-text {
+  margin-top: 1rem;
+}
+
 .img-section {
   display: flex;
   align-items: center;
@@ -51,8 +55,10 @@ img {
 }
 
 .big-btn {
-  width: 80%;
-  height: 70%;
+  // width: 80%;
+  // height: 70%;
+  width: 8rem;
+  height: 3rem;
   font-size: 2.5rem;
   margin: 1rem;
 }
@@ -79,6 +85,10 @@ img {
     repeat scroll transparent\9; /* ie fallback png background image */
   z-index: 9999;
   color: white;
+}
+
+.highlight {
+  color: #ff5733;
 }
 
 @media screen and (max-width: 767px) {

@@ -25,6 +25,7 @@ export class TaskComponent implements OnInit {
   selectedDate!: Date | null;
   isShowingCalender: boolean = false;
   isDateChanged: boolean = false;
+  showInputField: boolean = false;
   private paramSubscription!: Subscription;
 
   @ViewChild('createBoardElm', { static: false })
@@ -127,15 +128,6 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTask(task);
   }
 
-  // randomId(length: number) {
-  //   const chars =
-  //     '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  //   let result = '';
-  //   for (let i = length; i > 0; --i)
-  //     result += chars[Math.floor(Math.random() * chars.length)];
-  //   return result;
-  // }
-
   selectTheme(theme: string) {
     this.selectedTheme = theme;
     localStorage.setItem('themeColor', this.selectedTheme);
@@ -156,6 +148,7 @@ export class TaskComponent implements OnInit {
       task.modified = new Date();
       this.taskService.updateTask(task);
     }
+    this.showInputField = false;
   }
 
   dateChanged(date: any) {
@@ -208,6 +201,10 @@ export class TaskComponent implements OnInit {
       if (result.end) task.end = result.end;
       this.taskService.updateTask(task);
     });
+  }
+
+  enableEdit() {
+    this.showInputField = true;
   }
 }
 

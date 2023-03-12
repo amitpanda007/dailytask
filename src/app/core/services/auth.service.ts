@@ -15,7 +15,7 @@ import { User } from 'src/app/auth/user';
 export class AuthService {
   private usersCollection!: AngularFirestoreCollection<User>;
 
-  loggedIn = new BehaviorSubject<boolean>(false);
+  loggedIn = new Subject<boolean>();
   loggedIn$ = this.loggedIn.asObservable();
 
   constructor(
@@ -24,6 +24,18 @@ export class AuthService {
     private auth: AngularFireAuth,
     private afs: AngularFirestore
   ) {
+    // this.auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     this.loggedIn.next(true);
+    //   } else {
+    //     // not logged in
+    //     this.loggedIn.next(false);
+    //   }
+    // });
+    this.checkAuth();
+  }
+
+  checkAuth() {
     this.auth.onAuthStateChanged((user) => {
       if (user) {
         this.loggedIn.next(true);
@@ -57,7 +69,7 @@ export class AuthService {
         this.usersCollection = this.afs.collection<User>('users');
         this.usersCollection.doc(UID).set(newUser);
 
-        this.router.navigate(['tasks']);
+        this.router.navigate(['']);
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -73,7 +85,7 @@ export class AuthService {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        this.router.navigate(['tasks']);
+        this.router.navigate(['']);
       })
       .catch((error) => {
         var errorCode = error.code;

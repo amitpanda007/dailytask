@@ -80,10 +80,17 @@
             <input
               [(ngModel)]="task.text"
               class="input"
-              *ngIf="!task.status"
+              *ngIf="!task.status && showInputField"
               (focus)="focusBoardTitle(task)"
               (focusout)="focusOutBoardTitle(task)"
             />
+            <p
+              class="task-text"
+              (click)="enableEdit()"
+              *ngIf="!task.status && !showInputField"
+            >
+              {{ task.text }}
+            </p>
             <p *ngIf="task.status" class="task-text">
               <s>{{ task.text }}</s>
             </p>
@@ -168,76 +175,9 @@
         >
       </span>
       <span *ngIf="!enableTheme" class="color-select">
-        <!-- <span class="red1"
-          ><mat-icon
-            aria-hidden="false"
-            aria-label="close"
-            class="mat-click"
-            (click)="selectTheme('red1')"
-            >trip_origin</mat-icon
-          >
-        </span> -->
-
-        <color-icon
-          [theme]="'red1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'orange1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'green1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'green2'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'green3'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'pink1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'pink2'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'blue1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'blue2'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'blue3'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'yellow1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'yellow2'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'purple1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'purple2'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
-        <color-icon
-          [theme]="'cream1'"
-          (changedTheme)="selectTheme($event)"
-        ></color-icon>
+        <color-icon-list
+          (themeSelected)="selectTheme($event)"
+        ></color-icon-list>
 
         <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
           ><mat-icon

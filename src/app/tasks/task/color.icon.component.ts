@@ -49,6 +49,12 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
       .cream1 {
         color: #fdc799;
       }
+      .cream2 {
+        color: #f6e1c3;
+      }
+      .cream3 {
+        color: #e9a178;
+      }
 
       .mat-click {
         cursor: pointer;
@@ -96,6 +102,8 @@ export class ColorIconComponent implements OnInit {
     purple1: '#bc4ff3',
     purple2: '#d99ee6',
     cream1: '#fdc799',
+    cream2: '#F6E1C3',
+    cream3: '#E9A178',
   };
 
   constructor() {}
@@ -150,6 +158,12 @@ export class ColorIconComponent implements OnInit {
         break;
       case 'cream1':
         this.selectedTheme = this.themeColors.cream1;
+        break;
+      case 'cream2':
+        this.selectedTheme = this.themeColors.cream2;
+        break;
+      case 'cream3':
+        this.selectedTheme = this.themeColors.cream3;
         break;
       default:
         this.selectedTheme = this.themeColors.blue2;

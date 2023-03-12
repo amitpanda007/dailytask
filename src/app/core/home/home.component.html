@@ -1,33 +1,23 @@
 <div class="overlay" *ngIf="isLoading">
   <mat-spinner class="spinner"></mat-spinner>
 </div>
-<!-- <div *ngIf="!isLoading && !(authService.loggedIn$ | async)">
+
+<div *ngIf="!(authService.loggedIn$ | async)">
   <div class="info-section">
-    <p>Plan your daily task</p>
+    <p class="info-text">Plan Your Life</p>
+    <p class="info-text">with</p>
+    <p class="info-text">Daily <span class="highlight">Task</span></p>
+    <p class="info-text">Daily <span class="highlight">Diary</span></p>
     <p class="small">Log into start working with tasks</p>
-    <button mat-flat-button class="bg-gray" (click)="navigate('login')">
-      login
-    </button>
-  </div>
-
-  <div class="section img-section">
-    <img src="assets/images/task_2.png" />
-    <p class="p1">Add tasks for today and track it to completion</p>
-  </div>
-
-  <div class="section img-section">
-    <p class="p2">Chnage dates to view tasks you planned in past</p>
-    <img src="assets/images/task_1.png" />
-  </div>
-</div> -->
-
-<div *ngIf="!isLoading && !(authService.loggedIn$ | async)">
-  <div class="info-section">
-    <p>Plan your daily task</p>
-    <p class="small">Log into start working with tasks</p>
-    <button mat-flat-button class="bg-gray" (click)="navigate('login')">
-      login
-    </button>
+    <div class="btn-section">
+      <button
+        mat-flat-button
+        class="bg-gray big-btn"
+        (click)="navigate('login')"
+      >
+        Login
+      </button>
+    </div>
   </div>
 </div>
 

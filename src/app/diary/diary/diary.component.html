@@ -45,66 +45,7 @@
       >
     </span>
     <span *ngIf="!enableTheme" class="color-select">
-      <color-icon
-        [theme]="'red1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'orange1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'green1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'green2'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'green3'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'pink1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'pink2'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'blue1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'blue2'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'blue3'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'yellow1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'yellow2'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'purple1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'purple2'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
-      <color-icon
-        [theme]="'cream1'"
-        (changedTheme)="selectTheme($event)"
-      ></color-icon>
+      <color-icon-list (themeSelected)="selectTheme($event)"></color-icon-list>
 
       <span [style.color]="selectedTheme"
         ><mat-icon

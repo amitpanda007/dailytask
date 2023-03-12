@@ -92,7 +92,6 @@ export class DiaryComponent implements OnInit {
     const today = new Date();
     this.diaryService.getDiaryByDate(today);
     this.diaryService.diaryChanged.subscribe((diary: Diary) => {
-      console.log(diary);
       this.diary = diary;
       this.works = this.diary.work as Work[];
       this.families = this.diary.families as Family[];

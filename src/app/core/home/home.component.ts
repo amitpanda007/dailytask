@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  isLoading: boolean = true;
+  isLoading!: boolean;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -17,12 +17,15 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
+    this.authService.checkAuth();
     this.authService.loggedIn$.subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         // this.router.navigate(['tasks'], { relativeTo: this.route });
         this.isLoading = false;
+      } else {
+        this.isLoading = false;
       }
-      this.isLoading = false;
     });
   }
 
