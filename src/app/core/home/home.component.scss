@@ -23,12 +23,18 @@ img {
   flex-direction: column;
 }
 
-.info-section p {
-  font-size: 40px;
-}
+// .info-section p {
+//   font-size: 40px;
+// }
 
 .info-text {
+  font-size: 70px;
+  line-height: 70px;
   margin-top: 1rem;
+}
+
+.text-sm {
+  font-size: 40px;
 }
 
 .img-section {
@@ -46,7 +52,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  // flex-direction: column;
   height: 10rem;
 }
 
@@ -57,9 +63,8 @@ img {
 .big-btn {
   // width: 80%;
   // height: 70%;
-  width: 8rem;
-  height: 3rem;
-  font-size: 2.5rem;
+  height: 6rem;
+  font-size: 5rem;
   margin: 1rem;
 }
 
@@ -134,5 +139,15 @@ img {
   .small {
     font-size: 15px !important;
     margin-top: 1rem;
+  }
+
+  .btn-section {
+    height: 15rem;
+    flex-direction: column;
+  }
+
+  .big-btn {
+    height: 5rem;
+    font-size: 4rem;
   }
 }

@@ -4,7 +4,7 @@
 
 <div *ngIf="!(authService.loggedIn$ | async)">
   <div class="info-section">
-    <p class="info-text">Plan Your Life</p>
+    <p class="info-text">Plan Daily</p>
     <p class="info-text">with</p>
     <p class="info-text">Daily <span class="highlight">Task</span></p>
     <p class="info-text">Daily <span class="highlight">Diary</span></p>
@@ -23,8 +23,9 @@
 
 <div *ngIf="authService.loggedIn$ | async">
   <div class="info-section">
-    <p>Plan Life</p>
-    <p>Daily</p>
+    <p class="info-text">Plan Life</p>
+    <p class="info-text"><span class="highlight">Daily</span></p>
+    <p class="info-text text-sm">with</p>
     <div class="btn-section">
       <button
         mat-flat-button

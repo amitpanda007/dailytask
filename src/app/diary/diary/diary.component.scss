@@ -151,6 +151,17 @@
   width: 92%;
 }
 
+.task-text {
+  margin-left: 1rem;
+  width: 100%;
+  font-weight: 500;
+  font-size: 1.1rem;
+  // height: 24px !important;
+  border: 0;
+  margin: 0 0 0 1rem;
+  padding: 0;
+}
+
 .date-header {
   display: flex;
   align-items: center;
@@ -164,7 +175,7 @@
   background-color: #0000;
   color: #969696;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 1.1rem;
   height: 24px !important;
   border: 0;
   margin: 0 0 0 1rem;
@@ -191,7 +202,7 @@
 .data-text {
   margin-left: 1rem;
   width: 100%;
-  font-size: 18px;
+  font-size: 1.1rem;
 }
 
 .text-data mat-icon {
@@ -215,7 +226,7 @@
 
 .chip-container {
   display: flex;
-  margin-left: 2.6rem;
+  margin: 0.8rem 0 0 2.6rem;
 }
 
 .my-chip {
@@ -313,5 +324,17 @@
     display: flex;
     flex-wrap: wrap-reverse;
     justify-content: end;
+  }
+
+  .input {
+    font-size: 16px;
+  }
+
+  .text-input {
+    font-size: 1rem;
+  }
+
+  .task-text {
+    font-size: 14px;
   }
 }

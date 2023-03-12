@@ -94,10 +94,17 @@
           <input
             [(ngModel)]="work.text"
             class="input"
-            *ngIf="!work.status"
-            (focus)="focusBoardTitle(work)"
-            (focusout)="focusOutBoardTitle(work)"
+            *ngIf="!work.status && showWorkInputField"
+            (focus)="focusWorkTitle(work)"
+            (focusout)="focusOutWorkTitle(work)"
           />
+          <p
+            class="task-text"
+            (click)="enableWorkEdit()"
+            *ngIf="!work.status && !showWorkInputField"
+          >
+            {{ work.text }}
+          </p>
           <p *ngIf="work.status" class="data-text">
             <s>{{ work.text }}</s>
           </p>
@@ -187,10 +194,17 @@
           <input
             [(ngModel)]="family.text"
             class="input"
-            *ngIf="!family.status"
+            *ngIf="!family.status && showFamilyInputField"
             (focus)="focusFamilyTitle(family)"
             (focusout)="focusOutFamilyTitle(family)"
           />
+          <p
+            class="task-text"
+            (click)="enableFamilyEdit()"
+            *ngIf="!family.status && !showFamilyInputField"
+          >
+            {{ family.text }}
+          </p>
           <p *ngIf="family.status" class="data-text">
             <s>{{ family.text }}</s>
           </p>
@@ -283,10 +297,17 @@
           <input
             [(ngModel)]="selfcare.text"
             class="input"
-            *ngIf="!selfcare.status"
-            (focus)="focusFamilyTitle(selfcare)"
-            (focusout)="focusOutFamilyTitle(selfcare)"
+            *ngIf="!selfcare.status && showSelfcareInputField"
+            (focus)="focusSelfcareTitle(selfcare)"
+            (focusout)="focusOutSelfcareTitle(selfcare)"
           />
+          <p
+            class="task-text"
+            (click)="enableSelfcareEdit()"
+            *ngIf="!selfcare.status && !showSelfcareInputField"
+          >
+            {{ selfcare.text }}
+          </p>
           <p *ngIf="selfcare.status" class="data-text">
             <s>{{ selfcare.text }}</s>
           </p>
@@ -379,9 +400,17 @@
           <input
             [(ngModel)]="suggestion.text"
             class="input"
+            *ngIf="showSuggestionInputField"
             (focus)="focusSuggestionTitle(suggestion)"
             (focusout)="focusOutSuggestionTitle(suggestion)"
           />
+          <p
+            class="task-text"
+            (click)="enableSuggestionEdit()"
+            *ngIf="!showSuggestionInputField"
+          >
+            {{ suggestion.text }}
+          </p>
           <!-- <p *ngIf="suggestion.status" class="data-text">
             <s>{{ suggestion.text }}</s>
           </p> -->
@@ -456,9 +485,17 @@
           <input
             [(ngModel)]="note.text"
             class="input"
+            *ngIf="showNotesInputField"
             (focus)="focusNoteTitle(note)"
             (focusout)="focusOutNoteTitle(note)"
           />
+          <p
+            class="task-text"
+            (click)="enableNoteEdit()"
+            *ngIf="!showNotesInputField"
+          >
+            {{ note.text }}
+          </p>
           <!-- <p *ngIf="note.status" class="data-text">
             <s>{{ note.text }}</s>
           </p> -->

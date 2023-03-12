@@ -24,6 +24,14 @@ export class DiaryComponent implements OnInit {
   isShowingCalender: boolean = false;
   isDateChanged: boolean = false;
   selectedDate: Date = new Date();
+
+  //Edit input for different sections
+  showWorkInputField: boolean = false;
+  showFamilyInputField: boolean = false;
+  showSelfcareInputField: boolean = false;
+  showSuggestionInputField: boolean = false;
+  showNotesInputField: boolean = false;
+
   myHolidayFilter = (d: Date): boolean => {
     const today = new Date();
     return !(
@@ -171,16 +179,22 @@ export class DiaryComponent implements OnInit {
     this.diaryService.addUpdateDiary(this.diary);
   }
 
-  focusBoardTitle(work: Work) {
+  focusWorkTitle(work: Work) {
     work.backupWorkText = cloneDeep(work.text);
   }
 
-  focusOutBoardTitle(work: Work) {
+  focusOutWorkTitle(work: Work) {
     if (work.backupWorkText !== work.text) {
       delete work.backupWorkText;
       work.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
+
+    this.showWorkInputField = false;
+  }
+
+  enableWorkEdit() {
+    this.showWorkInputField = true;
   }
 
   scheduleTask(work: Work) {
@@ -252,6 +266,12 @@ export class DiaryComponent implements OnInit {
       family.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
+
+    this.showFamilyInputField = false;
+  }
+
+  enableFamilyEdit() {
+    this.showFamilyInputField = true;
   }
 
   scheduleFamilyTask(family: Family) {
@@ -323,6 +343,12 @@ export class DiaryComponent implements OnInit {
       selfcare.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
+
+    this.showSelfcareInputField = false;
+  }
+
+  enableSelfcareEdit() {
+    this.showSelfcareInputField = true;
   }
 
   scheduleSelfcareTask(selfcare: SelfCare) {
@@ -395,6 +421,12 @@ export class DiaryComponent implements OnInit {
       suggestion.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
+
+    this.showSuggestionInputField = false;
+  }
+
+  enableSuggestionEdit() {
+    this.showSuggestionInputField = true;
   }
 
   scheduleSuggestionTask(suggestion: Suggestion) {
@@ -466,6 +498,13 @@ export class DiaryComponent implements OnInit {
       note.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
+
+    this.showNotesInputField = false;
+  }
+
+  enableNoteEdit() {
+    console.log('Note show');
+    this.showNotesInputField = true;
   }
 
   // scheduleNoteTask(note: Note) {
