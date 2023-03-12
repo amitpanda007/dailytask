@@ -70,10 +70,12 @@ export class AuthService {
         this.usersCollection.doc(UID).set(newUser);
 
         this.router.navigate(['']);
+        this.snackBar.open('Successfully Registered', 'OK');
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
+        this.snackBar.open('Something went wrong. try again...', 'OK');
       });
   }
 
@@ -86,10 +88,12 @@ export class AuthService {
         // Signed in
         var user = userCredential.user;
         this.router.navigate(['']);
+        this.snackBar.open('Login Successful', 'OK');
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
+        this.snackBar.open('Incorrect Email/Password. try again...', 'OK');
       });
   }
 
