@@ -185,16 +185,14 @@ export class DiaryComponent implements OnInit {
 
   focusOutWorkTitle(work: Work) {
     if (work.backupWorkText !== work.text) {
-      delete work.backupWorkText;
       work.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
-
-    this.showWorkInputField = false;
+    work.isEditing = false;
   }
 
-  enableWorkEdit() {
-    this.showWorkInputField = true;
+  enableWorkEdit(work: Work) {
+    work.isEditing = true;
   }
 
   scheduleTask(work: Work) {
@@ -262,16 +260,14 @@ export class DiaryComponent implements OnInit {
 
   focusOutFamilyTitle(family: Family) {
     if (family.backupFamilyText !== family.text) {
-      delete family.backupFamilyText;
       family.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
-
-    this.showFamilyInputField = false;
+    family.isEditing = false;
   }
 
-  enableFamilyEdit() {
-    this.showFamilyInputField = true;
+  enableFamilyEdit(family: Family) {
+    family.isEditing = true;
   }
 
   scheduleFamilyTask(family: Family) {
@@ -339,16 +335,14 @@ export class DiaryComponent implements OnInit {
 
   focusOutSelfcareTitle(selfcare: SelfCare) {
     if (selfcare.backupSelfcareText !== selfcare.text) {
-      delete selfcare.backupSelfcareText;
       selfcare.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
-
-    this.showSelfcareInputField = false;
+    selfcare.isEditing = false;
   }
 
-  enableSelfcareEdit() {
-    this.showSelfcareInputField = true;
+  enableSelfcareEdit(selfcare: SelfCare) {
+    selfcare.isEditing = true;
   }
 
   scheduleSelfcareTask(selfcare: SelfCare) {
@@ -417,16 +411,14 @@ export class DiaryComponent implements OnInit {
 
   focusOutSuggestionTitle(suggestion: Suggestion) {
     if (suggestion.backupSuggestionText !== suggestion.text) {
-      delete suggestion.backupSuggestionText;
       suggestion.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
-
-    this.showSuggestionInputField = false;
+    suggestion.isEditing = false;
   }
 
-  enableSuggestionEdit() {
-    this.showSuggestionInputField = true;
+  enableSuggestionEdit(suggestion: Suggestion) {
+    suggestion.isEditing = true;
   }
 
   scheduleSuggestionTask(suggestion: Suggestion) {
@@ -494,17 +486,14 @@ export class DiaryComponent implements OnInit {
 
   focusOutNoteTitle(note: Note) {
     if (note.backupNoteText !== note.text) {
-      delete note.backupNoteText;
       note.modified = new Date();
       this.diaryService.addUpdateDiary(this.diary);
     }
-
-    this.showNotesInputField = false;
+    note.isEditing = false;
   }
 
-  enableNoteEdit() {
-    console.log('Note show');
-    this.showNotesInputField = true;
+  enableNoteEdit(note: Note) {
+    note.isEditing = true;
   }
 
   // scheduleNoteTask(note: Note) {
@@ -593,6 +582,7 @@ export interface Work {
   text: string;
   backupWorkText?: string;
   status: boolean;
+  isEditing?: boolean;
   start?: string;
   end?: string;
   created: Date;
@@ -603,6 +593,7 @@ export interface Family {
   text: string;
   backupFamilyText?: string;
   status: boolean;
+  isEditing?: boolean;
   start?: string;
   end?: string;
   created: Date;
@@ -613,6 +604,7 @@ export interface SelfCare {
   text: string;
   backupSelfcareText?: string;
   status: boolean;
+  isEditing?: boolean;
   start?: string;
   end?: string;
   created: Date;
@@ -623,6 +615,7 @@ export interface Suggestion {
   text: string;
   backupSuggestionText?: string;
   start?: string;
+  isEditing?: boolean;
   end?: string;
   created: Date;
   modified: Date;
@@ -631,6 +624,7 @@ export interface Note {
   id: string;
   text: string;
   backupNoteText?: string;
+  isEditing?: boolean;
   created: Date;
   modified: Date;
 }

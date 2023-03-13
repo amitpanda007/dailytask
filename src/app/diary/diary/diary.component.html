@@ -94,14 +94,14 @@
           <input
             [(ngModel)]="work.text"
             class="input"
-            *ngIf="!work.status && showWorkInputField"
+            *ngIf="!work.status && work.isEditing"
             (focus)="focusWorkTitle(work)"
             (focusout)="focusOutWorkTitle(work)"
           />
           <p
             class="task-text"
-            (click)="enableWorkEdit()"
-            *ngIf="!work.status && !showWorkInputField"
+            (click)="enableWorkEdit(work)"
+            *ngIf="!work.status && !work.isEditing"
           >
             {{ work.text }}
           </p>
@@ -194,14 +194,14 @@
           <input
             [(ngModel)]="family.text"
             class="input"
-            *ngIf="!family.status && showFamilyInputField"
+            *ngIf="!family.status && family.isEditing"
             (focus)="focusFamilyTitle(family)"
             (focusout)="focusOutFamilyTitle(family)"
           />
           <p
             class="task-text"
-            (click)="enableFamilyEdit()"
-            *ngIf="!family.status && !showFamilyInputField"
+            (click)="enableFamilyEdit(family)"
+            *ngIf="!family.status && !family.isEditing"
           >
             {{ family.text }}
           </p>
@@ -297,14 +297,14 @@
           <input
             [(ngModel)]="selfcare.text"
             class="input"
-            *ngIf="!selfcare.status && showSelfcareInputField"
+            *ngIf="!selfcare.status && selfcare.isEditing"
             (focus)="focusSelfcareTitle(selfcare)"
             (focusout)="focusOutSelfcareTitle(selfcare)"
           />
           <p
             class="task-text"
-            (click)="enableSelfcareEdit()"
-            *ngIf="!selfcare.status && !showSelfcareInputField"
+            (click)="enableSelfcareEdit(selfcare)"
+            *ngIf="!selfcare.status && !selfcare.isEditing"
           >
             {{ selfcare.text }}
           </p>
@@ -400,14 +400,14 @@
           <input
             [(ngModel)]="suggestion.text"
             class="input"
-            *ngIf="showSuggestionInputField"
+            *ngIf="suggestion.isEditing"
             (focus)="focusSuggestionTitle(suggestion)"
             (focusout)="focusOutSuggestionTitle(suggestion)"
           />
           <p
             class="task-text"
-            (click)="enableSuggestionEdit()"
-            *ngIf="!showSuggestionInputField"
+            (click)="enableSuggestionEdit(suggestion)"
+            *ngIf="!suggestion.isEditing"
           >
             {{ suggestion.text }}
           </p>
@@ -485,14 +485,14 @@
           <input
             [(ngModel)]="note.text"
             class="input"
-            *ngIf="showNotesInputField"
+            *ngIf="note.isEditing"
             (focus)="focusNoteTitle(note)"
             (focusout)="focusOutNoteTitle(note)"
           />
           <p
             class="task-text"
-            (click)="enableNoteEdit()"
-            *ngIf="!showNotesInputField"
+            (click)="enableNoteEdit(note)"
+            *ngIf="!note.isEditing"
           >
             {{ note.text }}
           </p>

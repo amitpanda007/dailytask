@@ -34,10 +34,45 @@ export class DiaryService {
   }
 
   addUpdateDiary(diary: Diary) {
+    const newDiary = this.cleanUpDiaryData(diary);
     const docId = this.todayString(new Date());
     const uid = this.authService.getUID();
     this.diaryCollection = this.afs.collection<Diary>(`diary/${uid}/userdiary`);
-    this.diaryCollection.doc(docId).set(diary);
+    this.diaryCollection.doc(docId).set(newDiary);
+  }
+
+  cleanUpDiaryData(diary: Diary) {
+    if (diary.work && diary.work.length > 0) {
+      diary.work.forEach((work) => {
+        delete work.isEditing;
+        delete work.backupWorkText;
+      });
+    }
+    if (diary.families && diary.families.length > 0) {
+      diary.families.forEach((family) => {
+        delete family.isEditing;
+        delete family.backupFamilyText;
+      });
+    }
+    if (diary.selfcares && diary.selfcares.length > 0) {
+      diary.selfcares.forEach((selfcare) => {
+        delete selfcare.isEditing;
+        delete selfcare.backupSelfcareText;
+      });
+    }
+    if (diary.suggestions && diary.suggestions.length > 0) {
+      diary.suggestions.forEach((suggestion) => {
+        delete suggestion.isEditing;
+        delete suggestion.backupSuggestionText;
+      });
+    }
+    if (diary.notes && diary.notes.length > 0) {
+      diary.notes.forEach((note) => {
+        delete note.isEditing;
+        delete note.backupNoteText;
+      });
+    }
+    return diary;
   }
 
   todayString(date: Date) {
