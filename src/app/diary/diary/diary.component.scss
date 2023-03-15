@@ -148,7 +148,7 @@
   height: 1.2rem;
   outline: none;
   padding: 0.4rem 0.4rem 0.4rem 0.8rem;
-  width: 92%;
+  width: 96%;
 }
 
 .task-text {
@@ -323,7 +323,7 @@
   .color-select {
     display: flex;
     flex-wrap: wrap-reverse;
-    justify-content: end;
+    justify-content: flex-end;
   }
 
   .input {

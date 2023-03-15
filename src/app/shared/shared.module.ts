@@ -16,6 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
@@ -38,6 +39,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatFormFieldModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatProgressBarModule,
   ],
   declarations: [],
   providers: [],

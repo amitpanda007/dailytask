@@ -26,6 +26,7 @@ export class TaskComponent implements OnInit {
   isShowingCalender: boolean = false;
   isDateChanged: boolean = false;
   showInputField: boolean = false;
+  percentageComplete: number = 0;
   private paramSubscription!: Subscription;
 
   @ViewChild('createBoardElm', { static: false })
@@ -72,6 +73,7 @@ export class TaskComponent implements OnInit {
     this.taskService.tasksChanged.subscribe((tasks: Task[]) => {
       tasks.sort(this.compare);
       this.tasks = tasks;
+      this.calculatePercentage();
     });
   }
 
@@ -87,6 +89,16 @@ export class TaskComponent implements OnInit {
       return 1;
     }
     return 0;
+  }
+
+  calculatePercentage() {
+    const total = this.tasks.length;
+    if (total == 0) {
+      this.percentageComplete = 0;
+      return;
+    }
+    const completedTasks = this.tasks.filter((task) => task.status).length;
+    this.percentageComplete = Math.floor((completedTasks / total) * 100);
   }
 
   onEnter() {
@@ -126,6 +138,7 @@ export class TaskComponent implements OnInit {
     task.status = !task.status;
     task.modified = new Date();
     this.taskService.updateTask(task);
+    this.calculatePercentage();
   }
 
   selectTheme(theme: string) {
