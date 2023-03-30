@@ -25,3 +25,37 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+# Adding Capacitor
+
+https://devdactic.com/angular-material-app-capacitor
+
+## Install the Capacitor CLI locally
+
+npm install @capacitor/cli --save-dev
+
+## Initialize Capacitor in your Angular project
+
+npx cap init
+
+## Install the required packages
+
+npm install @capacitor/core @capacitor/ios @capacitor/android
+
+## Add the native platforms
+
+npx cap add ios
+npx cap add android
+
+## Build the Angular project
+
+ng build
+
+## Sync our files to the native projects
+
+npx cap sync
+
+## Build and Deploy native apps
+
+npx cap open ios
+npx cap open android

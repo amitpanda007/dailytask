@@ -44,8 +44,10 @@
         [(ngModel)]="taskText"
         autocomplete="off"
         (keyup.enter)="onEnter()"
+        (keydown)="onKeyDown($event)"
         [disabled]="isDateChanged"
       />
+      <textarea (select)="selectionchange($event)"></textarea>
       <div class="progress-section">
         <span [style.font-weight]="'900'" [style.color]="selectedTheme"
           >{{ percentageComplete }}%</span

@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
@@ -116,6 +123,19 @@ export class TaskComponent implements OnInit {
       this.taskText = '';
       this.taskService.addTask(taskData);
     }
+  }
+
+  onKeyDown(event: any) {
+    if (event.ctrlKey && event.key === 'b') {
+      console.log('BOLD TEXT');
+    }
+  }
+
+  selectionchange(ev: any) {
+    console.log(ev);
+    const start = ev.target.selectionStart;
+    const end = ev.target.selectionEnd;
+    console.log(ev.target.value.substr(start, end - start));
   }
 
   drop(event: CdkDragDrop<string[]>) {
