@@ -47,7 +47,7 @@
         (keydown)="onKeyDown($event)"
         [disabled]="isDateChanged"
       />
-      <textarea (select)="selectionchange($event)"></textarea>
+      <!-- <textarea (select)="selectionchange($event)"></textarea> -->
       <div class="progress-section">
         <span [style.font-weight]="'900'" [style.color]="selectedTheme"
           >{{ percentageComplete }}%</span
@@ -108,8 +108,29 @@
               <s>{{ task.text }}</s>
             </p>
             <div class="actions">
+              <span>
+                <mat-icon
+                  matTooltip="move to long term task"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="convertToLongtermTask(task)"
+                  >star</mat-icon
+                >
+              </span>
+              <span>
+                <mat-icon
+                  matTooltip="move task for tomorrow"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="moveTaskForTomorrow(task)"
+                  >redo</mat-icon
+                >
+              </span>
               <span #createBoardElm>
                 <mat-icon
+                  matTooltip="schedule task"
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"
@@ -119,6 +140,7 @@
               </span>
               <span>
                 <mat-icon
+                  matTooltip="delete task"
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"

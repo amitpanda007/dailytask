@@ -41,7 +41,7 @@
 
 .card {
   // max-width: 450px;
-  width: 75%;
+  width: 90%;
   max-height: 80%;
   background: #191919;
   color: #dddddd;
@@ -100,6 +100,10 @@
   font-size: 14px;
 }
 
+.data:hover {
+  background: #252525;
+}
+
 .task-data {
   display: flex;
   width: 100%;
@@ -112,6 +116,10 @@
 .actions {
   display: flex;
   opacity: 0;
+}
+
+.actions span {
+  padding: 1px;
 }
 
 .task-data:hover .actions {
@@ -293,7 +301,7 @@
 
 @media screen and (max-width: 575px) {
   .card {
-    max-width: 300px;
+    max-width: 90%;
     max-height: 80%;
   }
 

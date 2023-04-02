@@ -22,9 +22,10 @@ import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { ScheduleDialogComponent } from './common/schedule-dialog/schedule-dialog.component';
 import { DiaryModule } from './diary/diary.module';
+import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, ScheduleDialogComponent],
+  declarations: [AppComponent, ScheduleDialogComponent, ConfirmationDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -48,7 +49,7 @@ import { DiaryModule } from './diary/diary.module';
     UserTrackingService,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
-  entryComponents: [ScheduleDialogComponent],
+  entryComponents: [ScheduleDialogComponent, ConfirmationDialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

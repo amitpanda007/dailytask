@@ -17,6 +17,10 @@ import {
 } from 'src/app/common/schedule-dialog/schedule-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonService } from 'src/app/core/services/common.service';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogResult,
+} from 'src/app/common/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'task',
@@ -233,6 +237,42 @@ export class TaskComponent implements OnInit {
       if (result.start) task.start = result.start;
       if (result.end) task.end = result.end;
       this.taskService.updateTask(task);
+    });
+  }
+
+  moveTaskForTomorrow(task: Task) {
+    console.log(task);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '270px',
+      height: '210px',
+    });
+
+    dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      // Logic for moving task to Tomorrow
+    });
+  }
+
+  convertToLongtermTask(task: Task) {
+    console.log(task);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '270px',
+      height: '210px',
+    });
+
+    dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      // Logic for moving task to long term
     });
   }
 
