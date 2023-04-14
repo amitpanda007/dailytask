@@ -21,6 +21,10 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogResult,
 } from 'src/app/common/confirmation-dialog/confirmation-dialog.component';
+import {
+  CalendarDialogComponent,
+  CalendarDialogResult,
+} from 'src/app/common/calendar-dialog/calendar-dialog.component';
 
 @Component({
   selector: 'task',
@@ -57,6 +61,7 @@ export class TaskComponent implements OnInit {
   };
 
   tasks: Task[] = [];
+  permanentTasks: Task[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -86,6 +91,15 @@ export class TaskComponent implements OnInit {
       this.tasks = tasks;
       this.calculatePercentage();
     });
+
+    this.taskService.getPermanentTasks();
+    this.taskService.permanentTasksChanged.subscribe(
+      (permanentTasks: Task[]) => {
+        permanentTasks.sort(this.compare);
+        this.permanentTasks = permanentTasks;
+        // this.calculatePercentage();
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -240,6 +254,30 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  moveTaskForToday(task: Task) {
+    console.log(task);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '270px',
+      height: '210px',
+    });
+
+    dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      // Logic for moving task to Tomorrow
+      if (result.confirm) {
+        const today = new Date();
+        task.created = today;
+        task.modified = today;
+        this.taskService.updateTask(task);
+      }
+    });
+  }
+
   moveTaskForTomorrow(task: Task) {
     console.log(task);
 
@@ -255,6 +293,34 @@ export class TaskComponent implements OnInit {
       }
 
       // Logic for moving task to Tomorrow
+      if (result.confirm) {
+        const tomorrow = this.getNextDay();
+        task.created = tomorrow;
+        task.modified = tomorrow;
+        this.taskService.updateTask(task);
+      }
+    });
+  }
+
+  moveTaskToDate(task: Task) {
+    console.log(task);
+
+    const dialogRef = this.dialog.open(CalendarDialogComponent, {
+      width: '280px',
+      height: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe((result: CalendarDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      if (result.date) {
+        task.created = result.date;
+        task.modified = result.date;
+        this.taskService.updateTask(task);
+      }
     });
   }
 
@@ -273,7 +339,21 @@ export class TaskComponent implements OnInit {
       }
 
       // Logic for moving task to long term
+      if (result.confirm) {
+        this.taskService.moveTaskToLongRun(task);
+      }
     });
+  }
+
+  getNextDay(): Date {
+    const today = new Date();
+    var tomorrow = new Date(today.getTime() + 86400000);
+    const nextDay = new Date(
+      `${
+        tomorrow.getMonth() + 1
+      }/${tomorrow.getDate()}/${tomorrow.getFullYear()}`
+    );
+    return nextDay;
   }
 
   enableEdit() {

@@ -23,9 +23,15 @@ import { SharedModule } from './shared/shared.module';
 import { ScheduleDialogComponent } from './common/schedule-dialog/schedule-dialog.component';
 import { DiaryModule } from './diary/diary.module';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
+import { CalendarDialogComponent } from './common/calendar-dialog/calendar-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, ScheduleDialogComponent, ConfirmationDialogComponent],
+  declarations: [
+    AppComponent,
+    ScheduleDialogComponent,
+    ConfirmationDialogComponent,
+    CalendarDialogComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -49,7 +55,11 @@ import { ConfirmationDialogComponent } from './common/confirmation-dialog/confir
     UserTrackingService,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
-  entryComponents: [ScheduleDialogComponent, ConfirmationDialogComponent],
+  entryComponents: [
+    ScheduleDialogComponent,
+    ConfirmationDialogComponent,
+    CalendarDialogComponent,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

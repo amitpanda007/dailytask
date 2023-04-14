@@ -1,0 +1,16 @@
+<p class="header">Select Date</p>
+
+<div class="section">
+  <mat-card class="calendar-card">
+    <mat-calendar
+      [(selected)]="selectedDate"
+      [dateFilter]="calenderFilter"
+    ></mat-calendar>
+  </mat-card>
+  <p>{{ selectedDate | date }}</p>
+</div>
+
+<div mat-dialog-actions class="options">
+  <button mat-flat-button (click)="save()" *ngIf="selectedDate">Save</button>
+  <button mat-flat-button (click)="cancel()">Cancel</button>
+</div>

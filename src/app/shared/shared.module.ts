@@ -17,7 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
+import { MatMenuModule } from '@angular/material/menu';
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -40,6 +40,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSelectModule,
     MatButtonToggleModule,
     MatProgressBarModule,
+    MatMenuModule,
   ],
   declarations: [],
   providers: [],

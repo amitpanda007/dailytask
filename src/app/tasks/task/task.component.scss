@@ -37,6 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .card {
@@ -45,6 +46,7 @@
   max-height: 80%;
   background: #191919;
   color: #dddddd;
+  margin: 1rem 0;
   font: 400 16px/24px Inter, sans-serif;
   border-radius: 1rem;
   // border: 1px solid rgb(255 255 255 / 10%);
@@ -102,6 +104,15 @@
 
 .data:hover {
   background: #252525;
+  border-radius: 4px;
+}
+
+::ng-deep .custom-menu {
+  background: #252525;
+}
+
+.menu-text {
+  color: #6c757d;
 }
 
 .task-data {

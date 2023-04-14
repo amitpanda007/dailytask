@@ -1,6 +1,139 @@
 <div class="container">
   <mat-card class="card">
     <div class="header">
+      <h2 [style.color]="selectedTheme">Permanent</h2>
+    </div>
+    <div class="content">
+      <div cdkDropList class="listdata" (cdkDropListDropped)="drop($event)">
+        <div *ngIf="permanentTasks.length == 0" class="no-task">
+          <p>No Task</p>
+        </div>
+        <div class="data" *ngFor="let ptask of permanentTasks" cdkDrag>
+          <div class="task-data" *ngIf="permanentTasks.length > 0">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="unchecked"
+              *ngIf="!ptask.status"
+              (click)="changeStatus(ptask)"
+              >radio_button_unchecked</mat-icon
+            >
+            <mat-icon
+              [style.color]="selectedTheme"
+              aria-hidden="false"
+              aria-label="checked"
+              *ngIf="ptask.status"
+              (click)="changeStatus(ptask)"
+              >check</mat-icon
+            >
+            <input
+              [(ngModel)]="ptask.text"
+              class="input"
+              *ngIf="!ptask.status && showInputField"
+              (focus)="focusBoardTitle(ptask)"
+              (focusout)="focusOutBoardTitle(ptask)"
+            />
+            <p
+              class="task-text"
+              (click)="enableEdit()"
+              *ngIf="!ptask.status && !showInputField"
+            >
+              {{ ptask.text }}
+            </p>
+            <p *ngIf="ptask.status" class="task-text">
+              <s>{{ ptask.text }}</s>
+            </p>
+            <div class="actions">
+              <span #createBoardElm>
+                <mat-icon
+                  matTooltip="schedule task"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="scheduleTask(ptask)"
+                  >schedule</mat-icon
+                >
+              </span>
+              <span>
+                <mat-icon
+                  matTooltip="delete task"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="deleteTask(ptask)"
+                  >delete</mat-icon
+                >
+              </span>
+            </div>
+            <span>
+              <mat-icon
+                matTooltip="options"
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                [matMenuTriggerFor]="menu"
+                >more_vert</mat-icon
+              >
+            </span>
+            <mat-menu #menu="matMenu" class="custom-menu">
+              <button mat-menu-item (click)="moveTaskForToday(ptask)">
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  >star</mat-icon
+                >
+                <span class="menu-text">Convert to today's task</span>
+              </button>
+              <button mat-menu-item (click)="moveTaskForTomorrow(ptask)">
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  >redo</mat-icon
+                >
+                <span class="menu-text">Move task for tomorrow</span>
+              </button>
+            </mat-menu>
+          </div>
+          <div class="chip-container" *ngIf="ptask.start || ptask.end">
+            <mat-chip-list>
+              <mat-chip
+                class="my-chip"
+                [style.border-color]="selectedTheme"
+                *ngIf="!ptask.status"
+              >
+                <span>{{ ptask.start }}</span>
+                <span
+                  [style.color]="selectedTheme"
+                  class="separate"
+                  *ngIf="ptask.end"
+                  >-</span
+                >
+                <span>{{ ptask.end }}</span>
+              </mat-chip>
+              <mat-chip
+                class="my-chip"
+                [style.border-color]="'#969696'"
+                *ngIf="ptask.status"
+              >
+                <span [style.color]="'#969696'">{{ ptask.start }}</span>
+                <span
+                  class="separate"
+                  [style.color]="'#969696'"
+                  *ngIf="ptask.end"
+                  >-</span
+                >
+                <span [style.color]="'#969696'">{{ ptask.end }}</span>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="card">
+    <div class="header">
       <h2
         *ngIf="!isDateChanged"
         (click)="showCalender()"
@@ -66,15 +199,6 @@
         </div>
         <div class="data" *ngFor="let task of tasks" cdkDrag>
           <div class="task-data" *ngIf="tasks.length > 0">
-            <!-- <svg viewBox="0 0 36 36" class="circular-chart">
-              <path
-                class="circle-svg"
-                [attr.stroke-dasharray]="percentage"
-                d="M18 2.0845
-      a 15.9155 15.9155 0 0 1 0 31.831
-      a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg> -->
             <mat-icon
               aria-hidden="false"
               aria-label="unchecked"
@@ -107,27 +231,8 @@
             <p *ngIf="task.status" class="task-text">
               <s>{{ task.text }}</s>
             </p>
+
             <div class="actions">
-              <span>
-                <mat-icon
-                  matTooltip="move to long term task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="convertToLongtermTask(task)"
-                  >star</mat-icon
-                >
-              </span>
-              <span>
-                <mat-icon
-                  matTooltip="move task for tomorrow"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="moveTaskForTomorrow(task)"
-                  >redo</mat-icon
-                >
-              </span>
               <span #createBoardElm>
                 <mat-icon
                   matTooltip="schedule task"
@@ -149,6 +254,46 @@
                 >
               </span>
             </div>
+            <span>
+              <mat-icon
+                matTooltip="options"
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                [matMenuTriggerFor]="menu"
+                >more_vert</mat-icon
+              >
+            </span>
+            <mat-menu #menu="matMenu" class="custom-menu">
+              <button mat-menu-item (click)="convertToLongtermTask(task)">
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  >star</mat-icon
+                >
+                <span class="menu-text">Convert to longterm task</span>
+              </button>
+              <button mat-menu-item (click)="moveTaskForTomorrow(task)">
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  >redo</mat-icon
+                >
+                <span class="menu-text">Move task for tomorrow</span>
+              </button>
+
+              <button mat-menu-item (click)="moveTaskToDate(task)">
+                <mat-icon
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  >calendar_month</mat-icon
+                >
+                <span class="menu-text">Move task to date</span>
+              </button>
+            </mat-menu>
           </div>
           <div class="chip-container" *ngIf="task.start || task.end">
             <mat-chip-list>

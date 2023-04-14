@@ -1,0 +1,45 @@
+::ng-deep.swatches-overflow {
+  overflow: hidden !important;
+}
+
+::ng-deep.mat-dialog-container {
+  background: #191919 !important;
+  color: #969696 !important;
+}
+
+::ng-deep.mat-button-toggle-checked span {
+  // background: #969696 !important;
+  color: #fb2424 !important;
+  font-weight: 700;
+}
+
+.calendar-card {
+  width: 200px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.options {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.section p {
+  font-size: 20px;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

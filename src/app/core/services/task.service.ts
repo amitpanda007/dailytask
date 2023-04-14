@@ -11,12 +11,16 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class TaskService {
   private tasksCollection!: AngularFirestoreCollection<Task>;
+  private permanentTasksCollection!: AngularFirestoreCollection<Task>;
   items!: Observable<Task[]>;
   private tasksSubscription!: Subscription;
+  private permanentTasksSubscription!: Subscription;
 
   private allTasks: Task[] = [];
+  private allPermanentTasks: Task[] = [];
   // public tasksChanged = new BehaviorSubject<Task[]>([]);
   public tasksChanged = new Subject<Task[]>();
+  public permanentTasksChanged = new Subject<Task[]>();
 
   constructor(
     private afs: AngularFirestore,
@@ -55,6 +59,24 @@ export class TaskService {
       });
   }
 
+  getPermanentTasks() {
+    const uid = this.authService.getUID();
+    this.permanentTasksCollection = this.afs.collection<Task>(
+      `tasks/${uid}/longrunningtask`,
+      (ref) => {
+        let query = ref.orderBy('created');
+        return query;
+      }
+    );
+
+    this.permanentTasksSubscription = this.permanentTasksCollection
+      .valueChanges({ idField: 'id' })
+      .subscribe((permanentTasks) => {
+        this.allPermanentTasks = permanentTasks;
+        this.permanentTasksChanged.next([...this.allPermanentTasks]);
+      });
+  }
+
   addTask(task: Task) {
     const uid = this.authService.getUID();
     this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
@@ -85,5 +107,21 @@ export class TaskService {
       batch.update(ref, { rank: tasks[idx].rank });
     });
     batch.commit();
+  }
+
+  moveTaskToLongRun(task: Task) {
+    const uid = this.authService.getUID();
+    const db = firebase.firestore();
+    const batch = db.batch();
+
+    const taskRef = db.collection(`tasks/${uid}/usertask`).doc(task.id);
+    batch.delete(taskRef);
+
+    const longTaskRef = db.collection(`tasks/${uid}/longrunningtask`).doc();
+    batch.set(longTaskRef, task);
+
+    batch.commit().then(() => {
+      // ...
+    });
   }
 }
