@@ -21,7 +21,6 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { ScheduleDialogComponent } from './common/schedule-dialog/schedule-dialog.component';
-import { DiaryModule } from './diary/diary.module';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 import { CalendarDialogComponent } from './common/calendar-dialog/calendar-dialog.component';
 import { LabelDialogComponent } from './common/label-dialog/label-dialog.component';
@@ -44,7 +43,6 @@ import { ColorCircleModule } from 'ngx-color/circle';
     AuthModule,
     CoreModule,
     TasksModule,
-    DiaryModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000',

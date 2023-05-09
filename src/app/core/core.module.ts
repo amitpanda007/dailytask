@@ -10,7 +10,6 @@ import { TaskService } from './services/task.service';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { CommonService } from './services/common.service';
-import { DiaryService } from './services/diary.service';
 
 @NgModule({
   imports: [CommonModule, SharedModule],
@@ -19,7 +18,6 @@ import { DiaryService } from './services/diary.service';
   providers: [
     AuthService,
     TaskService,
-    DiaryService,
     CommonService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
