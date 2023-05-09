@@ -24,6 +24,8 @@ import { ScheduleDialogComponent } from './common/schedule-dialog/schedule-dialo
 import { DiaryModule } from './diary/diary.module';
 import { ConfirmationDialogComponent } from './common/confirmation-dialog/confirmation-dialog.component';
 import { CalendarDialogComponent } from './common/calendar-dialog/calendar-dialog.component';
+import { LabelDialogComponent } from './common/label-dialog/label-dialog.component';
+import { ColorCircleModule } from 'ngx-color/circle';
 
 @NgModule({
   declarations: [
@@ -31,12 +33,14 @@ import { CalendarDialogComponent } from './common/calendar-dialog/calendar-dialo
     ScheduleDialogComponent,
     ConfirmationDialogComponent,
     CalendarDialogComponent,
+    LabelDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
+    ColorCircleModule,
     AuthModule,
     CoreModule,
     TasksModule,
@@ -59,6 +63,7 @@ import { CalendarDialogComponent } from './common/calendar-dialog/calendar-dialo
     ScheduleDialogComponent,
     ConfirmationDialogComponent,
     CalendarDialogComponent,
+    LabelDialogComponent,
   ],
   bootstrap: [AppComponent],
 })

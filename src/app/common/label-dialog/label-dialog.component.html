@@ -1,0 +1,84 @@
+<div class="label-section">
+  <mat-icon
+    (click)="toggleLabel()"
+    *ngIf="isAddingLabel && !isEditingLabel"
+    class="action-icon"
+    >arrow_back</mat-icon
+  >
+  <mat-icon (click)="reset()" *ngIf="isEditingLabel" class="action-icon"
+    >close</mat-icon
+  >
+
+  <div class="header">
+    <h2 *ngIf="!data.enableEdit">Labels</h2>
+    <p *ngIf="data.enableEdit">
+      Editing labels for task
+      <!-- <span [innerHTML]="data.taskTitle" class="task-title"></span> in list
+      <span [innerHTML]="data.listName" class="list-name"></span> -->
+    </p>
+  </div>
+
+  <div *ngIf="!isAddingLabel">
+    <!-- <p class="empty-label" *ngIf="labels?.length === 0">No Labels</p> -->
+    <div *ngFor="let label of labels" class="labels">
+      <div class="label-single">
+        <div
+          [style.background-color]="label.color"
+          class="label"
+          (click)="selectLabel(label)"
+        >
+          <mat-icon *ngIf="label.isSelected">done</mat-icon>
+          <span>{{ label.name }}</span>
+        </div>
+        <div class="label-options">
+          <mat-icon
+            (click)="editLabel(label)"
+            [ngStyle]="{ color: data.themeColor }"
+            >edit</mat-icon
+          >
+          <mat-icon
+            (click)="deleteLabel(label)"
+            [ngStyle]="{ color: data.themeColor }"
+            >delete</mat-icon
+          >
+        </div>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="toggleLabel()">
+      Create a new label
+    </button>
+  </div>
+
+  <div *ngIf="isAddingLabel">
+    <mat-label>Name</mat-label>
+    <div class="label-input">
+      <input
+        [style.background-color]="newLabelColor"
+        [style.color]="newLabelTextColor"
+        type="text"
+        matInput
+        cdkFocusInitial
+        autocomplete="off"
+        [(ngModel)]="newLabelName"
+      />
+    </div>
+
+    <div class="label-color">
+      <mat-label>Select a color</mat-label>
+      <color-circle (onChange)="handleChange($event)"></color-circle>
+    </div>
+    <div class="new-label-options">
+      <button mat-stroked-button (click)="addLabel()" *ngIf="!isEditingLabel">
+        ADD
+      </button>
+      <button mat-stroked-button (click)="updateLabel()" *ngIf="isEditingLabel">
+        UPDATE
+      </button>
+    </div>
+  </div>
+
+  <div mat-dialog-actions *ngIf="!isAddingLabel">
+    <button mat-stroked-button (click)="save()">OK</button>
+    <button mat-stroked-button (click)="cancel()">Cancel</button>
+  </div>
+</div>

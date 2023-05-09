@@ -1,4 +1,12 @@
 <div class="container">
+  <mat-card class="card-noshadow">
+    <div class="header">
+      <h2 [style.color]="selectedTheme">Monthly Status</h2>
+    </div>
+    <div class="content"></div>
+  </mat-card>
+
+  <!-- Permanent Tasks Section -->
   <mat-card class="card">
     <div class="header">
       <h2 [style.color]="selectedTheme">Permanent</h2>
@@ -14,7 +22,7 @@
               aria-hidden="false"
               aria-label="unchecked"
               *ngIf="!ptask.status"
-              (click)="changeStatus(ptask)"
+              (click)="changeStatus(ptask, 'PERMANENT')"
               >radio_button_unchecked</mat-icon
             >
             <mat-icon
@@ -22,7 +30,7 @@
               aria-hidden="false"
               aria-label="checked"
               *ngIf="ptask.status"
-              (click)="changeStatus(ptask)"
+              (click)="changeStatus(ptask, 'PERMANENT')"
               >check</mat-icon
             >
             <input
@@ -30,7 +38,7 @@
               class="input"
               *ngIf="!ptask.status && showInputField"
               (focus)="focusBoardTitle(ptask)"
-              (focusout)="focusOutBoardTitle(ptask)"
+              (focusout)="focusOutBoardTitle(ptask, 'PERMANENT')"
             />
             <p
               class="task-text"
@@ -43,13 +51,23 @@
               <s>{{ ptask.text }}</s>
             </p>
             <div class="actions">
+              <span>
+                <mat-icon
+                  matTooltip="add label"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="addLabel(ptask, 'PERMANENT')"
+                  >label</mat-icon
+                >
+              </span>
               <span #createBoardElm>
                 <mat-icon
                   matTooltip="schedule task"
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"
-                  (click)="scheduleTask(ptask)"
+                  (click)="scheduleTask(ptask, 'PERMANENT')"
                   >schedule</mat-icon
                 >
               </span>
@@ -75,7 +93,10 @@
               >
             </span>
             <mat-menu #menu="matMenu" class="custom-menu">
-              <button mat-menu-item (click)="moveTaskForToday(ptask)">
+              <button
+                mat-menu-item
+                (click)="moveTaskForToday(ptask, 'PERMANENT')"
+              >
                 <mat-icon
                   [style.color]="selectedTheme"
                   aria-hidden="false"
@@ -84,7 +105,10 @@
                 >
                 <span class="menu-text">Convert to today's task</span>
               </button>
-              <button mat-menu-item (click)="moveTaskForTomorrow(ptask)">
+              <!-- <button
+                mat-menu-item
+                (click)="moveTaskForTomorrow(ptask, 'PERMANENT')"
+              >
                 <mat-icon
                   [style.color]="selectedTheme"
                   aria-hidden="false"
@@ -92,39 +116,54 @@
                   >redo</mat-icon
                 >
                 <span class="menu-text">Move task for tomorrow</span>
-              </button>
+              </button> -->
             </mat-menu>
           </div>
-          <div class="chip-container" *ngIf="ptask.start || ptask.end">
+          <div
+            class="chip-container"
+            *ngIf="ptask.start || ptask.end || ptask.labels"
+          >
             <mat-chip-list>
-              <mat-chip
-                class="my-chip"
-                [style.border-color]="selectedTheme"
-                *ngIf="!ptask.status"
-              >
-                <span>{{ ptask.start }}</span>
-                <span
-                  [style.color]="selectedTheme"
-                  class="separate"
-                  *ngIf="ptask.end"
-                  >-</span
+              <div *ngIf="ptask.start || ptask.end">
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="selectedTheme"
+                  *ngIf="!ptask.status"
                 >
-                <span>{{ ptask.end }}</span>
-              </mat-chip>
-              <mat-chip
-                class="my-chip"
-                [style.border-color]="'#969696'"
-                *ngIf="ptask.status"
-              >
-                <span [style.color]="'#969696'">{{ ptask.start }}</span>
-                <span
-                  class="separate"
-                  [style.color]="'#969696'"
-                  *ngIf="ptask.end"
-                  >-</span
+                  <span>{{ ptask.start }}</span>
+                  <span
+                    [style.color]="selectedTheme"
+                    class="separate"
+                    *ngIf="ptask.end"
+                    >-</span
+                  >
+                  <span>{{ ptask.end }}</span>
+                </mat-chip>
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="'#969696'"
+                  *ngIf="ptask.status"
                 >
-                <span [style.color]="'#969696'">{{ ptask.end }}</span>
-              </mat-chip>
+                  <span [style.color]="'#969696'">{{ ptask.start }}</span>
+                  <span
+                    class="separate"
+                    [style.color]="'#969696'"
+                    *ngIf="ptask.end"
+                    >-</span
+                  >
+                  <span [style.color]="'#969696'">{{ ptask.end }}</span>
+                </mat-chip>
+              </div>
+              <div *ngFor="let label of ptask.labels">
+                <span>
+                  <mat-chip
+                    [style.background-color]="label.color"
+                    class="single-label my-chip"
+                  >
+                    {{ label.name }}
+                  </mat-chip>
+                </span>
+              </div>
             </mat-chip-list>
           </div>
         </div>
@@ -132,6 +171,7 @@
     </div>
   </mat-card>
 
+  <!-- TODAY's Tasks Section -->
   <mat-card class="card">
     <div class="header">
       <h2
@@ -203,7 +243,7 @@
               aria-hidden="false"
               aria-label="unchecked"
               *ngIf="!task.status"
-              (click)="changeStatus(task)"
+              (click)="changeStatus(task, 'DAILY')"
               >radio_button_unchecked</mat-icon
             >
             <mat-icon
@@ -211,7 +251,7 @@
               aria-hidden="false"
               aria-label="checked"
               *ngIf="task.status"
-              (click)="changeStatus(task)"
+              (click)="changeStatus(task, 'DAILY')"
               >check</mat-icon
             >
             <input
@@ -219,7 +259,7 @@
               class="input"
               *ngIf="!task.status && showInputField"
               (focus)="focusBoardTitle(task)"
-              (focusout)="focusOutBoardTitle(task)"
+              (focusout)="focusOutBoardTitle(task, 'DAILY')"
             />
             <p
               class="task-text"
@@ -233,13 +273,23 @@
             </p>
 
             <div class="actions">
+              <span>
+                <mat-icon
+                  matTooltip="add label"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="addLabel(task, 'DAILY')"
+                  >label</mat-icon
+                >
+              </span>
               <span #createBoardElm>
                 <mat-icon
                   matTooltip="schedule task"
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"
-                  (click)="scheduleTask(task)"
+                  (click)="scheduleTask(task, 'DAILY')"
                   >schedule</mat-icon
                 >
               </span>
@@ -265,26 +315,30 @@
               >
             </span>
             <mat-menu #menu="matMenu" class="custom-menu">
-              <button mat-menu-item (click)="convertToLongtermTask(task)">
+              <button mat-menu-item (click)="convertToPermanentTask(task)">
                 <mat-icon
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"
                   >star</mat-icon
                 >
-                <span class="menu-text">Convert to longterm task</span>
+                <span class="menu-text">Convert to permanent task</span>
               </button>
-              <button mat-menu-item (click)="moveTaskForTomorrow(task)">
+              <button
+                mat-menu-item
+                (click)="moveTaskForToday(task, 'DAILY')"
+                *ngIf="isDateChanged"
+              >
                 <mat-icon
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"
                   >redo</mat-icon
                 >
-                <span class="menu-text">Move task for tomorrow</span>
+                <span class="menu-text">Move task for today</span>
               </button>
 
-              <button mat-menu-item (click)="moveTaskToDate(task)">
+              <button mat-menu-item (click)="moveTaskToDate(task, 'DAILY')">
                 <mat-icon
                   [style.color]="selectedTheme"
                   aria-hidden="false"
@@ -325,6 +379,16 @@
                 >
                 <span [style.color]="'#969696'">{{ task.end }}</span>
               </mat-chip>
+              <div *ngFor="let label of task.labels">
+                <span>
+                  <mat-chip
+                    [style.background-color]="label.color"
+                    class="single-label my-chip"
+                  >
+                    {{ label.name }}
+                  </mat-chip>
+                </span>
+              </div>
             </mat-chip-list>
           </div>
         </div>

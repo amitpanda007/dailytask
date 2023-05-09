@@ -18,12 +18,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatInputModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,

@@ -1,0 +1,96 @@
+::ng-deep.swatches-overflow {
+  overflow: hidden !important;
+}
+
+::ng-deep.mat-dialog-container {
+  background: #191919 !important;
+  color: #969696 !important;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header p {
+  font-size: 12px;
+}
+
+.label-input {
+  border: 1px dotted gray;
+  line-height: 30px;
+}
+
+.label-input input {
+  font: inherit;
+  color: currentColor;
+  border: none;
+  outline: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  vertical-align: bottom;
+  text-align: inherit;
+  border-radius: 5px;
+}
+
+.label-color {
+  margin-top: 15px;
+}
+
+.action-icon {
+  cursor: pointer;
+}
+
+.empty-label {
+  font-size: 2em;
+  padding-top: 10px;
+  text-align: center;
+  opacity: 0.2;
+}
+
+.labels {
+  margin: 10px 0px;
+  min-width: 200px;
+}
+
+.label-single {
+  display: flex;
+}
+
+.label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 70%;
+  height: 30px;
+  color: white;
+  border-radius: 5px;
+}
+
+.label mat-icon {
+  margin: 2px;
+}
+
+.label span {
+  margin: 5px;
+}
+
+.label-options {
+  cursor: pointer;
+  // color: black;
+}
+
+.new-label-options {
+  margin-top: 15px;
+}
+
+.task-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.list-name {
+  font-size: 14px;
+  text-decoration: underline;
+}

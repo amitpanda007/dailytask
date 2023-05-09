@@ -2,30 +2,52 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
+  QuerySnapshot,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  Subscription,
+  map,
+  take,
+} from 'rxjs';
 import { Task } from 'src/app/tasks/task/task.component';
 import { AuthService } from './auth.service';
+import { Label } from 'src/app/common/label-dialog/label-dialog.component';
 
 @Injectable()
 export class TaskService {
   private tasksCollection!: AngularFirestoreCollection<Task>;
   private permanentTasksCollection!: AngularFirestoreCollection<Task>;
+  private labelsCollection!: AngularFirestoreCollection<Label>;
+
   items!: Observable<Task[]>;
   private tasksSubscription!: Subscription;
   private permanentTasksSubscription!: Subscription;
+  private labelsSubscription!: Subscription;
 
   private allTasks: Task[] = [];
   private allPermanentTasks: Task[] = [];
-  // public tasksChanged = new BehaviorSubject<Task[]>([]);
+  private allLabels: Label[] = [];
+
   public tasksChanged = new Subject<Task[]>();
   public permanentTasksChanged = new Subject<Task[]>();
+  public labelsChanged = new BehaviorSubject<Label[]>([]);
 
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService
   ) {}
+
+  getUncompletedTasks() {
+    const uid = this.authService.getUID();
+    return this.afs.collection<Task>(`tasks/${uid}/usertask`, (ref) => {
+      let query = ref.where('status', '==', false);
+      return query;
+    });
+  }
 
   getTasksByDate(date: Date) {
     const startDate = new Date(
@@ -59,6 +81,12 @@ export class TaskService {
       });
   }
 
+  removeTaskSubscription() {
+    if (this.tasksSubscription) {
+      this.tasksSubscription.unsubscribe();
+    }
+  }
+
   getPermanentTasks() {
     const uid = this.authService.getUID();
     this.permanentTasksCollection = this.afs.collection<Task>(
@@ -83,9 +111,16 @@ export class TaskService {
     this.tasksCollection.add(task);
   }
 
-  updateTask(task: Task) {
+  updateTask(task: Task, taskType: string) {
     const uid = this.authService.getUID();
-    this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
+
+    if (taskType === 'DAILY') {
+      this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
+    } else if (taskType === 'PERMANENT') {
+      this.tasksCollection = this.afs.collection<Task>(
+        `tasks/${uid}/longrunningtask`
+      );
+    }
     this.tasksCollection.doc(task.id).set(task);
   }
 
@@ -123,5 +158,35 @@ export class TaskService {
     batch.commit().then(() => {
       // ...
     });
+  }
+
+  addLabel(label: Label) {
+    const uid = this.authService.getUID();
+    this.labelsCollection = this.afs.collection<Label>(`tasks/${uid}/labels`);
+    this.labelsCollection.add(label);
+  }
+
+  getLabels() {
+    const uid = this.authService.getUID();
+    this.labelsCollection = this.afs.collection<Label>(`tasks/${uid}/labels`);
+
+    this.labelsSubscription = this.labelsCollection
+      .valueChanges({ idField: 'id' })
+      .subscribe((labels) => {
+        this.allLabels = labels;
+        this.labelsChanged.next([...this.allLabels]);
+      });
+  }
+
+  updateLabel(label: Label) {
+    const uid = this.authService.getUID();
+    this.labelsCollection = this.afs.collection<Label>(`tasks/${uid}/labels`);
+    this.labelsCollection.doc(label.id).set(label);
+  }
+
+  deleteLabel(label: Label) {
+    const uid = this.authService.getUID();
+    this.labelsCollection = this.afs.collection<Label>(`tasks/${uid}/labels`);
+    this.labelsCollection.doc(label.id).delete();
   }
 }

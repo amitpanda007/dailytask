@@ -25,6 +25,11 @@ import {
   CalendarDialogComponent,
   CalendarDialogResult,
 } from 'src/app/common/calendar-dialog/calendar-dialog.component';
+import {
+  Label,
+  LabelDialogComponent,
+  LabelDialogResult,
+} from 'src/app/common/label-dialog/label-dialog.component';
 
 @Component({
   selector: 'task',
@@ -43,6 +48,7 @@ export class TaskComponent implements OnInit {
   showInputField: boolean = false;
   percentageComplete: number = 0;
   private paramSubscription!: Subscription;
+  labels: Label[] = [];
 
   @ViewChild('createBoardElm', { static: false })
   public createBoardRef!: ElementRef;
@@ -87,6 +93,7 @@ export class TaskComponent implements OnInit {
     const today = new Date();
     this.taskService.getTasksByDate(today);
     this.taskService.tasksChanged.subscribe((tasks: Task[]) => {
+      console.log(tasks);
       tasks.sort(this.compare);
       this.tasks = tasks;
       this.calculatePercentage();
@@ -95,11 +102,18 @@ export class TaskComponent implements OnInit {
     this.taskService.getPermanentTasks();
     this.taskService.permanentTasksChanged.subscribe(
       (permanentTasks: Task[]) => {
+        console.log(permanentTasks);
         permanentTasks.sort(this.compare);
         this.permanentTasks = permanentTasks;
         // this.calculatePercentage();
       }
     );
+
+    this.taskService.getLabels();
+    this.taskService.labelsChanged.subscribe((labels) => {
+      console.log(labels);
+      this.labels = labels;
+    });
   }
 
   ngOnDestroy() {
@@ -136,6 +150,7 @@ export class TaskComponent implements OnInit {
         created: new Date(),
         modified: new Date(),
         rank: rank,
+        labels: [],
       };
       this.tasks.push(taskData);
       this.taskText = '';
@@ -172,10 +187,10 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTaskSequence(changedTasks);
   }
 
-  changeStatus(task: Task) {
+  changeStatus(task: Task, taskType: string) {
     task.status = !task.status;
     task.modified = new Date();
-    this.taskService.updateTask(task);
+    this.taskService.updateTask(task, taskType);
     this.calculatePercentage();
   }
 
@@ -193,11 +208,11 @@ export class TaskComponent implements OnInit {
     task.backupText = cloneDeep(task.text);
   }
 
-  focusOutBoardTitle(task: Task) {
+  focusOutBoardTitle(task: Task, taskType: string) {
     if (task.backupText !== task.text) {
       delete task.backupText;
       task.modified = new Date();
-      this.taskService.updateTask(task);
+      this.taskService.updateTask(task, taskType);
     }
     this.showInputField = false;
   }
@@ -211,9 +226,11 @@ export class TaskComponent implements OnInit {
       today.getFullYear() == date.getFullYear()
     ) {
       this.isDateChanged = false;
+      this.taskService.removeTaskSubscription();
       this.taskService.getTasksByDate(date);
     } else {
       this.isDateChanged = true;
+      this.taskService.removeTaskSubscription();
       this.taskService.getTasksByDate(date);
     }
     this.isShowingCalender = false;
@@ -231,7 +248,31 @@ export class TaskComponent implements OnInit {
     this.taskService.deleteTask(task);
   }
 
-  scheduleTask(task: Task) {
+  addLabel(task: Task, taskType: string) {
+    console.log(task);
+    const clonedTask = JSON.parse(JSON.stringify(task));
+
+    const dialogRef = this.dialog.open(LabelDialogComponent, {
+      width: '360px',
+      data: {
+        themeColor: this.selectedTheme,
+        task: clonedTask,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: LabelDialogResult) => {
+      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      if (result.updatedTask != undefined) {
+        this.taskService.updateTask(result.updatedTask, taskType);
+      }
+    });
+  }
+
+  scheduleTask(task: Task, taskType: string) {
     console.log(task);
 
     const dialogRef = this.dialog.open(ScheduleDialogComponent, {
@@ -250,11 +291,11 @@ export class TaskComponent implements OnInit {
 
       if (result.start) task.start = result.start;
       if (result.end) task.end = result.end;
-      this.taskService.updateTask(task);
+      this.taskService.updateTask(task, taskType);
     });
   }
 
-  moveTaskForToday(task: Task) {
+  moveTaskForToday(task: Task, taskType: string) {
     console.log(task);
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -273,12 +314,12 @@ export class TaskComponent implements OnInit {
         const today = new Date();
         task.created = today;
         task.modified = today;
-        this.taskService.updateTask(task);
+        this.taskService.updateTask(task, taskType);
       }
     });
   }
 
-  moveTaskForTomorrow(task: Task) {
+  moveTaskForTomorrow(task: Task, taskType: string) {
     console.log(task);
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -297,12 +338,12 @@ export class TaskComponent implements OnInit {
         const tomorrow = this.getNextDay();
         task.created = tomorrow;
         task.modified = tomorrow;
-        this.taskService.updateTask(task);
+        this.taskService.updateTask(task, taskType);
       }
     });
   }
 
-  moveTaskToDate(task: Task) {
+  moveTaskToDate(task: Task, taskType: string) {
     console.log(task);
 
     const dialogRef = this.dialog.open(CalendarDialogComponent, {
@@ -319,12 +360,12 @@ export class TaskComponent implements OnInit {
       if (result.date) {
         task.created = result.date;
         task.modified = result.date;
-        this.taskService.updateTask(task);
+        this.taskService.updateTask(task, taskType);
       }
     });
   }
 
-  convertToLongtermTask(task: Task) {
+  convertToPermanentTask(task: Task) {
     console.log(task);
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -351,7 +392,7 @@ export class TaskComponent implements OnInit {
     const nextDay = new Date(
       `${
         tomorrow.getMonth() + 1
-      }/${tomorrow.getDate()}/${tomorrow.getFullYear()}`
+      }/${tomorrow.getDate()}/${tomorrow.getFullYear()} 12:01:00`
     );
     return nextDay;
   }
@@ -372,4 +413,10 @@ export interface Task {
   start?: string;
   end?: string;
   rank: number;
+  labels: Label[];
+}
+
+export enum TaskType {
+  DAILY,
+  PERMANENT,
 }
