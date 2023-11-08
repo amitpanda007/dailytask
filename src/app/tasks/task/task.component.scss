@@ -20,7 +20,8 @@
 .progress {
   margin: 0 0 0 10px;
   border-radius: 4px;
-  background: #6c757d;
+  // background: #6c757d;
+  background: var(--bgColor);
   width: 100%;
 }
 
@@ -44,7 +45,8 @@
   // max-width: 450px;
   width: 90%;
   max-height: 80%;
-  background: #191919;
+  // background: #191919;
+  background: var(--bgColor);
   color: #dddddd;
   margin: 1rem 0;
   font: 400 16px/24px Inter, sans-serif;
@@ -60,7 +62,8 @@
   // max-width: 450px;
   width: 90%;
   max-height: 80%;
-  background: #191919;
+  // background: #191919;
+  background: var(--bgColor);
   color: #dddddd;
   margin: 1rem 0;
   font: 400 16px/24px Inter, sans-serif;
@@ -95,7 +98,8 @@
   // border: solid 1px #ccc;
   min-height: 60px;
   display: block;
-  background: #191919;
+  // background: #191919;
+  background: var(--bgColor);
   border-radius: 4px;
   overflow-y: scroll;
 }
@@ -109,12 +113,14 @@
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
-  background: #191919;
+  // background: #191919;
+  background: var(--bgColor);
   font-size: 14px;
 }
 
 .data:hover {
-  background: #252525;
+  // background: #252525;
+  background: var(--bgColor);
   border-radius: 4px;
 }
 
@@ -175,7 +181,8 @@
   -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
   -webkit-appearance: none !important;
   -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
-  background: #272727;
+  // background: #272727;
+  background: var(--bgColor);
   border: 0;
   border-radius: 5px;
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
@@ -221,7 +228,8 @@
 .calender {
   z-index: 999;
   position: absolute;
-  background: #343333;
+  // background: #343333;
+  background: var(--bgColor);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -236,9 +244,7 @@
 // #609ef2, #09d9ff, #f6ff81, #ffd155, #bc4ff3, #d99ee6, #fdc799,
 
 .theme-section {
-  margin-top: 2rem;
   display: flex;
-  justify-content: flex-end;
 }
 
 .circle:before {
@@ -307,7 +313,8 @@
 }
 
 .my-chip {
-  background-color: #191919;
+  // background-color: #191919;
+  background: var(--bgColor);
   // color: #969696;
   color: #fff;
   min-height: 10px;

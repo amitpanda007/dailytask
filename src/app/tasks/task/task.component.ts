@@ -30,6 +30,7 @@ import {
   LabelDialogComponent,
   LabelDialogResult,
 } from 'src/app/common/label-dialog/label-dialog.component';
+import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
 
 @Component({
   selector: 'task',
@@ -67,13 +68,14 @@ export class TaskComponent implements OnInit {
   };
 
   tasks: Task[] = [];
-  permanentTasks: Task[] = [];
+  // permanentTasks: Task[] = [];
 
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private modeToggleService: ModeToggleService,
   ) {}
 
   ngOnInit(): void {
@@ -99,15 +101,15 @@ export class TaskComponent implements OnInit {
       this.calculatePercentage();
     });
 
-    this.taskService.getPermanentTasks();
-    this.taskService.permanentTasksChanged.subscribe(
-      (permanentTasks: Task[]) => {
-        console.log(permanentTasks);
-        permanentTasks.sort(this.compare);
-        this.permanentTasks = permanentTasks;
-        // this.calculatePercentage();
-      }
-    );
+    // this.taskService.getPermanentTasks();
+    // this.taskService.permanentTasksChanged.subscribe(
+    //   (permanentTasks: Task[]) => {
+    //     console.log(permanentTasks);
+    //     permanentTasks.sort(this.compare);
+    //     this.permanentTasks = permanentTasks;
+    //     // this.calculatePercentage();
+    //   }
+    // );
 
     this.taskService.getLabels();
     this.taskService.labelsChanged.subscribe((labels) => {
@@ -202,6 +204,10 @@ export class TaskComponent implements OnInit {
 
   toggleTheme() {
     this.enableTheme = !this.enableTheme;
+  }
+
+  toggleMode() {
+    this.modeToggleService.toggleMode();
   }
 
   focusBoardTitle(task: Task) {
@@ -365,26 +371,26 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  convertToPermanentTask(task: Task) {
-    console.log(task);
+  // convertToPermanentTask(task: Task) {
+  //   console.log(task);
 
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '270px',
-      height: '210px',
-    });
+  //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+  //     width: '270px',
+  //     height: '210px',
+  //   });
 
-    dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
-      console.log(result);
-      if (!result) {
-        return;
-      }
+  //   dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
+  //     console.log(result);
+  //     if (!result) {
+  //       return;
+  //     }
 
-      // Logic for moving task to long term
-      if (result.confirm) {
-        this.taskService.moveTaskToLongRun(task);
-      }
-    });
-  }
+  //     // Logic for moving task to long term
+  //     if (result.confirm) {
+  //       this.taskService.moveTaskToLongRun(task);
+  //     }
+  //   });
+  // }
 
   getNextDay(): Date {
     const today = new Date();

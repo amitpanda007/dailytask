@@ -1,13 +1,71 @@
 <div class="container">
-  <mat-card class="card-noshadow">
+  <mat-card class="card-noshadow" [ngStyle]="{'border': '2px solid' + selectedTheme}"
+  >
     <div class="header">
-      <h2 [style.color]="selectedTheme">Monthly Status</h2>
+      <!-- <h2 [style.color]="selectedTheme">Settings</h2> -->
     </div>
-    <div class="content"></div>
+    <div class="content">
+      <div class="theme-section">
+        <!-- <svg viewBox="0 0 36 36" class="circular-chart">
+          <path
+            class="circle"
+            [attr.stroke-dasharray]="percentage"
+            d="M18 2.0845
+        a 15.9155 15.9155 0 0 1 0 31.831
+        a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+        </svg> -->
+
+        <span>
+          <mat-icon
+            *ngIf="enableTheme"
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="close"
+            class="icon mat-click"
+            matTooltip="change theme"
+            [style.color]="selectedTheme"
+            (click)="toggleTheme()"
+            >palette</mat-icon
+          >
+        </span>
+        <span *ngIf="!enableTheme" class="color-select">
+          <color-icon-list
+            (themeSelected)="selectTheme($event)"
+          ></color-icon-list>
+
+          <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
+            ><mat-icon
+              matTooltip="cancel"
+              aria-hidden="false"
+              aria-label="close"
+              class="icon mat-click"
+              (click)="toggleTheme()"
+              >cancel</mat-icon
+            ></span
+          >
+        </span>
+
+        <span>
+          <mat-icon
+            *ngIf="enableTheme"
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="close"
+            class="icon mat-click"
+            matTooltip="toggle mode"
+            [style.color]="selectedTheme"
+            (click)="toggleMode()"
+            >star</mat-icon
+          >
+        </span>
+      </div>
+
+    </div>
   </mat-card>
 
-  <!-- Permanent Tasks Section -->
-  <mat-card class="card">
+  <!-- Permanent Tasks Section: START -->
+  <!-- <mat-card class="card">
     <div class="header">
       <h2 [style.color]="selectedTheme">Permanent</h2>
     </div>
@@ -105,7 +163,7 @@
                 >
                 <span class="menu-text">Convert to today's task</span>
               </button>
-              <!-- <button
+              <button
                 mat-menu-item
                 (click)="moveTaskForTomorrow(ptask, 'PERMANENT')"
               >
@@ -116,7 +174,7 @@
                   >redo</mat-icon
                 >
                 <span class="menu-text">Move task for tomorrow</span>
-              </button> -->
+              </button>
             </mat-menu>
           </div>
           <div
@@ -169,7 +227,8 @@
         </div>
       </div>
     </div>
-  </mat-card>
+  </mat-card> -->
+  <!-- Permanent Tasks Section: END -->
 
   <!-- TODAY's Tasks Section -->
   <mat-card class="card">
@@ -315,7 +374,7 @@
               >
             </span>
             <mat-menu #menu="matMenu" class="custom-menu">
-              <button mat-menu-item (click)="convertToPermanentTask(task)">
+              <!-- <button mat-menu-item (click)="convertToPermanentTask(task)">
                 <mat-icon
                   [style.color]="selectedTheme"
                   aria-hidden="false"
@@ -323,7 +382,7 @@
                   >star</mat-icon
                 >
                 <span class="menu-text">Convert to permanent task</span>
-              </button>
+              </button> -->
               <button
                 mat-menu-item
                 (click)="moveTaskForToday(task, 'DAILY')"
@@ -393,47 +452,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="theme-section">
-      <!-- <svg viewBox="0 0 36 36" class="circular-chart">
-        <path
-          class="circle"
-          [attr.stroke-dasharray]="percentage"
-          d="M18 2.0845
-      a 15.9155 15.9155 0 0 1 0 31.831
-      a 15.9155 15.9155 0 0 1 0 -31.831"
-        />
-      </svg> -->
-
-      <span>
-        <mat-icon
-          *ngIf="enableTheme"
-          [style.color]="selectedTheme"
-          aria-hidden="false"
-          aria-label="close"
-          class="icon mat-click"
-          matTooltip="change theme"
-          [style.color]="selectedTheme"
-          (click)="toggleTheme()"
-          >add_circle</mat-icon
-        >
-      </span>
-      <span *ngIf="!enableTheme" class="color-select">
-        <color-icon-list
-          (themeSelected)="selectTheme($event)"
-        ></color-icon-list>
-
-        <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
-          ><mat-icon
-            matTooltip="cancel"
-            aria-hidden="false"
-            aria-label="close"
-            class="icon mat-click"
-            (click)="toggleTheme()"
-            >cancel</mat-icon
-          ></span
-        >
-      </span>
     </div>
   </mat-card>
 </div>

@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "_variables";
 
 html,
 body {
@@ -6,17 +7,29 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: #000 !important;
+  font-family: "Space Mono", monospace;
+  // background: #000 !important;
+  background-color: var(--bgColor);
+}
+
+body.dark {
+  @include darken();
+}
+body.light {
+  @include lighten();
+}
+
+button {
+  font-family: "Space Mono", monospace;
 }
 
 h1,
 h2 {
-  font: 600 52px/60px Inter, sans-serif;
+  font: 600 52px/60px Inter, monospace;
 }
 
 p {
-  font: 400 16px/24px Inter, sans-serif;
+  font: 400 16px/24px Inter, monospace;
 }
 
 ::-webkit-scrollbar {

@@ -26,6 +26,9 @@ const routes: Routes = [
     path: 'tasks/:taskId',
     component: TaskComponent,
     canActivate: [AngularFireAuthGuard],
+    data: {
+      authGuardPipe: redirectUnauthorizedToLogin,
+    },
   },
 ];
 
