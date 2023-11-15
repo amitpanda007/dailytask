@@ -189,4 +189,11 @@ export class TaskService {
     this.labelsCollection = this.afs.collection<Label>(`tasks/${uid}/labels`);
     this.labelsCollection.doc(label.id).delete();
   }
+
+
+  deleteSchedule(task: Task) {
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
+    this.tasksCollection.doc(task.id).set(task);
+  }
 }

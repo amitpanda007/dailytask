@@ -1,234 +1,5 @@
 <div class="container">
-  <mat-card class="card-noshadow" [ngStyle]="{'border': '2px solid' + selectedTheme}"
-  >
-    <div class="header">
-      <!-- <h2 [style.color]="selectedTheme">Settings</h2> -->
-    </div>
-    <div class="content">
-      <div class="theme-section">
-        <!-- <svg viewBox="0 0 36 36" class="circular-chart">
-          <path
-            class="circle"
-            [attr.stroke-dasharray]="percentage"
-            d="M18 2.0845
-        a 15.9155 15.9155 0 0 1 0 31.831
-        a 15.9155 15.9155 0 0 1 0 -31.831"
-          />
-        </svg> -->
-
-        <span>
-          <mat-icon
-            *ngIf="enableTheme"
-            [style.color]="selectedTheme"
-            aria-hidden="false"
-            aria-label="close"
-            class="icon mat-click"
-            matTooltip="change theme"
-            [style.color]="selectedTheme"
-            (click)="toggleTheme()"
-            >palette</mat-icon
-          >
-        </span>
-        <span *ngIf="!enableTheme" class="color-select">
-          <color-icon-list
-            (themeSelected)="selectTheme($event)"
-          ></color-icon-list>
-
-          <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
-            ><mat-icon
-              matTooltip="cancel"
-              aria-hidden="false"
-              aria-label="close"
-              class="icon mat-click"
-              (click)="toggleTheme()"
-              >cancel</mat-icon
-            ></span
-          >
-        </span>
-
-        <span>
-          <mat-icon
-            *ngIf="enableTheme"
-            [style.color]="selectedTheme"
-            aria-hidden="false"
-            aria-label="close"
-            class="icon mat-click"
-            matTooltip="toggle mode"
-            [style.color]="selectedTheme"
-            (click)="toggleMode()"
-            >star</mat-icon
-          >
-        </span>
-      </div>
-
-    </div>
-  </mat-card>
-
-  <!-- Permanent Tasks Section: START -->
-  <!-- <mat-card class="card">
-    <div class="header">
-      <h2 [style.color]="selectedTheme">Permanent</h2>
-    </div>
-    <div class="content">
-      <div cdkDropList class="listdata" (cdkDropListDropped)="drop($event)">
-        <div *ngIf="permanentTasks.length == 0" class="no-task">
-          <p>No Task</p>
-        </div>
-        <div class="data" *ngFor="let ptask of permanentTasks" cdkDrag>
-          <div class="task-data" *ngIf="permanentTasks.length > 0">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="unchecked"
-              *ngIf="!ptask.status"
-              (click)="changeStatus(ptask, 'PERMANENT')"
-              >radio_button_unchecked</mat-icon
-            >
-            <mat-icon
-              [style.color]="selectedTheme"
-              aria-hidden="false"
-              aria-label="checked"
-              *ngIf="ptask.status"
-              (click)="changeStatus(ptask, 'PERMANENT')"
-              >check</mat-icon
-            >
-            <input
-              [(ngModel)]="ptask.text"
-              class="input"
-              *ngIf="!ptask.status && showInputField"
-              (focus)="focusBoardTitle(ptask)"
-              (focusout)="focusOutBoardTitle(ptask, 'PERMANENT')"
-            />
-            <p
-              class="task-text"
-              (click)="enableEdit()"
-              *ngIf="!ptask.status && !showInputField"
-            >
-              {{ ptask.text }}
-            </p>
-            <p *ngIf="ptask.status" class="task-text">
-              <s>{{ ptask.text }}</s>
-            </p>
-            <div class="actions">
-              <span>
-                <mat-icon
-                  matTooltip="add label"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="addLabel(ptask, 'PERMANENT')"
-                  >label</mat-icon
-                >
-              </span>
-              <span #createBoardElm>
-                <mat-icon
-                  matTooltip="schedule task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="scheduleTask(ptask, 'PERMANENT')"
-                  >schedule</mat-icon
-                >
-              </span>
-              <span>
-                <mat-icon
-                  matTooltip="delete task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="deleteTask(ptask)"
-                  >delete</mat-icon
-                >
-              </span>
-            </div>
-            <span>
-              <mat-icon
-                matTooltip="options"
-                [style.color]="selectedTheme"
-                aria-hidden="false"
-                aria-label="close"
-                [matMenuTriggerFor]="menu"
-                >more_vert</mat-icon
-              >
-            </span>
-            <mat-menu #menu="matMenu" class="custom-menu">
-              <button
-                mat-menu-item
-                (click)="moveTaskForToday(ptask, 'PERMANENT')"
-              >
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >star</mat-icon
-                >
-                <span class="menu-text">Convert to today's task</span>
-              </button>
-              <button
-                mat-menu-item
-                (click)="moveTaskForTomorrow(ptask, 'PERMANENT')"
-              >
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >redo</mat-icon
-                >
-                <span class="menu-text">Move task for tomorrow</span>
-              </button>
-            </mat-menu>
-          </div>
-          <div
-            class="chip-container"
-            *ngIf="ptask.start || ptask.end || ptask.labels"
-          >
-            <mat-chip-list>
-              <div *ngIf="ptask.start || ptask.end">
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="selectedTheme"
-                  *ngIf="!ptask.status"
-                >
-                  <span>{{ ptask.start }}</span>
-                  <span
-                    [style.color]="selectedTheme"
-                    class="separate"
-                    *ngIf="ptask.end"
-                    >-</span
-                  >
-                  <span>{{ ptask.end }}</span>
-                </mat-chip>
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="'#969696'"
-                  *ngIf="ptask.status"
-                >
-                  <span [style.color]="'#969696'">{{ ptask.start }}</span>
-                  <span
-                    class="separate"
-                    [style.color]="'#969696'"
-                    *ngIf="ptask.end"
-                    >-</span
-                  >
-                  <span [style.color]="'#969696'">{{ ptask.end }}</span>
-                </mat-chip>
-              </div>
-              <div *ngFor="let label of ptask.labels">
-                <span>
-                  <mat-chip
-                    [style.background-color]="label.color"
-                    class="single-label my-chip"
-                  >
-                    {{ label.name }}
-                  </mat-chip>
-                </span>
-              </div>
-            </mat-chip-list>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-card> -->
-  <!-- Permanent Tasks Section: END -->
+  <task-options [selectedTheme]="selectedTheme"></task-options>
 
   <!-- TODAY's Tasks Section -->
   <mat-card class="card">
@@ -363,7 +134,7 @@
                 >
               </span>
             </div>
-            <span>
+            <!-- <span>
               <mat-icon
                 matTooltip="options"
                 [style.color]="selectedTheme"
@@ -374,15 +145,6 @@
               >
             </span>
             <mat-menu #menu="matMenu" class="custom-menu">
-              <!-- <button mat-menu-item (click)="convertToPermanentTask(task)">
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >star</mat-icon
-                >
-                <span class="menu-text">Convert to permanent task</span>
-              </button> -->
               <button
                 mat-menu-item
                 (click)="moveTaskForToday(task, 'DAILY')"
@@ -406,7 +168,7 @@
                 >
                 <span class="menu-text">Move task to date</span>
               </button>
-            </mat-menu>
+            </mat-menu> -->
           </div>
           <div class="chip-container" *ngIf="task.start || task.end">
             <mat-chip-list>
@@ -438,6 +200,16 @@
                 >
                 <span [style.color]="'#969696'">{{ task.end }}</span>
               </mat-chip>
+              <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
+                ><mat-icon
+                  matTooltip="cancel"
+                  aria-hidden="false"
+                  aria-label="close"
+                  class="material-symbols-outlined icon mat-click"
+                  (click)="deleteSchedule(task)"
+                  >cancel</mat-icon
+                ></span
+              >
               <div *ngFor="let label of task.labels">
                 <span>
                   <mat-chip

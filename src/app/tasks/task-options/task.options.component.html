@@ -1,0 +1,77 @@
+<mat-card class="card-noshadow" [ngStyle]="{'border': '2px solid' + selectedTheme}"
+  >
+    <div class="header">
+      <!-- <h2 [style.color]="selectedTheme">Settings</h2> -->
+    </div>
+    <div class="content">
+      <div class="theme-section">
+        <!-- <svg viewBox="0 0 36 36" class="circular-chart">
+          <path
+            class="circle"
+            [attr.stroke-dasharray]="percentage"
+            d="M18 2.0845
+        a 15.9155 15.9155 0 0 1 0 31.831
+        a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+        </svg> -->
+
+        <span>
+          <mat-icon
+            *ngIf="enableTheme"
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="close"
+            class="material-symbols-outlined icon mat-click"
+            matTooltip="change theme"
+            [style.color]="selectedTheme"
+            (click)="toggleTheme()"
+            >palette</mat-icon
+          >
+        </span>
+        <span *ngIf="!enableTheme" class="color-select">
+          <color-icon-list
+            (themeSelected)="selectTheme($event)"
+          ></color-icon-list>
+
+          <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
+            ><mat-icon
+              matTooltip="cancel"
+              aria-hidden="false"
+              aria-label="close"
+              class="material-symbols-outlined icon mat-click"
+              (click)="toggleTheme()"
+              >cancel</mat-icon
+            ></span
+          >
+        </span>
+
+        <span>
+          <mat-icon
+            *ngIf="enableTheme && isLightMode"
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="close"
+            class="material-symbols-outlined icon mat-click"
+            matTooltip="dark mode"
+            [style.color]="selectedTheme"
+            (click)="toggleMode()"
+            >dark_mode</mat-icon
+          >
+        </span>
+        <span>
+          <mat-icon
+            *ngIf="enableTheme && !isLightMode"
+            [style.color]="selectedTheme"
+            aria-hidden="false"
+            aria-label="close"
+            class="material-symbols-outlined icon mat-click"
+            matTooltip="light mode"
+            [style.color]="selectedTheme"
+            (click)="toggleMode()"
+            >light_mode</mat-icon
+          >
+        </span>
+      </div>
+
+    </div>
+  </mat-card>

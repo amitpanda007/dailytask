@@ -30,7 +30,6 @@ import {
   LabelDialogComponent,
   LabelDialogResult,
 } from 'src/app/common/label-dialog/label-dialog.component';
-import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
 
 @Component({
   selector: 'task',
@@ -40,7 +39,6 @@ import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
 export class TaskComponent implements OnInit {
   taskId!: string;
   taskText: string = '';
-  enableTheme: boolean = true;
   percentage: string = '50, 100';
   selectedTheme!: string;
   selectedDate!: Date | null;
@@ -74,8 +72,7 @@ export class TaskComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private commonService: CommonService,
-    private modeToggleService: ModeToggleService,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -196,20 +193,6 @@ export class TaskComponent implements OnInit {
     this.calculatePercentage();
   }
 
-  selectTheme(theme: string) {
-    this.selectedTheme = theme;
-    localStorage.setItem('themeColor', this.selectedTheme);
-    this.toggleTheme();
-  }
-
-  toggleTheme() {
-    this.enableTheme = !this.enableTheme;
-  }
-
-  toggleMode() {
-    this.modeToggleService.toggleMode();
-  }
-
   focusBoardTitle(task: Task) {
     task.backupText = cloneDeep(task.text);
   }
@@ -252,6 +235,12 @@ export class TaskComponent implements OnInit {
 
   deleteTask(task: Task) {
     this.taskService.deleteTask(task);
+  }
+
+  deleteSchedule(task: Task) {
+    delete task.start;
+    delete task.end;
+    this.taskService.deleteSchedule(task);
   }
 
   addLabel(task: Task, taskType: string) {

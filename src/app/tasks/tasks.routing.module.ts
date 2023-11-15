@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TaskListComponent } from './task-list/task.list.component';
 import { TaskComponent } from './task/task.component';
 import {
   AngularFireAuthGuard,
@@ -9,6 +8,7 @@ import {
 } from '@angular/fire/compat/auth-guard';
 import { ColorIconComponent } from './task/color.icon.component';
 import { ColorIconListComponent } from './task/color.icon.list.component';
+import { TaskOptionsComponent } from './task-options/task.options.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToTasks = () => redirectLoggedInTo(['tasks']);
@@ -16,7 +16,7 @@ const redirectLoggedInToTasks = () => redirectLoggedInTo(['tasks']);
 const routes: Routes = [
   {
     path: 'tasks',
-    component: TaskListComponent,
+    component: TaskComponent,
     canActivate: [AngularFireAuthGuard],
     data: {
       authGuardPipe: redirectUnauthorizedToLogin,
@@ -38,7 +38,7 @@ const routes: Routes = [
 })
 export class TasksRoutingModule {
   static components = [
-    TaskListComponent,
+    TaskOptionsComponent,
     TaskComponent,
     ColorIconComponent,
     ColorIconListComponent,
