@@ -170,42 +170,48 @@
               </button>
             </mat-menu> -->
           </div>
-          <div class="chip-container" *ngIf="task.start || task.end">
+          <!-- <div class="chip-container" *ngIf="task.start || task.end"> -->
+          <div class="chip-container">
             <mat-chip-list>
-              <mat-chip
-                class="my-chip"
-                [style.border-color]="selectedTheme"
-                *ngIf="!task.status"
-              >
-                <span>{{ task.start }}</span>
-                <span
-                  [style.color]="selectedTheme"
-                  class="separate"
-                  *ngIf="task.end"
-                  >-</span
+              <div *ngIf="task.start || task.end">
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="selectedTheme"
+                  *ngIf="!task.status"
                 >
-                <span>{{ task.end }}</span>
-              </mat-chip>
-              <mat-chip
-                class="my-chip"
-                [style.border-color]="'#969696'"
-                *ngIf="task.status"
-              >
-                <span [style.color]="'#969696'">{{ task.start }}</span>
-                <span
-                  class="separate"
-                  [style.color]="'#969696'"
-                  *ngIf="task.end"
-                  >-</span
+                  <span>{{ task.start }}</span>
+                  <span
+                    [style.color]="selectedTheme"
+                    class="separate"
+                    *ngIf="task.end"
+                    >-</span
+                  >
+                  <span>{{ task.end }}</span>
+                </mat-chip>
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="'#969696'"
+                  *ngIf="task.status"
                 >
-                <span [style.color]="'#969696'">{{ task.end }}</span>
-              </mat-chip>
-              <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
+                  <span [style.color]="'#969696'">{{ task.start }}</span>
+                  <span
+                    class="separate"
+                    [style.color]="'#969696'"
+                    *ngIf="task.end"
+                    >-</span
+                  >
+                  <span [style.color]="'#969696'">{{ task.end }}</span>
+                </mat-chip>
+              </div>
+              <span
+                [style.color]="selectedTheme"
+                [style.marginLeft.px]="10"
+                *ngIf="task.start || task.end"
                 ><mat-icon
                   matTooltip="cancel"
                   aria-hidden="false"
                   aria-label="close"
-                  class="material-symbols-outlined icon mat-click"
+                  class="material-symbols-outlined mat-click"
                   (click)="deleteSchedule(task)"
                   >cancel</mat-icon
                 ></span
@@ -222,6 +228,7 @@
               </div>
             </mat-chip-list>
           </div>
+          <mat-chip-list> </mat-chip-list>
         </div>
       </div>
     </div>

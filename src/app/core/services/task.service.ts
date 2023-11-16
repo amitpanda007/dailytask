@@ -54,11 +54,7 @@ export class TaskService {
       date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
     );
     const endDate = new Date(
-      date.getFullYear() +
-        '-' +
-        (date.getMonth() + 1) +
-        '-' +
-        (date.getDate() + 1)
+      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDate() + 1)
     );
 
     const uid = this.authService.getUID();
@@ -66,12 +62,14 @@ export class TaskService {
       `tasks/${uid}/usertask`,
       (ref) => {
         let query = ref
-          .where('created', '>', startDate)
+          .where('created', '>=', startDate)
           .where('created', '<', endDate)
           .orderBy('created');
         return query;
       }
     );
+
+    // this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
 
     this.tasksSubscription = this.tasksCollection
       .valueChanges({ idField: 'id' })
@@ -189,7 +187,6 @@ export class TaskService {
     this.labelsCollection = this.afs.collection<Label>(`tasks/${uid}/labels`);
     this.labelsCollection.doc(label.id).delete();
   }
-
 
   deleteSchedule(task: Task) {
     const uid = this.authService.getUID();

@@ -262,7 +262,8 @@ export class TaskComponent implements OnInit {
       }
 
       if (result.updatedTask != undefined) {
-        this.taskService.updateTask(result.updatedTask, taskType);
+        task.labels = result.updatedTask.labels
+        this.taskService.updateTask(task, taskType);
       }
     });
   }

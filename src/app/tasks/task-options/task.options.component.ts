@@ -16,7 +16,7 @@ export class TaskOptionsComponent implements OnInit {
     private modeToggleService: ModeToggleService) {}
 
   ngOnInit(): void {
-    this.router.navigate(['today'], { relativeTo: this.route });
+    // this.router.navigate(['today'], { relativeTo: this.route });
 
     this.modeToggleService.modeChanged$.subscribe(mode => {
       this.isLightMode = mode == 'light' ? true : false ;
