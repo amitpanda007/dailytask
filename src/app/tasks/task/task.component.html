@@ -173,15 +173,16 @@
           <!-- <div class="chip-container" *ngIf="task.start || task.end"> -->
           <div class="chip-container">
             <mat-chip-list>
-              <div *ngIf="task.start || task.end">
+              <span *ngIf="task.start || task.end" class="flex">
                 <mat-chip
                   class="my-chip"
                   [style.border-color]="selectedTheme"
+                  [style.background-color]="selectedTheme"
                   *ngIf="!task.status"
                 >
                   <span>{{ task.start }}</span>
                   <span
-                    [style.color]="selectedTheme"
+                    [style.color]="'#FFF'"
                     class="separate"
                     *ngIf="task.end"
                     >-</span
@@ -191,6 +192,7 @@
                 <mat-chip
                   class="my-chip"
                   [style.border-color]="'#969696'"
+                  [style.background-color]="selectedTheme"
                   *ngIf="task.status"
                 >
                   <span [style.color]="'#969696'">{{ task.start }}</span>
@@ -202,33 +204,30 @@
                   >
                   <span [style.color]="'#969696'">{{ task.end }}</span>
                 </mat-chip>
-              </div>
+              </span>
               <span
                 [style.color]="selectedTheme"
-                [style.marginLeft.px]="10"
                 *ngIf="task.start || task.end"
+                class="flex"
                 ><mat-icon
-                  matTooltip="cancel"
+                  matTooltip="remove"
                   aria-hidden="false"
                   aria-label="close"
-                  class="material-symbols-outlined mat-click"
+                  class="material-symbols-outlined mat-click schedule-remove"
                   (click)="deleteSchedule(task)"
                   >cancel</mat-icon
                 ></span
               >
-              <div *ngFor="let label of task.labels">
-                <span>
+                <span *ngFor="let label of task.labels">
                   <mat-chip
                     [style.background-color]="label.color"
-                    class="single-label my-chip"
+                    class="single-label my-chip flex"
                   >
                     {{ label.name }}
                   </mat-chip>
                 </span>
-              </div>
             </mat-chip-list>
           </div>
-          <mat-chip-list> </mat-chip-list>
         </div>
       </div>
     </div>

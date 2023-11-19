@@ -235,6 +235,10 @@
   display: flex;
 }
 
+.flex {
+  display: flex;
+}
+
 .circle:before {
   cursor: pointer;
   content: " \25CF";
@@ -315,6 +319,16 @@
 .separate {
   padding: 0 2px;
 }
+
+.schedule-remove {
+  display: none;
+}
+
+.chip-container:hover .schedule-remove {
+  display: flex;
+}
+
+
 
 @media screen and (max-width: 575px) {
   .card {
