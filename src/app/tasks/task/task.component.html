@@ -115,6 +115,7 @@
               </span>
               <span #createBoardElm>
                 <mat-icon
+                  *ngIf="!task.start && !task.end"
                   matTooltip="schedule task"
                   [style.color]="selectedTheme"
                   aria-hidden="false"
@@ -180,11 +181,9 @@
                   [style.background-color]="selectedTheme"
                   *ngIf="!task.status"
                 >
+                  <span *ngIf="!task.start && task.end">Now</span>
                   <span>{{ task.start }}</span>
-                  <span
-                    [style.color]="'#FFF'"
-                    class="separate"
-                    *ngIf="task.end"
+                  <span [style.color]="'#FFF'" class="separate" *ngIf="task.end"
                     >-</span
                   >
                   <span>{{ task.end }}</span>
@@ -218,14 +217,14 @@
                   >cancel</mat-icon
                 ></span
               >
-                <span *ngFor="let label of task.labels">
-                  <mat-chip
-                    [style.background-color]="label.color"
-                    class="single-label my-chip flex"
-                  >
-                    {{ label.name }}
-                  </mat-chip>
-                </span>
+              <span *ngFor="let label of task.labels">
+                <mat-chip
+                  [style.background-color]="label.color"
+                  class="single-label my-chip flex"
+                >
+                  {{ label.name }}
+                </mat-chip>
+              </span>
             </mat-chip-list>
           </div>
         </div>

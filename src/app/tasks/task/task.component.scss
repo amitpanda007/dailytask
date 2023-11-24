@@ -301,7 +301,7 @@
 
 .chip-container {
   display: flex;
-  margin: 0.8rem 0 0 2.6rem;
+  margin: 0 0 0 2.4rem;
 }
 
 .my-chip {
@@ -326,9 +326,10 @@
 
 .chip-container:hover .schedule-remove {
   display: flex;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
 }
-
-
 
 @media screen and (max-width: 575px) {
   .card {
