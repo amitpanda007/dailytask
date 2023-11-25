@@ -103,73 +103,40 @@
             </p>
 
             <div class="actions">
-              <span>
-                <mat-icon
-                  matTooltip="add label"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="addLabel(task, 'DAILY')"
-                  >label</mat-icon
-                >
-              </span>
-              <span #createBoardElm>
-                <mat-icon
-                  *ngIf="!task.start && !task.end"
-                  matTooltip="schedule task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="scheduleTask(task, 'DAILY')"
-                  >schedule</mat-icon
-                >
-              </span>
-              <span>
-                <mat-icon
-                  matTooltip="delete task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="deleteTask(task)"
-                  >delete</mat-icon
-                >
-              </span>
-            </div>
-            <!-- <span>
-              <mat-icon
-                matTooltip="options"
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
+                matTooltip="add label"
+                [style.color]="!task.status ? selectedTheme: disabledTheme"
+                (click)="addLabel(task, 'DAILY')"
+              >
+                <mat-icon>label</mat-icon>
+              </button>
+
+              <button mat-icon-button
+                #createBoardElm
+                *ngIf="!task.start && !task.end"
+                matTooltip="schedule task"
+                [style.color]="!task.status ? selectedTheme: disabledTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleTask(task, 'DAILY')"
+              >
+                <mat-icon>schedule</mat-icon>
+              </button>
+
+              <button mat-icon-button
+                matTooltip="delete task"
                 [style.color]="selectedTheme"
                 aria-hidden="false"
                 aria-label="close"
-                [matMenuTriggerFor]="menu"
-                >more_vert</mat-icon
+                (click)="deleteTask(task)"
               >
-            </span>
-            <mat-menu #menu="matMenu" class="custom-menu">
-              <button
-                mat-menu-item
-                (click)="moveTaskForToday(task, 'DAILY')"
-                *ngIf="isDateChanged"
-              >
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >redo</mat-icon
-                >
-                <span class="menu-text">Move task for today</span>
+                <mat-icon>delete</mat-icon>
               </button>
-
-              <button mat-menu-item (click)="moveTaskToDate(task, 'DAILY')">
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >calendar_month</mat-icon
-                >
-                <span class="menu-text">Move task to date</span>
-              </button>
-            </mat-menu> -->
+            </div>
           </div>
           <!-- <div class="chip-container" *ngIf="task.start || task.end"> -->
           <div class="chip-container">
@@ -191,7 +158,7 @@
                 <mat-chip
                   class="my-chip"
                   [style.border-color]="'#969696'"
-                  [style.background-color]="selectedTheme"
+                  [style.background-color]="'#f1f1f1'"
                   *ngIf="task.status"
                 >
                   <span [style.color]="'#969696'">{{ task.start }}</span>
@@ -206,7 +173,7 @@
               </span>
               <span
                 [style.color]="selectedTheme"
-                *ngIf="task.start || task.end"
+                *ngIf="(task.start || task.end) && !task.status"
                 class="flex"
                 ><mat-icon
                   matTooltip="remove"

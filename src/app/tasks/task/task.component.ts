@@ -41,6 +41,7 @@ export class TaskComponent implements OnInit {
   taskText: string = '';
   percentage: string = '50, 100';
   selectedTheme!: string;
+  disabledTheme!: string;
   selectedDate!: Date | null;
   isShowingCalender: boolean = false;
   isDateChanged: boolean = false;
@@ -79,8 +80,10 @@ export class TaskComponent implements OnInit {
     const theme = localStorage.getItem('themeColor');
     if (theme) {
       this.selectedTheme = theme;
+      this.disabledTheme = "#969696";
     } else {
       this.selectedTheme = '#fe387b';
+      this.disabledTheme = "#969696";
     }
 
     this.paramSubscription = this.route.paramMap.subscribe(
