@@ -1,5 +1,8 @@
 <div class="container">
-  <task-options [selectedTheme]="selectedTheme"></task-options>
+  <task-options
+    class="task-opts"
+    [selectedTheme]="selectedTheme"
+  ></task-options>
 
   <!-- TODAY's Tasks Section -->
   <mat-card class="card">
@@ -109,17 +112,18 @@
                 aria-hidden="false"
                 aria-label="close"
                 matTooltip="add label"
-                [style.color]="!task.status ? selectedTheme: disabledTheme"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
                 (click)="addLabel(task, 'DAILY')"
               >
                 <mat-icon>label</mat-icon>
               </button>
 
-              <button mat-icon-button
+              <button
+                mat-icon-button
                 #createBoardElm
                 *ngIf="!task.start && !task.end"
                 matTooltip="schedule task"
-                [style.color]="!task.status ? selectedTheme: disabledTheme"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
                 aria-hidden="false"
                 aria-label="close"
                 (click)="scheduleTask(task, 'DAILY')"
@@ -127,7 +131,8 @@
                 <mat-icon>schedule</mat-icon>
               </button>
 
-              <button mat-icon-button
+              <button
+                mat-icon-button
                 matTooltip="delete task"
                 [style.color]="selectedTheme"
                 aria-hidden="false"
