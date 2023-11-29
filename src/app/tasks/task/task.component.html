@@ -75,6 +75,7 @@
             <mat-icon
               aria-hidden="false"
               aria-label="unchecked"
+              matTooltip="mark complete"
               *ngIf="!task.status"
               (click)="changeStatus(task, 'DAILY')"
               >radio_button_unchecked</mat-icon
@@ -83,6 +84,7 @@
               [style.color]="selectedTheme"
               aria-hidden="false"
               aria-label="checked"
+              matTooltip="mark incomplete"
               *ngIf="task.status"
               (click)="changeStatus(task, 'DAILY')"
               >check</mat-icon
@@ -90,15 +92,9 @@
             <input
               [(ngModel)]="task.text"
               class="input"
-              *ngIf="!task.status && showInputField"
-              (focus)="focusBoardTitle(task)"
-              (focusout)="focusOutBoardTitle(task, 'DAILY')"
+              *ngIf="!task.status && task.isEdit"
             />
-            <p
-              class="task-text"
-              (click)="enableEdit()"
-              *ngIf="!task.status && !showInputField"
-            >
+            <p class="task-text" *ngIf="!task.status && !task.isEdit">
               {{ task.text }}
             </p>
             <p *ngIf="task.status" class="task-text">
@@ -106,6 +102,19 @@
             </p>
 
             <div class="actions">
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
+                matTooltip="edit task"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
+                (click)="editTask(task)"
+              >
+                <mat-icon *ngIf="!task.isEdit">edit</mat-icon>
+                <mat-icon *ngIf="task.isEdit">done</mat-icon>
+              </button>
+
               <button
                 [disabled]="task.status"
                 mat-icon-button
@@ -119,8 +128,8 @@
               </button>
 
               <button
+                [disabled]="task.status"
                 mat-icon-button
-                #createBoardElm
                 *ngIf="!task.start && !task.end"
                 matTooltip="schedule task"
                 [style.color]="!task.status ? selectedTheme : disabledTheme"
@@ -128,6 +137,7 @@
                 aria-label="close"
                 (click)="scheduleTask(task, 'DAILY')"
               >
+                <span #createBoardElm></span>
                 <mat-icon>schedule</mat-icon>
               </button>
 

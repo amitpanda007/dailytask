@@ -80,10 +80,10 @@ export class TaskComponent implements OnInit {
     const theme = localStorage.getItem('themeColor');
     if (theme) {
       this.selectedTheme = theme;
-      this.disabledTheme = "#969696";
+      this.disabledTheme = '#969696';
     } else {
       this.selectedTheme = '#fe387b';
-      this.disabledTheme = "#969696";
+      this.disabledTheme = '#969696';
     }
 
     this.paramSubscription = this.route.paramMap.subscribe(
@@ -265,7 +265,7 @@ export class TaskComponent implements OnInit {
       }
 
       if (result.updatedTask != undefined) {
-        task.labels = result.updatedTask.labels
+        task.labels = result.updatedTask.labels;
         this.taskService.updateTask(task, taskType);
       }
     });
@@ -273,6 +273,7 @@ export class TaskComponent implements OnInit {
 
   scheduleTask(task: Task, taskType: string) {
     console.log(task);
+    console.log(this.createBoardRef);
 
     const dialogRef = this.dialog.open(ScheduleDialogComponent, {
       width: '270px',
@@ -396,8 +397,17 @@ export class TaskComponent implements OnInit {
     return nextDay;
   }
 
-  enableEdit() {
-    this.showInputField = true;
+  editTask(task: Task) {
+    task.isEdit = !task.isEdit;
+    if (task.isEdit) {
+      task.backupText = cloneDeep(task.text);
+    }
+    if (!task.isEdit && task.backupText !== task.text) {
+      delete task.backupText;
+      task.modified = new Date();
+      this.taskService.updateTask(task, 'DAILY');
+      return;
+    }
   }
 }
 
@@ -413,6 +423,7 @@ export interface Task {
   end?: string;
   rank: number;
   labels: Label[];
+  isEdit?: boolean;
 }
 
 export enum TaskType {
