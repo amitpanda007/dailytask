@@ -111,32 +111,64 @@ export class LabelDialogComponent implements OnInit {
     this.taskService.deleteLabel(label);
   }
 
+  // selectLabel(label: Label) {
+  //   let labelIndex = this.data?.task?.labels?.findIndex(
+  //     (l) => l.id == label.id
+  //   );
+  //   let labelData = this.labels.find((l) => l.id == label.id);
+
+  //   if (labelIndex != undefined && labelIndex > -1) {
+  //     this.data?.task?.labels?.splice(labelIndex, 1);
+  //     if (labelData != undefined) {
+  //       labelData.isSelected = false;
+  //     }
+  //   } else {
+  //     this.data?.task?.labels?.push(label);
+  //     if (labelData != undefined) {
+  //       labelData.isSelected = true;
+  //     }
+  //   }
+  // }
+
   selectLabel(label: Label) {
-    let labelIndex = this.data?.task?.labels?.findIndex(
-      (l) => l.id == label.id
+    let labelIndex = this.data?.task?.labelIds?.findIndex(
+      (id) => id == label.id
     );
     let labelData = this.labels.find((l) => l.id == label.id);
 
     if (labelIndex != undefined && labelIndex > -1) {
-      this.data?.task?.labels?.splice(labelIndex, 1);
+      this.data?.task?.labelIds?.splice(labelIndex, 1);
       if (labelData != undefined) {
         labelData.isSelected = false;
       }
     } else {
-      this.data?.task?.labels?.push(label);
+      if (label.id) this.data?.task?.labelIds?.push(label.id);
       if (labelData != undefined) {
         labelData.isSelected = true;
       }
     }
   }
 
+  // markLabelSelect() {
+  //   this.labels.forEach((lbl) => {
+  //     lbl.isSelected = false;
+  //   });
+
+  //   this.data?.task?.labels?.forEach((label) => {
+  //     let labelFound = this.labels.find((l) => l.id == label.id);
+  //     if (labelFound != undefined) {
+  //       labelFound.isSelected = true;
+  //     }
+  //   });
+  // }
+
   markLabelSelect() {
     this.labels.forEach((lbl) => {
       lbl.isSelected = false;
     });
 
-    this.data?.task?.labels?.forEach((label) => {
-      let labelFound = this.labels.find((l) => l.id == label.id);
+    this.data?.task?.labelIds?.forEach((id) => {
+      let labelFound = this.labels.find((l) => l.id == id);
       if (labelFound != undefined) {
         labelFound.isSelected = true;
       }
@@ -153,6 +185,7 @@ export interface LabelDialogData {
 
 export interface LabelDialogResult {
   updatedTask?: Task;
+  taskLabelIds?: string[];
 }
 
 export interface Label {

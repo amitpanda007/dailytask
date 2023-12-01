@@ -8,7 +8,14 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Subscription } from 'rxjs';
+import {
+  Subscription,
+  combineLatest,
+  combineLatestWith,
+  concatAll,
+  mergeAll,
+  of,
+} from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { TaskService } from 'src/app/core/services/task.service';
 import {
@@ -99,6 +106,7 @@ export class TaskComponent implements OnInit {
       tasks.sort(this.compare);
       this.tasks = tasks;
       this.calculatePercentage();
+      this.addLabelToTask();
     });
 
     // this.taskService.getPermanentTasks();
@@ -115,6 +123,7 @@ export class TaskComponent implements OnInit {
     this.taskService.labelsChanged.subscribe((labels) => {
       console.log(labels);
       this.labels = labels;
+      this.addLabelToTask();
     });
   }
 
@@ -142,6 +151,16 @@ export class TaskComponent implements OnInit {
     this.percentageComplete = Math.floor((completedTasks / total) * 100);
   }
 
+  addLabelToTask() {
+    this.tasks.forEach((task) => {
+      task.labels = [];
+      task.labelIds?.forEach((id) => {
+        let labelFound = this.labels.find((lbl) => lbl.id == id);
+        if (labelFound) task.labels.push(labelFound);
+      });
+    });
+  }
+
   onEnter() {
     if (this.taskText && this.taskText.trim().length > 0) {
       const rank = this.tasks.length;
@@ -153,6 +172,7 @@ export class TaskComponent implements OnInit {
         modified: new Date(),
         rank: rank,
         labels: [],
+        labelIds: [],
       };
       this.tasks.push(taskData);
       this.taskText = '';
@@ -265,7 +285,8 @@ export class TaskComponent implements OnInit {
       }
 
       if (result.updatedTask != undefined) {
-        task.labels = result.updatedTask.labels;
+        // task.labels = result.updatedTask.labels;
+        task.labelIds = result.updatedTask.labelIds;
         this.taskService.updateTask(task, taskType);
       }
     });
@@ -423,6 +444,7 @@ export interface Task {
   end?: string;
   rank: number;
   labels: Label[];
+  labelIds?: string[];
   isEdit?: boolean;
 }
 
