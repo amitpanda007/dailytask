@@ -173,6 +173,7 @@ export class TaskComponent implements OnInit {
         rank: rank,
         labels: [],
         labelIds: [],
+        isPermanent: false
       };
       this.tasks.push(taskData);
       this.taskText = '';
@@ -430,6 +431,11 @@ export class TaskComponent implements OnInit {
       return;
     }
   }
+
+  markTaskPermanent(task: Task) {
+    task.isPermanent = !task.isPermanent;
+    this.taskService.updateTask(task, 'DAILY');
+  }
 }
 
 export interface Task {
@@ -446,6 +452,7 @@ export interface Task {
   labels: Label[];
   labelIds?: string[];
   isEdit?: boolean;
+  isPermanent: boolean;
 }
 
 export enum TaskType {

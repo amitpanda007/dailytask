@@ -120,6 +120,18 @@
                 mat-icon-button
                 aria-hidden="false"
                 aria-label="close"
+                [matTooltip]="task.isPermanent ? 'remove permanent' : 'make permanent'"
+                (click)="markTaskPermanent(task)"
+              >
+                <mat-icon class="material-icons-outlined" *ngIf="!task.isPermanent">star</mat-icon>
+                <mat-icon class="permanent" *ngIf="task.isPermanent">star</mat-icon>
+              </button>
+
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
                 matTooltip="add label"
                 [style.color]="!task.status ? selectedTheme : disabledTheme"
                 (click)="addLabel(task, 'DAILY')"

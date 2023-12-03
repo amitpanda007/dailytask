@@ -12,5 +12,5 @@ https://task2tick.web.app/
 
 - [x] Add edit button for each task :tada:
 - [ ] Add subtasks under expandable main task
-- [ ] Add permanent task
-- [ ] Label update should reflect on tasks. Change label structure under task.
+- [x] Add permanent task
+- [x] Label update should reflect on tasks. Change label structure under task.
