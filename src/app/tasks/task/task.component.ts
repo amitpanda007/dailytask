@@ -46,6 +46,7 @@ import {
 export class TaskComponent implements OnInit {
   taskId!: string;
   taskText: string = '';
+  // subtaskText: string = '';
   percentage: string = '50, 100';
   selectedTheme!: string;
   disabledTheme!: string;
@@ -173,11 +174,34 @@ export class TaskComponent implements OnInit {
         rank: rank,
         labels: [],
         labelIds: [],
-        isPermanent: false
+        isPermanent: false,
+        showSubtaskInput: false,
+        subtasks: [],
       };
       this.tasks.push(taskData);
       this.taskText = '';
       this.taskService.addTask(taskData);
+    }
+  }
+
+  onSubtaskEnter(task: Task) {
+    if(!task.subtasks) {
+      task.subtasks = [];
+    }
+    if (task.subtaskText && task.subtaskText.trim().length > 0) {
+      const rank = task.subtasks.length;
+      const subtaskData: Subtask = {
+        subtaskId: this.commonService.randomId(10),
+        text: task.subtaskText,
+        status: false,
+        created: new Date(),
+        modified: new Date(),
+        rank: rank,
+      };
+      task.subtasks.push(subtaskData);
+      console.log(task);
+      task.subtaskText = '';
+      // this.taskService.updateTask(task, 'DAILY');
     }
   }
 
@@ -208,6 +232,11 @@ export class TaskComponent implements OnInit {
       });
     });
     this.taskService.updateTaskSequence(changedTasks);
+  }
+
+  dropSubtask(event: CdkDragDrop<string[]>) {
+    const changedSubtasks: Task[] = [];
+    console.log(event);
   }
 
   changeStatus(task: Task, taskType: string) {
@@ -387,6 +416,10 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  showSubtaskInput(task: Task) {
+    task.showSubtaskInput = !task.showSubtaskInput;
+  }
+
   // convertToPermanentTask(task: Task) {
   //   console.log(task);
 
@@ -453,6 +486,19 @@ export interface Task {
   labelIds?: string[];
   isEdit?: boolean;
   isPermanent: boolean;
+  subtaskText?: string;
+  showSubtaskInput: boolean;
+  subtasks: Subtask[];
+}
+
+export interface Subtask {
+  subtaskId: string;
+  text: string;
+  status: boolean;
+  created: Date;
+  modified: Date;
+  rank: number;
+  isEdit?: boolean;
 }
 
 export enum TaskType {
