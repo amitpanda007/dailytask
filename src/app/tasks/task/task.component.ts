@@ -242,7 +242,27 @@ export class TaskComponent implements OnInit {
   changeStatus(task: Task, taskType: string) {
     task.status = !task.status;
     task.modified = new Date();
-    this.taskService.updateTask(task, taskType);
+    if(task.status) {
+      task.subtasks.forEach(sbtask => sbtask.status = true);
+    }else {
+      task.subtasks.forEach(sbtask => sbtask.status = false);
+    }
+
+    // this.taskService.updateTask(task, taskType);
+    this.calculatePercentage();
+  }
+
+  changeSubtaskStatus(task: Task, subtask: Subtask, taskType: string) {
+    // const subtaskData = task.subtasks.find(sbtask => sbtask.subtaskId = subtask.subtaskId);
+    subtask.status = !subtask.status;
+    // console.log(task);
+    const peningSubtask = task.subtasks.filter(sbtask => sbtask.status == false);
+    if(peningSubtask.length == 0) {
+      task.status = true
+    } else {
+      task.status = false
+    }
+    // this.taskService.updateTask(task, taskType);
     this.calculatePercentage();
   }
 

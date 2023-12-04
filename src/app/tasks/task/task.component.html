@@ -127,6 +127,7 @@
               >
                 <mat-icon
                   class="material-icons-outlined"
+                  [style.color]="'white'"
                   *ngIf="!task.isPermanent"
                   >star</mat-icon
                 >
@@ -141,7 +142,9 @@
                 aria-hidden="false"
                 aria-label="close"
                 [style.color]="!task.status ? selectedTheme : disabledTheme"
-                [matTooltip]="task.showSubtaskInput ? 'close subtask': 'add subtask'"
+                [matTooltip]="
+                  task.showSubtaskInput ? 'close subtask' : 'add subtask'
+                "
                 (click)="showSubtaskInput(task)"
               >
                 <mat-icon *ngIf="!task.showSubtaskInput">add</mat-icon>
@@ -187,10 +190,11 @@
             </div>
           </div>
 
-          <!-- Subtak Section-->
+          <!-- Subtak Section: Start-->
+
           <input
             cdkFocusInitial
-            class="text-input"
+            class="text-input subtask-section"
             name="subtaskText"
             type="email"
             placeholder="Enter sub task here (eg. complete document review)"
@@ -200,41 +204,62 @@
             (keydown)="onKeyDown($event)"
             *ngIf="task.showSubtaskInput"
           />
-          <div
-            cdkDropList
-            class="listdata"
-            (cdkDropListDropped)="dropSubtask($event)"
+
+          <mat-accordion
             *ngIf="task.subtasks && task.subtasks.length > 0"
+            class="subtask-section"
           >
-            <div class="data" *ngFor="let subtask of task.subtasks" cdkDrag>
-              <mat-icon
-                aria-hidden="false"
-                aria-label="unchecked"
-                matTooltip="mark complete"
-                *ngIf="!subtask.status"
-                >radio_button_unchecked</mat-icon
-              >
-              <mat-icon
-                [style.color]="selectedTheme"
-                aria-hidden="false"
-                aria-label="checked"
-                matTooltip="mark incomplete"
-                *ngIf="subtask.status"
-                >check</mat-icon
-              >
-              <input
-                [(ngModel)]="subtask.text"
-                class="input"
-                *ngIf="!subtask.status && subtask.isEdit"
-              />
-              <p class="task-text" *ngIf="!subtask.status && !subtask.isEdit">
-                {{ subtask.text }}
-              </p>
-              <p *ngIf="subtask.status" class="task-text">
-                <s>{{ subtask.text }}</s>
-              </p>
-            </div>
-          </div>
+            <mat-expansion-panel hideToggle class="bkgrnd" [style.border]="'1px solid'" [style.border-color]="selectedTheme">
+              <mat-expansion-panel-header>
+                <mat-panel-title [style.color]="selectedTheme"> SUBTASKS({{task.subtasks.length}}) </mat-panel-title>
+                <!-- <mat-panel-description>
+                  This is a summary of the content
+                </mat-panel-description> -->
+              </mat-expansion-panel-header>
+              <div cdkDropList (cdkDropListDropped)="dropSubtask($event)">
+                <div
+                  class="subtask"
+                  *ngFor="let subtask of task.subtasks"
+                  cdkDrag
+                >
+                  <mat-icon
+                    [style.color]="'#969696'"
+                    aria-hidden="false"
+                    aria-label="unchecked"
+                    matTooltip="mark complete"
+                    *ngIf="!subtask.status"
+                    (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
+                    >radio_button_unchecked</mat-icon
+                  >
+                  <mat-icon
+                    [style.color]="selectedTheme"
+                    aria-hidden="false"
+                    aria-label="checked"
+                    matTooltip="mark incomplete"
+                    *ngIf="subtask.status"
+                    (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
+                    >check</mat-icon
+                  >
+                  <input
+                    [(ngModel)]="subtask.text"
+                    class="input"
+                    *ngIf="!subtask.status && subtask.isEdit"
+                  />
+                  <p
+                    class="task-text"
+                    *ngIf="!subtask.status && !subtask.isEdit"
+                  >
+                    {{ subtask.text }}
+                  </p>
+                  <p *ngIf="subtask.status" class="task-text">
+                    <s>{{ subtask.text }}</s>
+                  </p>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <!-- Subtak Section: End-->
 
           <div class="chip-container">
             <mat-chip-list>
