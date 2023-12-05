@@ -37,6 +37,7 @@ import {
   LabelDialogComponent,
   LabelDialogResult,
 } from 'src/app/common/label-dialog/label-dialog.component';
+import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
 
 @Component({
   selector: 'task',
@@ -57,6 +58,7 @@ export class TaskComponent implements OnInit {
   percentageComplete: number = 0;
   private paramSubscription!: Subscription;
   labels: Label[] = [];
+  iconColor: string = 'white';
 
   @ViewChild('createBoardElm', { static: false })
   public createBoardRef!: ElementRef;
@@ -81,7 +83,8 @@ export class TaskComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private modeToggleService: ModeToggleService
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +102,10 @@ export class TaskComponent implements OnInit {
         this.taskId = params.get('taskId') as string;
       }
     );
+
+    this.modeToggleService.modeChanged$.subscribe(mode => {
+      this.iconColor = mode == 'light' ? '#e1e1e1' : 'white' ;
+    });
 
     const today = new Date();
     this.taskService.getTasksByDate(today);

@@ -127,7 +127,7 @@
               >
                 <mat-icon
                   class="material-icons-outlined"
-                  [style.color]="!task.status ? 'white' : disabledTheme"
+                  [style.color]="!task.status ? iconColor : disabledTheme"
                   *ngIf="!task.isPermanent"
                   >star</mat-icon
                 >
