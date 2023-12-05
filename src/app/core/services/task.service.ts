@@ -18,7 +18,6 @@ import { Task } from 'src/app/tasks/task/task.component';
 import { AuthService } from './auth.service';
 import { Label } from 'src/app/common/label-dialog/label-dialog.component';
 
-
 @Injectable()
 export class TaskService {
   private tasksCollection!: AngularFirestoreCollection<Task>;
@@ -71,36 +70,40 @@ export class TaskService {
   //     }
   //   );
 
-    getTasksByDate(date: Date) {
-      const startDate = new Date(
-        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-      );
-      const endDate = new Date(
-        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDate() + 1)
-      );
+  getTasksByDate(date: Date) {
+    const startDate = new Date(
+      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    );
+    const endDate = new Date(
+      date.getFullYear() +
+        '-' +
+        (date.getMonth() + 1) +
+        '-' +
+        (date.getDate() + 1)
+    );
 
-      const uid = this.authService.getUID();
-      this.tasksCollection = this.afs.collection<Task>(
-        `tasks/${uid}/usertask`,
-        (ref) => {
-          let query = ref
-            .where('created', '>=', startDate)
-            .where('created', '<', endDate)
-            .orderBy('created');
-          return query;
-        }
-      );
+    const uid = this.authService.getUID();
+    this.tasksCollection = this.afs.collection<Task>(
+      `tasks/${uid}/usertask`,
+      (ref) => {
+        let query = ref
+          .where('created', '>=', startDate)
+          .where('created', '<', endDate)
+          .orderBy('created');
+        return query;
+      }
+    );
 
-      this.permanentTasksCollection = this.afs.collection<Task>(
-        `tasks/${uid}/usertask`,
-        (ref) => {
-          let query = ref
-            .where('isPermanent', '==', true)
-            .where('created', '<', startDate)
-            .orderBy('created');
-          return query;
-        }
-      );
+    this.permanentTasksCollection = this.afs.collection<Task>(
+      `tasks/${uid}/usertask`,
+      (ref) => {
+        let query = ref
+          .where('isPermanent', '==', true)
+          .where('created', '<', startDate)
+          .orderBy('created');
+        return query;
+      }
+    );
 
     // this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
 
@@ -111,9 +114,12 @@ export class TaskService {
     //     this.tasksChanged.next([...this.allTasks]);
     //   });
 
-    this.tasksCollection.valueChanges({ idField: 'id' })
+    this.tasksCollection
+      .valueChanges({ idField: 'id' })
       .pipe(
-        combineLatestWith(this.permanentTasksCollection.valueChanges({ idField: 'id' }))
+        combineLatestWith(
+          this.permanentTasksCollection.valueChanges({ idField: 'id' })
+        )
       )
       .subscribe(([tasks, permanentTasks]) => {
         this.allTasks = [...tasks, ...permanentTasks];
@@ -236,4 +242,3 @@ export class TaskService {
     this.tasksCollection.doc(task.id).set(task);
   }
 }
-

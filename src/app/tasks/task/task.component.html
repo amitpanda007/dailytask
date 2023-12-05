@@ -127,7 +127,7 @@
               >
                 <mat-icon
                   class="material-icons-outlined"
-                  [style.color]="'white'"
+                  [style.color]="!task.status ? 'white' : disabledTheme"
                   *ngIf="!task.isPermanent"
                   >star</mat-icon
                 >
@@ -209,14 +209,22 @@
             *ngIf="task.subtasks && task.subtasks.length > 0"
             class="subtask-section"
           >
-            <mat-expansion-panel hideToggle class="bkgrnd" [style.border]="'1px solid'" [style.border-color]="selectedTheme">
+            <mat-expansion-panel
+              hideToggle
+              class="bkgrnd"
+              [style.border]="'1px solid'"
+              [style.border-color]="selectedTheme"
+              [expanded]="task.subtasks.length > 0"
+            >
               <mat-expansion-panel-header>
-                <mat-panel-title [style.color]="selectedTheme"> SUBTASKS({{task.subtasks.length}}) </mat-panel-title>
+                <mat-panel-title [style.color]="selectedTheme">
+                  SUBTASKS({{ task.subtasks.length }})
+                </mat-panel-title>
                 <!-- <mat-panel-description>
                   This is a summary of the content
                 </mat-panel-description> -->
               </mat-expansion-panel-header>
-              <div cdkDropList (cdkDropListDropped)="dropSubtask($event)">
+              <div cdkDropList (cdkDropListDropped)="dropSubtask($event, task)">
                 <div
                   class="subtask"
                   *ngFor="let subtask of task.subtasks"

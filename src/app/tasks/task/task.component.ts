@@ -185,7 +185,7 @@ export class TaskComponent implements OnInit {
   }
 
   onSubtaskEnter(task: Task) {
-    if(!task.subtasks) {
+    if (!task.subtasks) {
       task.subtasks = [];
     }
     if (task.subtaskText && task.subtaskText.trim().length > 0) {
@@ -201,7 +201,7 @@ export class TaskComponent implements OnInit {
       task.subtasks.push(subtaskData);
       console.log(task);
       task.subtaskText = '';
-      // this.taskService.updateTask(task, 'DAILY');
+      this.taskService.updateTask(task, 'DAILY');
     }
   }
 
@@ -234,21 +234,25 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTaskSequence(changedTasks);
   }
 
-  dropSubtask(event: CdkDragDrop<string[]>) {
-    const changedSubtasks: Task[] = [];
-    console.log(event);
+  dropSubtask(event: CdkDragDrop<string[]>, task: Task) {
+    // const changedSubtasks: Task[] = [];
+    moveItemInArray(task.subtasks, event.previousIndex, event.currentIndex);
+    task.subtasks.forEach((sbtsk, i) => {
+      sbtsk.rank = i;
+    });
+    this.taskService.updateTask(task, 'DAILY');
   }
 
   changeStatus(task: Task, taskType: string) {
     task.status = !task.status;
     task.modified = new Date();
-    if(task.status) {
-      task.subtasks.forEach(sbtask => sbtask.status = true);
-    }else {
-      task.subtasks.forEach(sbtask => sbtask.status = false);
+    if (task.status) {
+      task.subtasks.forEach((sbtask) => (sbtask.status = true));
+    } else {
+      task.subtasks.forEach((sbtask) => (sbtask.status = false));
     }
 
-    // this.taskService.updateTask(task, taskType);
+    this.taskService.updateTask(task, taskType);
     this.calculatePercentage();
   }
 
@@ -256,13 +260,15 @@ export class TaskComponent implements OnInit {
     // const subtaskData = task.subtasks.find(sbtask => sbtask.subtaskId = subtask.subtaskId);
     subtask.status = !subtask.status;
     // console.log(task);
-    const peningSubtask = task.subtasks.filter(sbtask => sbtask.status == false);
-    if(peningSubtask.length == 0) {
-      task.status = true
+    const peningSubtask = task.subtasks.filter(
+      (sbtask) => sbtask.status == false
+    );
+    if (peningSubtask.length == 0) {
+      task.status = true;
     } else {
-      task.status = false
+      task.status = false;
     }
-    // this.taskService.updateTask(task, taskType);
+    this.taskService.updateTask(task, taskType);
     this.calculatePercentage();
   }
 
