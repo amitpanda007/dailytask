@@ -230,38 +230,68 @@
                   *ngFor="let subtask of task.subtasks"
                   cdkDrag
                 >
-                  <mat-icon
-                    [style.color]="'#969696'"
-                    aria-hidden="false"
-                    aria-label="unchecked"
-                    matTooltip="mark complete"
-                    *ngIf="!subtask.status"
-                    (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
-                    >radio_button_unchecked</mat-icon
-                  >
-                  <mat-icon
-                    [style.color]="selectedTheme"
-                    aria-hidden="false"
-                    aria-label="checked"
-                    matTooltip="mark incomplete"
-                    *ngIf="subtask.status"
-                    (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
-                    >check</mat-icon
-                  >
-                  <input
-                    [(ngModel)]="subtask.text"
-                    class="input"
-                    *ngIf="!subtask.status && subtask.isEdit"
-                  />
-                  <p
-                    class="task-text"
-                    *ngIf="!subtask.status && !subtask.isEdit"
-                  >
-                    {{ subtask.text }}
-                  </p>
-                  <p *ngIf="subtask.status" class="task-text">
-                    <s>{{ subtask.text }}</s>
-                  </p>
+                  <div class="subtask-data">
+                    <mat-icon
+                      [style.color]="'#969696'"
+                      aria-hidden="false"
+                      aria-label="unchecked"
+                      matTooltip="mark complete"
+                      *ngIf="!subtask.status"
+                      (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
+                      >radio_button_unchecked</mat-icon
+                    >
+                    <mat-icon
+                      [style.color]="selectedTheme"
+                      aria-hidden="false"
+                      aria-label="checked"
+                      matTooltip="mark incomplete"
+                      *ngIf="subtask.status"
+                      (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
+                      >check</mat-icon
+                    >
+                    <input
+                      [(ngModel)]="subtask.text"
+                      class="input"
+                      *ngIf="!subtask.status && subtask.isEdit"
+                    />
+                    <p
+                      class="task-text"
+                      *ngIf="!subtask.status && !subtask.isEdit"
+                    >
+                      {{ subtask.text }}
+                    </p>
+                    <p *ngIf="subtask.status" class="task-text">
+                      <s>{{ subtask.text }}</s>
+                    </p>
+
+                    <div class="actions">
+                      <button
+                        [disabled]="subtask.status"
+                        mat-icon-button
+                        aria-hidden="false"
+                        aria-label="close"
+                        matTooltip="edit task"
+                        [style.color]="
+                          !subtask.status ? selectedTheme : disabledTheme
+                        "
+                        (click)="editSubtask(task, subtask)"
+                      >
+                        <mat-icon *ngIf="!subtask.isEdit">edit</mat-icon>
+                        <mat-icon *ngIf="subtask.isEdit">done</mat-icon>
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        matTooltip="delete task"
+                        [style.color]="selectedTheme"
+                        aria-hidden="false"
+                        aria-label="close"
+                        (click)="deleteSubtask(task, subtask)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </mat-expansion-panel>

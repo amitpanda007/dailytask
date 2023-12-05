@@ -502,6 +502,28 @@ export class TaskComponent implements OnInit {
     task.isPermanent = !task.isPermanent;
     this.taskService.updateTask(task, 'DAILY');
   }
+
+  editSubtask(task: Task, subtask: Subtask) {
+    subtask.isEdit = !subtask.isEdit;
+    if (subtask.isEdit) {
+      subtask.backupText = cloneDeep(subtask.text);
+    }
+    if (!subtask.isEdit && subtask.backupText !== subtask.text) {
+      delete subtask.backupText;
+      subtask.modified = new Date();
+      this.taskService.updateTask(task, 'DAILY');
+      return;
+    }
+  }
+
+  deleteSubtask(task: Task, subtask: Subtask) {
+    const sbtskIndex = task.subtasks.findIndex(sbtsk => sbtsk.subtaskId == subtask.subtaskId);
+    console.log(sbtskIndex);
+    if(sbtskIndex != -1) {
+      task.subtasks.splice(sbtskIndex, 1);
+      this.taskService.updateTask(task, 'DAILY');
+    }
+  }
 }
 
 export interface Task {
@@ -527,6 +549,7 @@ export interface Task {
 export interface Subtask {
   subtaskId: string;
   text: string;
+  backupText?: string;
   status: boolean;
   created: Date;
   modified: Date;

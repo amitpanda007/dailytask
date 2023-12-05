@@ -151,6 +151,11 @@
   cursor: pointer;
 }
 
+.subtask-data {
+  display: flex;
+  width: 100%;
+}
+
 .subtask mat-icon {
   cursor: pointer;
 }
@@ -165,6 +170,10 @@
 }
 
 .task-data:hover .actions {
+  opacity: 1;
+}
+
+.subtask-data:hover .actions {
   opacity: 1;
 }
 
