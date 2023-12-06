@@ -65,9 +65,9 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
       }
 
       .mat-icon {
-        font-size: 40px;
-        width: 40px;
-        height: 40px;
+        font-size: 25px;
+        width: 25px;
+        height: 25px;
       }
     </style>
     <mat-icon
