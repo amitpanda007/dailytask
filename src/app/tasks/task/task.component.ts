@@ -38,6 +38,7 @@ import {
   LabelDialogResult,
 } from 'src/app/common/label-dialog/label-dialog.component';
 import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'task',
@@ -84,7 +85,8 @@ export class TaskComponent implements OnInit {
     private route: ActivatedRoute,
     private taskService: TaskService,
     private commonService: CommonService,
-    private modeToggleService: ModeToggleService
+    private modeToggleService: ModeToggleService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -517,14 +519,24 @@ export class TaskComponent implements OnInit {
   }
 
   deleteSubtask(task: Task, subtask: Subtask) {
-    const sbtskIndex = task.subtasks.findIndex(
-      (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
+    let snackBarRef = this.snackBar.open(
+      'undo last action?',
+      'Undo',
+      { duration: 5000 }
     );
-    console.log(sbtskIndex);
-    if (sbtskIndex != -1) {
-      task.subtasks.splice(sbtskIndex, 1);
-      this.taskService.updateTask(task, 'DAILY');
-    }
+
+    snackBarRef.onAction().subscribe(() => {
+      console.log('The snackbar action was triggered!');
+    });
+
+    // const sbtskIndex = task.subtasks.findIndex(
+    //   (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
+    // );
+    // console.log(sbtskIndex);
+    // if (sbtskIndex != -1) {
+    //   task.subtasks.splice(sbtskIndex, 1);
+    //   this.taskService.updateTask(task, 'DAILY');
+    // }
   }
 }
 

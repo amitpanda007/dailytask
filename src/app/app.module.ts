@@ -25,6 +25,7 @@ import { ConfirmationDialogComponent } from './common/confirmation-dialog/confir
 import { CalendarDialogComponent } from './common/calendar-dialog/calendar-dialog.component';
 import { LabelDialogComponent } from './common/label-dialog/label-dialog.component';
 import { ColorCircleModule } from 'ngx-color/circle';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [

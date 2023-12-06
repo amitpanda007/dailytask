@@ -7,7 +7,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: "Roboto", monospace;
+  font-family: "Roboto Mono", monospace;
   // background: #000 !important;
   background-color: var(--bgColor);
 }
@@ -20,16 +20,17 @@ body.light {
 }
 
 button {
-  font-family: "Space Mono", monospace;
+  // font-family: "Space Mono", monospace;
+  font-family: "Roboto Mono", monospace;
 }
 
 h1,
 h2 {
-  font: 600 52px/60px Inter, monospace;
+  font: 600 52px/60px "Roboto Mono", monospace;
 }
 
 p {
-  font: 400 16px/24px Inter, monospace;
+  font: 400 16px/24px "Roboto Mono", monospace;
 }
 
 ::-webkit-scrollbar {
