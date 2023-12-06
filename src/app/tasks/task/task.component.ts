@@ -103,8 +103,8 @@ export class TaskComponent implements OnInit {
       }
     );
 
-    this.modeToggleService.modeChanged$.subscribe(mode => {
-      this.iconColor = mode == 'light' ? '#e1e1e1' : 'white' ;
+    this.modeToggleService.modeChanged$.subscribe((mode) => {
+      this.iconColor = mode == 'light' ? '#e1e1e1' : 'white';
     });
 
     const today = new Date();
@@ -258,7 +258,7 @@ export class TaskComponent implements OnInit {
     } else {
       task.subtasks.forEach((sbtask) => (sbtask.status = false));
     }
-
+    task.showSubtaskInput = false;
     this.taskService.updateTask(task, taskType);
     this.calculatePercentage();
   }
@@ -517,9 +517,11 @@ export class TaskComponent implements OnInit {
   }
 
   deleteSubtask(task: Task, subtask: Subtask) {
-    const sbtskIndex = task.subtasks.findIndex(sbtsk => sbtsk.subtaskId == subtask.subtaskId);
+    const sbtskIndex = task.subtasks.findIndex(
+      (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
+    );
     console.log(sbtskIndex);
-    if(sbtskIndex != -1) {
+    if (sbtskIndex != -1) {
       task.subtasks.splice(sbtskIndex, 1);
       this.taskService.updateTask(task, 'DAILY');
     }

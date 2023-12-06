@@ -213,11 +213,15 @@
               hideToggle
               class="bkgrnd"
               [style.border]="'1px solid'"
-              [style.border-color]="selectedTheme"
-              [expanded]="task.subtasks.length > 0"
+              [style.border-color]="
+                !task.status ? selectedTheme : disabledTheme
+              "
+              [expanded]="task.subtasks.length > 0 && task.status == false"
             >
               <mat-expansion-panel-header>
-                <mat-panel-title [style.color]="selectedTheme">
+                <mat-panel-title
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                >
                   SUBTASKS({{ task.subtasks.length }})
                 </mat-panel-title>
                 <!-- <mat-panel-description>
