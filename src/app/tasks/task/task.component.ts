@@ -337,7 +337,6 @@ export class TaskComponent implements OnInit {
     snackBarRef.afterDismissed().subscribe(() => {
       console.log(undoClicked);
       if (undoClicked) {
-        this.tasks = tasksBackup;
         return;
       } else {
         this.taskService.deleteTask(task);
@@ -347,6 +346,7 @@ export class TaskComponent implements OnInit {
     snackBarRef.onAction().subscribe(() => {
       console.log('The snackbar action was triggered!');
       undoClicked = true;
+      this.tasks = tasksBackup;
     });
   }
 
@@ -535,7 +535,6 @@ export class TaskComponent implements OnInit {
     snackBarRef.afterDismissed().subscribe(() => {
       console.log(undoClicked);
       if (undoClicked) {
-        task.isPermanent = !task.isPermanent;
         return;
       } else {
         this.taskService.updateTask(task, 'DAILY');
@@ -545,6 +544,7 @@ export class TaskComponent implements OnInit {
     snackBarRef.onAction().subscribe(() => {
       console.log('The snackbar action was triggered!');
       undoClicked = true;
+      task.isPermanent = !task.isPermanent;
     });
   }
 
@@ -579,7 +579,6 @@ export class TaskComponent implements OnInit {
     snackBarRef.afterDismissed().subscribe(() => {
       console.log(undoClicked);
       if (undoClicked) {
-        task.subtasks = subtaskBackup;
         return;
       } else {
         this.taskService.updateTask(task, 'DAILY');
@@ -589,6 +588,7 @@ export class TaskComponent implements OnInit {
     snackBarRef.onAction().subscribe(() => {
       console.log('The snackbar action was triggered!');
       undoClicked = true;
+      task.subtasks = subtaskBackup;
     });
   }
 }
