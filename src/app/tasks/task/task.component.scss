@@ -344,7 +344,8 @@
   // background-color: #191919;
   background: var(--bgColor);
   // color: #969696;
-  color: #fff;
+  // color: #fff;
+  color: var(--textColor);
   min-height: 10px;
   transition: min-height 2s;
   border: 2px solid;
@@ -354,6 +355,12 @@
 
 .separate {
   padding: 0 2px;
+  color: var(--textColor);
+}
+
+.separate-disabled {
+  padding: 0 2px;
+  color: #969696;
 }
 
 .schedule-remove {

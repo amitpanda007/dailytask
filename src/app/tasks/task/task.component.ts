@@ -527,7 +527,25 @@ export class TaskComponent implements OnInit {
 
   markTaskPermanent(task: Task) {
     task.isPermanent = !task.isPermanent;
-    this.taskService.updateTask(task, 'DAILY');
+    let undoClicked: boolean = false;
+    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+      duration: 5000,
+    });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      console.log(undoClicked);
+      if (undoClicked) {
+        task.isPermanent = !task.isPermanent;
+        return;
+      } else {
+        this.taskService.updateTask(task, 'DAILY');
+      }
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      console.log('The snackbar action was triggered!');
+      undoClicked = true;
+    });
   }
 
   editSubtask(task: Task, subtask: Subtask) {

@@ -195,31 +195,23 @@
               <span *ngIf="task.start || task.end" class="flex">
                 <mat-chip
                   class="my-chip"
-                  [style.border-color]="selectedTheme"
-                  [style.background-color]="selectedTheme"
-                  *ngIf="!task.status"
+                  [style.border-color]="task.status ? '#969696' : selectedTheme"
+                  [style.background-color]="
+                    task.status ? '#f1f1f1' : selectedTheme
+                  "
                 >
                   <span *ngIf="!task.start && task.end">Now</span>
-                  <span>{{ task.start }}</span>
-                  <span [style.color]="'#FFF'" class="separate" *ngIf="task.end"
-                    >-</span
-                  >
-                  <span>{{ task.end }}</span>
-                </mat-chip>
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="'#969696'"
-                  [style.background-color]="'#f1f1f1'"
-                  *ngIf="task.status"
-                >
-                  <span [style.color]="'#969696'">{{ task.start }}</span>
+                  <span [style.color]="task.status ? '#969696' : ''">{{
+                    task.start
+                  }}</span>
                   <span
-                    class="separate"
-                    [style.color]="'#969696'"
+                    [ngClass]="task.status ? 'separate-disabled' : 'separate'"
                     *ngIf="task.end"
                     >-</span
                   >
-                  <span [style.color]="'#969696'">{{ task.end }}</span>
+                  <span [style.color]="task.status ? '#969696' : ''">{{
+                    task.end
+                  }}</span>
                 </mat-chip>
               </span>
               <span
