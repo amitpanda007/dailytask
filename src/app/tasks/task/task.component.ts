@@ -86,7 +86,7 @@ export class TaskComponent implements OnInit {
     private taskService: TaskService,
     private commonService: CommonService,
     private modeToggleService: ModeToggleService,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -322,7 +322,32 @@ export class TaskComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
-    this.taskService.deleteTask(task);
+    const tasksBackup = cloneDeep(this.tasks);
+    let undoClicked: boolean = false;
+    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+      duration: 5000,
+    });
+
+    const tskIndex = this.tasks.findIndex((tsk) => tsk.taskId == task.taskId);
+    console.log(tskIndex);
+    if (tskIndex != -1) {
+      this.tasks.splice(tskIndex, 1);
+    }
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      console.log(undoClicked);
+      if (undoClicked) {
+        this.tasks = tasksBackup;
+        return;
+      } else {
+        this.taskService.deleteTask(task);
+      }
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      console.log('The snackbar action was triggered!');
+      undoClicked = true;
+    });
   }
 
   deleteSchedule(task: Task) {
@@ -519,24 +544,34 @@ export class TaskComponent implements OnInit {
   }
 
   deleteSubtask(task: Task, subtask: Subtask) {
-    let snackBarRef = this.snackBar.open(
-      'undo last action?',
-      'Undo',
-      { duration: 5000 }
+    const subtaskBackup = cloneDeep(task.subtasks);
+    let undoClicked: boolean = false;
+    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+      duration: 5000,
+    });
+
+    const sbtskIndex = task.subtasks.findIndex(
+      (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
     );
+    console.log(sbtskIndex);
+    if (sbtskIndex != -1) {
+      task.subtasks.splice(sbtskIndex, 1);
+    }
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      console.log(undoClicked);
+      if (undoClicked) {
+        task.subtasks = subtaskBackup;
+        return;
+      } else {
+        this.taskService.updateTask(task, 'DAILY');
+      }
+    });
 
     snackBarRef.onAction().subscribe(() => {
       console.log('The snackbar action was triggered!');
+      undoClicked = true;
     });
-
-    // const sbtskIndex = task.subtasks.findIndex(
-    //   (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
-    // );
-    // console.log(sbtskIndex);
-    // if (sbtskIndex != -1) {
-    //   task.subtasks.splice(sbtskIndex, 1);
-    //   this.taskService.updateTask(task, 'DAILY');
-    // }
   }
 }
 

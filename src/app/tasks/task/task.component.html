@@ -190,6 +190,62 @@
             </div>
           </div>
 
+          <div class="chip-container">
+            <mat-chip-list>
+              <span *ngIf="task.start || task.end" class="flex">
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="selectedTheme"
+                  [style.background-color]="selectedTheme"
+                  *ngIf="!task.status"
+                >
+                  <span *ngIf="!task.start && task.end">Now</span>
+                  <span>{{ task.start }}</span>
+                  <span [style.color]="'#FFF'" class="separate" *ngIf="task.end"
+                    >-</span
+                  >
+                  <span>{{ task.end }}</span>
+                </mat-chip>
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="'#969696'"
+                  [style.background-color]="'#f1f1f1'"
+                  *ngIf="task.status"
+                >
+                  <span [style.color]="'#969696'">{{ task.start }}</span>
+                  <span
+                    class="separate"
+                    [style.color]="'#969696'"
+                    *ngIf="task.end"
+                    >-</span
+                  >
+                  <span [style.color]="'#969696'">{{ task.end }}</span>
+                </mat-chip>
+              </span>
+              <span
+                [style.color]="selectedTheme"
+                *ngIf="(task.start || task.end) && !task.status"
+                class="flex"
+                ><mat-icon
+                  matTooltip="remove"
+                  aria-hidden="false"
+                  aria-label="close"
+                  class="material-symbols-outlined mat-click schedule-remove"
+                  (click)="deleteSchedule(task)"
+                  >cancel</mat-icon
+                ></span
+              >
+              <span *ngFor="let label of task.labels">
+                <mat-chip
+                  [style.background-color]="label.color"
+                  class="single-label my-chip flex"
+                >
+                  {{ label.name }}
+                </mat-chip>
+              </span>
+            </mat-chip-list>
+          </div>
+
           <!-- Subtak Section: Start-->
 
           <input
@@ -302,62 +358,6 @@
           </mat-accordion>
 
           <!-- Subtak Section: End-->
-
-          <div class="chip-container">
-            <mat-chip-list>
-              <span *ngIf="task.start || task.end" class="flex">
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="selectedTheme"
-                  [style.background-color]="selectedTheme"
-                  *ngIf="!task.status"
-                >
-                  <span *ngIf="!task.start && task.end">Now</span>
-                  <span>{{ task.start }}</span>
-                  <span [style.color]="'#FFF'" class="separate" *ngIf="task.end"
-                    >-</span
-                  >
-                  <span>{{ task.end }}</span>
-                </mat-chip>
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="'#969696'"
-                  [style.background-color]="'#f1f1f1'"
-                  *ngIf="task.status"
-                >
-                  <span [style.color]="'#969696'">{{ task.start }}</span>
-                  <span
-                    class="separate"
-                    [style.color]="'#969696'"
-                    *ngIf="task.end"
-                    >-</span
-                  >
-                  <span [style.color]="'#969696'">{{ task.end }}</span>
-                </mat-chip>
-              </span>
-              <span
-                [style.color]="selectedTheme"
-                *ngIf="(task.start || task.end) && !task.status"
-                class="flex"
-                ><mat-icon
-                  matTooltip="remove"
-                  aria-hidden="false"
-                  aria-label="close"
-                  class="material-symbols-outlined mat-click schedule-remove"
-                  (click)="deleteSchedule(task)"
-                  >cancel</mat-icon
-                ></span
-              >
-              <span *ngFor="let label of task.labels">
-                <mat-chip
-                  [style.background-color]="label.color"
-                  class="single-label my-chip flex"
-                >
-                  {{ label.name }}
-                </mat-chip>
-              </span>
-            </mat-chip-list>
-          </div>
         </div>
       </div>
     </div>
