@@ -60,6 +60,7 @@ export class TaskComponent implements OnInit {
   private paramSubscription!: Subscription;
   labels: Label[] = [];
   iconColor: string = 'white';
+  deleteSubtakInprogress: boolean = false;
 
   @ViewChild('createBoardElm', { static: false })
   public createBoardRef!: ElementRef;
@@ -325,7 +326,7 @@ export class TaskComponent implements OnInit {
     const tasksBackup = cloneDeep(this.tasks);
     let undoClicked: boolean = false;
     let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
-      duration: 5000,
+      duration: 3000,
     });
 
     const tskIndex = this.tasks.findIndex((tsk) => tsk.taskId == task.taskId);
@@ -529,7 +530,7 @@ export class TaskComponent implements OnInit {
     task.isPermanent = !task.isPermanent;
     let undoClicked: boolean = false;
     let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
-      duration: 5000,
+      duration: 3000,
     });
 
     snackBarRef.afterDismissed().subscribe(() => {
@@ -562,34 +563,43 @@ export class TaskComponent implements OnInit {
   }
 
   deleteSubtask(task: Task, subtask: Subtask) {
-    const subtaskBackup = cloneDeep(task.subtasks);
-    let undoClicked: boolean = false;
-    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
-      duration: 5000,
-    });
+    if (!this.deleteSubtakInprogress) {
+      const subtaskBackup = cloneDeep(task.subtasks);
+      let undoClicked: boolean = false;
+      let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+        duration: 3000,
+      });
 
-    const sbtskIndex = task.subtasks.findIndex(
-      (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
-    );
-    console.log(sbtskIndex);
-    if (sbtskIndex != -1) {
-      task.subtasks.splice(sbtskIndex, 1);
-    }
-
-    snackBarRef.afterDismissed().subscribe(() => {
-      console.log(undoClicked);
-      if (undoClicked) {
-        return;
-      } else {
-        this.taskService.updateTask(task, 'DAILY');
+      const sbtskIndex = task.subtasks.findIndex(
+        (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
+      );
+      console.log(sbtskIndex);
+      if (sbtskIndex != -1) {
+        task.subtasks.splice(sbtskIndex, 1);
       }
-    });
 
-    snackBarRef.onAction().subscribe(() => {
-      console.log('The snackbar action was triggered!');
-      undoClicked = true;
-      task.subtasks = subtaskBackup;
-    });
+      snackBarRef.afterOpened().subscribe(() => {
+        this.deleteSubtakInprogress = true;
+      });
+
+      snackBarRef.afterDismissed().subscribe(() => {
+        console.log(undoClicked);
+        this.deleteSubtakInprogress = false;
+        if (undoClicked) {
+          return;
+        } else {
+          this.taskService.updateTask(task, 'DAILY');
+        }
+      });
+
+      snackBarRef.onAction().subscribe(() => {
+        console.log('The snackbar action was triggered!');
+        undoClicked = true;
+        task.subtasks = subtaskBackup;
+      });
+    } else {
+      return;
+    }
   }
 }
 

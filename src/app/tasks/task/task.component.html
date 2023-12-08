@@ -54,7 +54,7 @@
         [disabled]="isDateChanged"
       />
       <!-- <textarea (select)="selectionchange($event)"></textarea> -->
-      <div class="progress-section">
+      <div class="progress-section" *ngIf="percentageComplete > 0">
         <span [style.font-weight]="'900'" [style.color]="selectedTheme"
           >{{ percentageComplete }}%</span
         >
