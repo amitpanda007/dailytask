@@ -162,7 +162,7 @@
 
 .actions {
   display: none;
-  // opacity: 0;
+  z-index: 100;
 }
 
 .actions span {
@@ -170,11 +170,20 @@
 }
 
 .task-data:hover .actions {
-  // opacity: 1;
   display: flex;
+  z-index: 100;
 }
 
-.subtask-data:hover .actions {
+.sub-actions {
+  display: flex;
+  opacity: 0;
+}
+
+.sub-actions span {
+  padding: 1px;
+}
+
+.subtask-data:hover .sub-actions {
   opacity: 1;
 }
 
@@ -203,7 +212,6 @@
 
 .text-input {
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  -webkit-appearance: none !important;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   // background: #272727;
   background: var(--bgColor);

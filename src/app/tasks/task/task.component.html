@@ -251,6 +251,7 @@
             (keyup.enter)="onSubtaskEnter(task)"
             (keydown)="onKeyDown($event)"
             *ngIf="task.showSubtaskInput"
+            [disabled]="isDateChanged"
           />
 
           <mat-accordion
@@ -316,7 +317,7 @@
                       <s>{{ subtask.text }}</s>
                     </p>
 
-                    <div class="actions">
+                    <div class="sub-actions">
                       <button
                         [disabled]="subtask.status"
                         mat-icon-button
