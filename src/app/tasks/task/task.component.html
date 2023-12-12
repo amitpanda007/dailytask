@@ -96,7 +96,11 @@
               class="input height-40"
               *ngIf="!task.status && task.isEdit"
             />
-            <p class="task-text" *ngIf="!task.status && !task.isEdit">
+            <p
+              class="task-text"
+              *ngIf="!task.status && !task.isEdit"
+              [style.color]="task.isPermanent ? '#daa520' : '#969696'"
+            >
               {{ task.text }}
             </p>
             <p *ngIf="task.status" class="task-text">
