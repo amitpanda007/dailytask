@@ -76,6 +76,7 @@
               aria-hidden="false"
               aria-label="unchecked"
               matTooltip="mark complete"
+              class="height-40"
               *ngIf="!task.status"
               (click)="changeStatus(task, 'DAILY')"
               >radio_button_unchecked</mat-icon
@@ -85,13 +86,14 @@
               aria-hidden="false"
               aria-label="checked"
               matTooltip="mark incomplete"
+              class="height-40"
               *ngIf="task.status"
               (click)="changeStatus(task, 'DAILY')"
               >check</mat-icon
             >
             <input
               [(ngModel)]="task.text"
-              class="input"
+              class="input height-40"
               *ngIf="!task.status && task.isEdit"
             />
             <p class="task-text" *ngIf="!task.status && !task.isEdit">
@@ -289,6 +291,7 @@
                       aria-hidden="false"
                       aria-label="unchecked"
                       matTooltip="mark complete"
+                      class="height-40"
                       *ngIf="!subtask.status"
                       (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
                       >radio_button_unchecked</mat-icon
@@ -298,13 +301,14 @@
                       aria-hidden="false"
                       aria-label="checked"
                       matTooltip="mark incomplete"
+                      class="height-40"
                       *ngIf="subtask.status"
                       (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
                       >check</mat-icon
                     >
                     <input
                       [(ngModel)]="subtask.text"
-                      class="input"
+                      class="input height-40"
                       *ngIf="!subtask.status && subtask.isEdit"
                     />
                     <p
