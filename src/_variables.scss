@@ -1,6 +1,9 @@
 $bgColor_light: white;
 $bgColor_dark: black;
 
+$popupBgColor_light: #efefef;
+$popupBgColor_dark: #191919;
+
 $textColor_light: black;
 $textColor_dark: white;
 
@@ -13,6 +16,7 @@ $placeholderColor_dark: #48484889;
 // mixin that enables css variables in light mode
 @mixin lighten() {
   --bgColor: #{$bgColor_light};
+  --popupBgColor: #{$popupBgColor_light};
   --textColor: #{$textColor_light};
   --borderColor: #{$borderColor_light};
   --placeholderColor: #{$placeholderColor_light};
@@ -21,6 +25,7 @@ $placeholderColor_dark: #48484889;
 // mixin that enables css variables in dark mode
 @mixin darken() {
   --bgColor: #{$bgColor_dark};
+  --popupBgColor: #{$popupBgColor_dark};
   --textColor: #{$textColor_dark};
   --borderColor: #{$borderColor_dark};
   --placeholderColor: #{$placeholderColor_dark};

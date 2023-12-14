@@ -3,12 +3,11 @@
 }
 
 ::ng-deep.mat-dialog-container {
-  background: #191919 !important;
-  color: #969696 !important;
+  background: var(--popupBgColor) !important;
+  color: var(--textColor) !important;
 }
 
 ::ng-deep.mat-button-toggle-checked span {
-  // background: #969696 !important;
   color: #fb2424 !important;
   font-weight: 700;
 }
@@ -35,8 +34,8 @@
 
 select {
   height: 25px;
-  background: #191919 !important;
-  color: #969696 !important;
+  background: var(--popupBgColor) !important;
+  color: var(--textColor) !important;
 }
 
 .toggle {
@@ -51,6 +50,6 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #191919 !important;
-  color: #969696 !important;
+  background: var(--popupBgColor) !important;
+  color: var(--textColor) !important;
 }
