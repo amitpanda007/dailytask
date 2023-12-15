@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
+  Observable,
   Subscription,
   combineLatest,
   combineLatestWith,
@@ -39,6 +40,11 @@ import {
 } from 'src/app/common/label-dialog/label-dialog.component';
 import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  BreakpointObserver,
+  BreakpointState,
+  Breakpoints,
+} from '@angular/cdk/layout';
 
 @Component({
   selector: 'task',
@@ -46,6 +52,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['task.component.scss'],
 })
 export class TaskComponent implements OnInit {
+  isSmallScreen: Observable<BreakpointState> = this.breakpointObserver.observe(
+    Breakpoints.XSmall
+  );
+
   taskId!: string;
   taskText: string = '';
   // subtaskText: string = '';
@@ -87,7 +97,8 @@ export class TaskComponent implements OnInit {
     private taskService: TaskService,
     private commonService: CommonService,
     private modeToggleService: ModeToggleService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {

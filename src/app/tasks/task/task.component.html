@@ -107,7 +107,8 @@
               <s>{{ task.text }}</s>
             </p>
 
-            <div class="actions">
+            <!-- Task Actions for Bigger Screen -->
+            <div class="actions" *ngIf="!(isSmallScreen | async)!.matches">
               <button
                 [disabled]="task.status"
                 mat-icon-button
@@ -192,6 +193,105 @@
               >
                 <mat-icon>delete</mat-icon>
               </button>
+            </div>
+
+            <!-- Task Actions for Smaller Screen -->
+
+            <div *ngIf="(isSmallScreen | async)!.matches">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="task actions"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  matTooltip="edit task"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  (click)="editTask(task)"
+                >
+                  <mat-icon *ngIf="!task.isEdit">edit</mat-icon>
+                  <mat-icon *ngIf="task.isEdit">done</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  [matTooltip]="
+                    task.isPermanent ? 'remove permanent' : 'make permanent'
+                  "
+                  (click)="markTaskPermanent(task)"
+                >
+                  <mat-icon
+                    class="material-icons-outlined"
+                    [style.color]="!task.status ? iconColor : disabledTheme"
+                    *ngIf="!task.isPermanent"
+                    >star</mat-icon
+                  >
+                  <mat-icon class="permanent" *ngIf="task.isPermanent"
+                    >star</mat-icon
+                  >
+                </button>
+
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  [matTooltip]="
+                    task.showSubtaskInput ? 'close subtask' : 'add subtask'
+                  "
+                  (click)="showSubtaskInput(task)"
+                >
+                  <mat-icon *ngIf="!task.showSubtaskInput">add</mat-icon>
+                  <mat-icon *ngIf="task.showSubtaskInput">remove</mat-icon>
+                </button>
+
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  matTooltip="add label"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  (click)="addLabel(task, 'DAILY')"
+                >
+                  <mat-icon>label</mat-icon>
+                </button>
+
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  *ngIf="!task.start && !task.end"
+                  matTooltip="schedule task"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="scheduleTask(task, 'DAILY')"
+                >
+                  <span #createBoardElm></span>
+                  <mat-icon>schedule</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  matTooltip="delete task"
+                  [style.color]="selectedTheme"
+                  aria-hidden="false"
+                  aria-label="close"
+                  (click)="deleteTask(task)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-menu>
             </div>
           </div>
 

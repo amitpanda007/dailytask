@@ -15,6 +15,10 @@
   color: var(--placeholderColor) !important;
 }
 
+::ng-deep.mat-menu-panel {
+  background-color: var(--popupBgColor) !important;
+}
+
 .bkgrnd {
   background: var(--bgColor);
 }
@@ -152,6 +156,10 @@
 
 .actions span {
   padding: 1px;
+}
+
+.menuBg {
+  background-color: #252525 !important;
 }
 
 .task-data:hover .actions {
