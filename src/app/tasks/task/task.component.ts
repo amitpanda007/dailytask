@@ -1,22 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-  Observable,
-  Subscription,
-  combineLatest,
-  combineLatestWith,
-  concatAll,
-  mergeAll,
-  of,
-} from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { TaskService } from 'src/app/core/services/task.service';
 import {
@@ -155,6 +140,10 @@ export class TaskComponent implements OnInit {
 
   ngOnDestroy() {
     this.paramSubscription.unsubscribe();
+  }
+
+  themeChanged($event: any) {
+    this.selectedTheme = $event;
   }
 
   compare(a: any, b: any) {
