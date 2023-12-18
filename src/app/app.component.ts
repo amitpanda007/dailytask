@@ -11,6 +11,7 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent implements OnInit {
   title = 'today-ui';
   isOffline: boolean = false;
+  todayDate: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +26,14 @@ export class AppComponent implements OnInit {
     //     this.router.navigate(['tasks'], { relativeTo: this.route });
     //   }
     // });
+
+    const options: any = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    this.todayDate = new Date().toLocaleDateString('en-US', options);
 
     if (navigator.onLine) {
       this.isOffline = false;
