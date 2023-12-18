@@ -52,9 +52,13 @@ import {
   styleUrls: ['task.component.scss'],
 })
 export class TaskComponent implements OnInit {
-  isSmallScreen: Observable<BreakpointState> = this.breakpointObserver.observe(
-    Breakpoints.XSmall
-  );
+  // isSmallScreen: Observable<BreakpointState> = this.breakpointObserver.observe(
+  //   Breakpoints.XSmall
+  // );
+
+  isSmallScreen: Observable<BreakpointState> = this.breakpointObserver.observe([
+    '(max-width: 899px)',
+  ]);
 
   taskId!: string;
   taskText: string = '';
