@@ -337,17 +337,13 @@ export class TaskComponent implements OnInit {
   }
 
   checkStaleContent() {
-    console.log(new Date().toLocaleDateString('en-US'));
-    console.log(this.selectedDate?.toLocaleDateString('en-US'));
     if (
       this.selectedDate == undefined ||
       this.selectedDate.toLocaleDateString('en-US') ==
         new Date().toLocaleDateString('en-US')
     ) {
-      console.log("User is looking at today's data");
       this.showPageRefreshIcon = false;
     } else {
-      console.log('User is still seeing older data. refresh the page');
       this.showPageRefreshIcon = true;
     }
   }
