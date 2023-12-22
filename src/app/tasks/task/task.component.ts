@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable, Subscription } from 'rxjs';
@@ -60,9 +66,21 @@ export class TaskComponent implements OnInit {
   labels: Label[] = [];
   iconColor: string = 'white';
   deleteSubtakInprogress: boolean = false;
+  appHidden: boolean = false;
+  showPageRefreshIcon: boolean = false;
 
   @ViewChild('createBoardElm', { static: false })
   public createBoardRef!: ElementRef;
+
+  @HostListener('document:visibilitychange', ['$event'])
+  appVisibility() {
+    if (document.hidden) {
+      this.appHidden = true;
+    } else {
+      this.appHidden = false;
+      this.checkStaleContent();
+    }
+  }
 
   myHolidayFilter = (d: Date): boolean => {
     const today = new Date();
@@ -316,6 +334,26 @@ export class TaskComponent implements OnInit {
       this.taskService.getTasksByDate(date);
     }
     this.isShowingCalender = false;
+  }
+
+  checkStaleContent() {
+    console.log(new Date().toLocaleDateString('en-US'));
+    console.log(this.selectedDate?.toLocaleDateString('en-US'));
+    if (
+      this.selectedDate == undefined ||
+      this.selectedDate.toLocaleDateString('en-US') ==
+        new Date().toLocaleDateString('en-US')
+    ) {
+      console.log("User is looking at today's data");
+      this.showPageRefreshIcon = false;
+    } else {
+      console.log('User is still seeing older data. refresh the page');
+      this.showPageRefreshIcon = true;
+    }
+  }
+
+  reloadPage(): void {
+    window.location.reload();
   }
 
   showCalender() {

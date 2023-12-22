@@ -76,9 +76,15 @@
 .header {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.header h2 {
+.header p {
+  font-size: 28px;
+  margin-bottom: 0px !important;
+}
+
+.icon-big {
   font-size: 28px;
 }
 

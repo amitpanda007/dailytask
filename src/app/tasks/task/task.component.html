@@ -8,22 +8,32 @@
   <!-- TODAY's Tasks Section -->
   <mat-card class="card">
     <div class="header">
-      <h2
+      <p
         *ngIf="!isDateChanged"
         (click)="showCalender()"
         class="pointer"
         [style.color]="selectedTheme"
       >
         Today
-      </h2>
-      <h2
+      </p>
+      <p
         *ngIf="isDateChanged"
         (click)="showCalender()"
         class="pointer"
         [style.color]="selectedTheme"
       >
         {{ selectedDate | date : "MMM d, y" }}
-      </h2>
+      </p>
+      <button
+        *ngIf="showPageRefreshIcon"
+        mat-icon-button
+        color="warn"
+        aria-label="page refresh"
+        matTooltip="Stale data on page. Refresh to get today's tasks"
+        (click)="reloadPage()"
+      >
+        <mat-icon class="icon-big">refresh</mat-icon>
+      </button>
       <div class="calender" *ngIf="isShowingCalender">
         <mat-calendar
           class="calender-card"
@@ -45,6 +55,7 @@
       <input
         cdkFocusInitial
         class="text-input"
+        [style.margin-top]="'1rem'"
         name="taskText"
         type="email"
         placeholder="Enter task here (eg. Call Sam for discussion)"
