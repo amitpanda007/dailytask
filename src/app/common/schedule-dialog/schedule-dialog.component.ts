@@ -67,7 +67,7 @@ export class ScheduleDialogComponent implements OnInit {
         left: `${rect.left - 50}px`,
       };
     }
-    this.dialogRef.updatePosition(matDialogConfig.position);
+    // this.dialogRef.updatePosition(matDialogConfig.position);
   }
 
   cancel(): void {

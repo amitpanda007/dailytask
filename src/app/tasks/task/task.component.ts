@@ -2,13 +2,12 @@ import {
   Component,
   ElementRef,
   HostListener,
-  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { TaskService } from 'src/app/core/services/task.service';
 import {
@@ -30,6 +29,13 @@ import {
   LabelDialogComponent,
   LabelDialogResult,
 } from 'src/app/common/label-dialog/label-dialog.component';
+import { ModeToggleService } from 'src/app/core/services/mode-toggle.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  BreakpointObserver,
+  BreakpointState,
+  Breakpoints,
+} from '@angular/cdk/layout';
 
 @Component({
   selector: 'task',
@@ -37,11 +43,20 @@ import {
   styleUrls: ['task.component.scss'],
 })
 export class TaskComponent implements OnInit {
+  // isSmallScreen: Observable<BreakpointState> = this.breakpointObserver.observe(
+  //   Breakpoints.XSmall
+  // );
+
+  isSmallScreen: Observable<BreakpointState> = this.breakpointObserver.observe([
+    '(max-width: 899px)',
+  ]);
+
   taskId!: string;
   taskText: string = '';
-  enableTheme: boolean = true;
+  // subtaskText: string = '';
   percentage: string = '50, 100';
   selectedTheme!: string;
+  disabledTheme!: string;
   selectedDate!: Date | null;
   isShowingCalender: boolean = false;
   isDateChanged: boolean = false;
@@ -49,9 +64,23 @@ export class TaskComponent implements OnInit {
   percentageComplete: number = 0;
   private paramSubscription!: Subscription;
   labels: Label[] = [];
+  iconColor: string = 'white';
+  deleteSubtakInprogress: boolean = false;
+  appHidden: boolean = false;
+  showPageRefreshIcon: boolean = false;
 
   @ViewChild('createBoardElm', { static: false })
   public createBoardRef!: ElementRef;
+
+  @HostListener('document:visibilitychange', ['$event'])
+  appVisibility() {
+    if (document.hidden) {
+      this.appHidden = true;
+    } else {
+      this.appHidden = false;
+      this.checkStaleContent();
+    }
+  }
 
   myHolidayFilter = (d: Date): boolean => {
     const today = new Date();
@@ -67,21 +96,26 @@ export class TaskComponent implements OnInit {
   };
 
   tasks: Task[] = [];
-  permanentTasks: Task[] = [];
+  // permanentTasks: Task[] = [];
 
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private modeToggleService: ModeToggleService,
+    private snackBar: MatSnackBar,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
     const theme = localStorage.getItem('themeColor');
     if (theme) {
       this.selectedTheme = theme;
+      this.disabledTheme = '#969696';
     } else {
       this.selectedTheme = '#fe387b';
+      this.disabledTheme = '#969696';
     }
 
     this.paramSubscription = this.route.paramMap.subscribe(
@@ -90,6 +124,10 @@ export class TaskComponent implements OnInit {
       }
     );
 
+    this.modeToggleService.modeChanged$.subscribe((mode) => {
+      this.iconColor = mode == 'light' ? '#e1e1e1' : 'white';
+    });
+
     const today = new Date();
     this.taskService.getTasksByDate(today);
     this.taskService.tasksChanged.subscribe((tasks: Task[]) => {
@@ -97,27 +135,33 @@ export class TaskComponent implements OnInit {
       tasks.sort(this.compare);
       this.tasks = tasks;
       this.calculatePercentage();
+      this.addLabelToTask();
     });
 
-    this.taskService.getPermanentTasks();
-    this.taskService.permanentTasksChanged.subscribe(
-      (permanentTasks: Task[]) => {
-        console.log(permanentTasks);
-        permanentTasks.sort(this.compare);
-        this.permanentTasks = permanentTasks;
-        // this.calculatePercentage();
-      }
-    );
+    // this.taskService.getPermanentTasks();
+    // this.taskService.permanentTasksChanged.subscribe(
+    //   (permanentTasks: Task[]) => {
+    //     console.log(permanentTasks);
+    //     permanentTasks.sort(this.compare);
+    //     this.permanentTasks = permanentTasks;
+    //     // this.calculatePercentage();
+    //   }
+    // );
 
     this.taskService.getLabels();
     this.taskService.labelsChanged.subscribe((labels) => {
       console.log(labels);
       this.labels = labels;
+      this.addLabelToTask();
     });
   }
 
   ngOnDestroy() {
     this.paramSubscription.unsubscribe();
+  }
+
+  themeChanged($event: any) {
+    this.selectedTheme = $event;
   }
 
   compare(a: any, b: any) {
@@ -140,6 +184,16 @@ export class TaskComponent implements OnInit {
     this.percentageComplete = Math.floor((completedTasks / total) * 100);
   }
 
+  addLabelToTask() {
+    this.tasks.forEach((task) => {
+      task.labels = [];
+      task.labelIds?.forEach((id) => {
+        let labelFound = this.labels.find((lbl) => lbl.id == id);
+        if (labelFound) task.labels.push(labelFound);
+      });
+    });
+  }
+
   onEnter() {
     if (this.taskText && this.taskText.trim().length > 0) {
       const rank = this.tasks.length;
@@ -151,10 +205,35 @@ export class TaskComponent implements OnInit {
         modified: new Date(),
         rank: rank,
         labels: [],
+        labelIds: [],
+        isPermanent: false,
+        showSubtaskInput: false,
+        subtasks: [],
       };
       this.tasks.push(taskData);
       this.taskText = '';
       this.taskService.addTask(taskData);
+    }
+  }
+
+  onSubtaskEnter(task: Task) {
+    if (!task.subtasks) {
+      task.subtasks = [];
+    }
+    if (task.subtaskText && task.subtaskText.trim().length > 0) {
+      const rank = task.subtasks.length;
+      const subtaskData: Subtask = {
+        subtaskId: this.commonService.randomId(10),
+        text: task.subtaskText,
+        status: false,
+        created: new Date(),
+        modified: new Date(),
+        rank: rank,
+      };
+      task.subtasks.push(subtaskData);
+      console.log(task);
+      task.subtaskText = '';
+      this.taskService.updateTask(task, 'DAILY');
     }
   }
 
@@ -187,21 +266,42 @@ export class TaskComponent implements OnInit {
     this.taskService.updateTaskSequence(changedTasks);
   }
 
+  dropSubtask(event: CdkDragDrop<string[]>, task: Task) {
+    // const changedSubtasks: Task[] = [];
+    moveItemInArray(task.subtasks, event.previousIndex, event.currentIndex);
+    task.subtasks.forEach((sbtsk, i) => {
+      sbtsk.rank = i;
+    });
+    this.taskService.updateTask(task, 'DAILY');
+  }
+
   changeStatus(task: Task, taskType: string) {
     task.status = !task.status;
     task.modified = new Date();
+    if (task.status) {
+      task.subtasks.forEach((sbtask) => (sbtask.status = true));
+    } else {
+      task.subtasks.forEach((sbtask) => (sbtask.status = false));
+    }
+    task.showSubtaskInput = false;
     this.taskService.updateTask(task, taskType);
     this.calculatePercentage();
   }
 
-  selectTheme(theme: string) {
-    this.selectedTheme = theme;
-    localStorage.setItem('themeColor', this.selectedTheme);
-    this.toggleTheme();
-  }
-
-  toggleTheme() {
-    this.enableTheme = !this.enableTheme;
+  changeSubtaskStatus(task: Task, subtask: Subtask, taskType: string) {
+    // const subtaskData = task.subtasks.find(sbtask => sbtask.subtaskId = subtask.subtaskId);
+    subtask.status = !subtask.status;
+    // console.log(task);
+    const peningSubtask = task.subtasks.filter(
+      (sbtask) => sbtask.status == false
+    );
+    if (peningSubtask.length == 0) {
+      task.status = true;
+    } else {
+      task.status = false;
+    }
+    this.taskService.updateTask(task, taskType);
+    this.calculatePercentage();
   }
 
   focusBoardTitle(task: Task) {
@@ -236,6 +336,22 @@ export class TaskComponent implements OnInit {
     this.isShowingCalender = false;
   }
 
+  checkStaleContent() {
+    if (
+      this.selectedDate == undefined ||
+      this.selectedDate.toLocaleDateString('en-US') ==
+        new Date().toLocaleDateString('en-US')
+    ) {
+      this.showPageRefreshIcon = false;
+    } else {
+      this.showPageRefreshIcon = true;
+    }
+  }
+
+  reloadPage(): void {
+    window.location.reload();
+  }
+
   showCalender() {
     this.isShowingCalender = true;
   }
@@ -245,7 +361,38 @@ export class TaskComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
-    this.taskService.deleteTask(task);
+    const tasksBackup = cloneDeep(this.tasks);
+    let undoClicked: boolean = false;
+    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+      duration: 3000,
+    });
+
+    const tskIndex = this.tasks.findIndex((tsk) => tsk.taskId == task.taskId);
+    console.log(tskIndex);
+    if (tskIndex != -1) {
+      this.tasks.splice(tskIndex, 1);
+    }
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      console.log(undoClicked);
+      if (undoClicked) {
+        return;
+      } else {
+        this.taskService.deleteTask(task);
+      }
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      console.log('The snackbar action was triggered!');
+      undoClicked = true;
+      this.tasks = tasksBackup;
+    });
+  }
+
+  deleteSchedule(task: Task) {
+    delete task.start;
+    delete task.end;
+    this.taskService.deleteSchedule(task);
   }
 
   addLabel(task: Task, taskType: string) {
@@ -267,13 +414,16 @@ export class TaskComponent implements OnInit {
       }
 
       if (result.updatedTask != undefined) {
-        this.taskService.updateTask(result.updatedTask, taskType);
+        // task.labels = result.updatedTask.labels;
+        task.labelIds = result.updatedTask.labelIds;
+        this.taskService.updateTask(task, taskType);
       }
     });
   }
 
   scheduleTask(task: Task, taskType: string) {
     console.log(task);
+    console.log(this.createBoardRef);
 
     const dialogRef = this.dialog.open(ScheduleDialogComponent, {
       width: '270px',
@@ -365,26 +515,30 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  convertToPermanentTask(task: Task) {
-    console.log(task);
-
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '270px',
-      height: '210px',
-    });
-
-    dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
-      console.log(result);
-      if (!result) {
-        return;
-      }
-
-      // Logic for moving task to long term
-      if (result.confirm) {
-        this.taskService.moveTaskToLongRun(task);
-      }
-    });
+  showSubtaskInput(task: Task) {
+    task.showSubtaskInput = !task.showSubtaskInput;
   }
+
+  // convertToPermanentTask(task: Task) {
+  //   console.log(task);
+
+  //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+  //     width: '270px',
+  //     height: '210px',
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
+  //     console.log(result);
+  //     if (!result) {
+  //       return;
+  //     }
+
+  //     // Logic for moving task to long term
+  //     if (result.confirm) {
+  //       this.taskService.moveTaskToLongRun(task);
+  //     }
+  //   });
+  // }
 
   getNextDay(): Date {
     const today = new Date();
@@ -397,8 +551,93 @@ export class TaskComponent implements OnInit {
     return nextDay;
   }
 
-  enableEdit() {
-    this.showInputField = true;
+  editTask(task: Task) {
+    task.isEdit = !task.isEdit;
+    if (task.isEdit) {
+      task.backupText = cloneDeep(task.text);
+    }
+    if (!task.isEdit && task.backupText !== task.text) {
+      delete task.backupText;
+      task.modified = new Date();
+      this.taskService.updateTask(task, 'DAILY');
+      return;
+    }
+  }
+
+  markTaskPermanent(task: Task) {
+    task.isPermanent = !task.isPermanent;
+    let undoClicked: boolean = false;
+    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+      duration: 3000,
+    });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      console.log(undoClicked);
+      if (undoClicked) {
+        return;
+      } else {
+        this.taskService.updateTask(task, 'DAILY');
+      }
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      console.log('The snackbar action was triggered!');
+      undoClicked = true;
+      task.isPermanent = !task.isPermanent;
+    });
+  }
+
+  editSubtask(task: Task, subtask: Subtask) {
+    subtask.isEdit = !subtask.isEdit;
+    if (subtask.isEdit) {
+      subtask.backupText = cloneDeep(subtask.text);
+    }
+    if (!subtask.isEdit && subtask.backupText !== subtask.text) {
+      delete subtask.backupText;
+      subtask.modified = new Date();
+      this.taskService.updateTask(task, 'DAILY');
+      return;
+    }
+  }
+
+  deleteSubtask(task: Task, subtask: Subtask) {
+    if (!this.deleteSubtakInprogress) {
+      const subtaskBackup = cloneDeep(task.subtasks);
+      let undoClicked: boolean = false;
+      let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+        duration: 3000,
+      });
+
+      const sbtskIndex = task.subtasks.findIndex(
+        (sbtsk) => sbtsk.subtaskId == subtask.subtaskId
+      );
+      console.log(sbtskIndex);
+      if (sbtskIndex != -1) {
+        task.subtasks.splice(sbtskIndex, 1);
+      }
+
+      snackBarRef.afterOpened().subscribe(() => {
+        this.deleteSubtakInprogress = true;
+      });
+
+      snackBarRef.afterDismissed().subscribe(() => {
+        console.log(undoClicked);
+        this.deleteSubtakInprogress = false;
+        if (undoClicked) {
+          return;
+        } else {
+          this.taskService.updateTask(task, 'DAILY');
+        }
+      });
+
+      snackBarRef.onAction().subscribe(() => {
+        console.log('The snackbar action was triggered!');
+        undoClicked = true;
+        task.subtasks = subtaskBackup;
+      });
+    } else {
+      return;
+    }
   }
 }
 
@@ -414,6 +653,23 @@ export interface Task {
   end?: string;
   rank: number;
   labels: Label[];
+  labelIds?: string[];
+  isEdit?: boolean;
+  isPermanent: boolean;
+  subtaskText?: string;
+  showSubtaskInput: boolean;
+  subtasks: Subtask[];
+}
+
+export interface Subtask {
+  subtaskId: string;
+  text: string;
+  backupText?: string;
+  status: boolean;
+  created: Date;
+  modified: Date;
+  rank: number;
+  isEdit?: boolean;
 }
 
 export enum TaskType {

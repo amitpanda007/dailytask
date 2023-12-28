@@ -8,8 +8,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { TaskService } from './services/task.service';
 import { NavComponent } from './nav/nav.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from '../home/home.component';
 import { CommonService } from './services/common.service';
+import { DiaryService } from './services/diary.service';
 
 @NgModule({
   imports: [CommonModule, SharedModule],
@@ -19,7 +20,12 @@ import { CommonService } from './services/common.service';
     AuthService,
     TaskService,
     CommonService,
+    ModeToggleService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {
+      provide: MODE_STORAGE_SERVICE,
+      useClass: ModeLocalStorageService,
+    },
   ],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {

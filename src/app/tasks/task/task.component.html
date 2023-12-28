@@ -1,195 +1,39 @@
 <div class="container">
-  <mat-card class="card-noshadow">
-    <div class="header">
-      <h2 [style.color]="selectedTheme">Monthly Status</h2>
-    </div>
-    <div class="content"></div>
-  </mat-card>
-
-  <!-- Permanent Tasks Section -->
-  <mat-card class="card">
-    <div class="header">
-      <h2 [style.color]="selectedTheme">Permanent</h2>
-    </div>
-    <div class="content">
-      <div cdkDropList class="listdata" (cdkDropListDropped)="drop($event)">
-        <div *ngIf="permanentTasks.length == 0" class="no-task">
-          <p>No Task</p>
-        </div>
-        <div class="data" *ngFor="let ptask of permanentTasks" cdkDrag>
-          <div class="task-data" *ngIf="permanentTasks.length > 0">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="unchecked"
-              *ngIf="!ptask.status"
-              (click)="changeStatus(ptask, 'PERMANENT')"
-              >radio_button_unchecked</mat-icon
-            >
-            <mat-icon
-              [style.color]="selectedTheme"
-              aria-hidden="false"
-              aria-label="checked"
-              *ngIf="ptask.status"
-              (click)="changeStatus(ptask, 'PERMANENT')"
-              >check</mat-icon
-            >
-            <input
-              [(ngModel)]="ptask.text"
-              class="input"
-              *ngIf="!ptask.status && showInputField"
-              (focus)="focusBoardTitle(ptask)"
-              (focusout)="focusOutBoardTitle(ptask, 'PERMANENT')"
-            />
-            <p
-              class="task-text"
-              (click)="enableEdit()"
-              *ngIf="!ptask.status && !showInputField"
-            >
-              {{ ptask.text }}
-            </p>
-            <p *ngIf="ptask.status" class="task-text">
-              <s>{{ ptask.text }}</s>
-            </p>
-            <div class="actions">
-              <span>
-                <mat-icon
-                  matTooltip="add label"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="addLabel(ptask, 'PERMANENT')"
-                  >label</mat-icon
-                >
-              </span>
-              <span #createBoardElm>
-                <mat-icon
-                  matTooltip="schedule task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="scheduleTask(ptask, 'PERMANENT')"
-                  >schedule</mat-icon
-                >
-              </span>
-              <span>
-                <mat-icon
-                  matTooltip="delete task"
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  (click)="deleteTask(ptask)"
-                  >delete</mat-icon
-                >
-              </span>
-            </div>
-            <span>
-              <mat-icon
-                matTooltip="options"
-                [style.color]="selectedTheme"
-                aria-hidden="false"
-                aria-label="close"
-                [matMenuTriggerFor]="menu"
-                >more_vert</mat-icon
-              >
-            </span>
-            <mat-menu #menu="matMenu" class="custom-menu">
-              <button
-                mat-menu-item
-                (click)="moveTaskForToday(ptask, 'PERMANENT')"
-              >
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >star</mat-icon
-                >
-                <span class="menu-text">Convert to today's task</span>
-              </button>
-              <!-- <button
-                mat-menu-item
-                (click)="moveTaskForTomorrow(ptask, 'PERMANENT')"
-              >
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >redo</mat-icon
-                >
-                <span class="menu-text">Move task for tomorrow</span>
-              </button> -->
-            </mat-menu>
-          </div>
-          <div
-            class="chip-container"
-            *ngIf="ptask.start || ptask.end || ptask.labels"
-          >
-            <mat-chip-list>
-              <div *ngIf="ptask.start || ptask.end">
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="selectedTheme"
-                  *ngIf="!ptask.status"
-                >
-                  <span>{{ ptask.start }}</span>
-                  <span
-                    [style.color]="selectedTheme"
-                    class="separate"
-                    *ngIf="ptask.end"
-                    >-</span
-                  >
-                  <span>{{ ptask.end }}</span>
-                </mat-chip>
-                <mat-chip
-                  class="my-chip"
-                  [style.border-color]="'#969696'"
-                  *ngIf="ptask.status"
-                >
-                  <span [style.color]="'#969696'">{{ ptask.start }}</span>
-                  <span
-                    class="separate"
-                    [style.color]="'#969696'"
-                    *ngIf="ptask.end"
-                    >-</span
-                  >
-                  <span [style.color]="'#969696'">{{ ptask.end }}</span>
-                </mat-chip>
-              </div>
-              <div *ngFor="let label of ptask.labels">
-                <span>
-                  <mat-chip
-                    [style.background-color]="label.color"
-                    class="single-label my-chip"
-                  >
-                    {{ label.name }}
-                  </mat-chip>
-                </span>
-              </div>
-            </mat-chip-list>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-card>
+  <task-options
+    class="task-opts"
+    [selectedTheme]="selectedTheme"
+    (themeChanged)="themeChanged($event)"
+  ></task-options>
 
   <!-- TODAY's Tasks Section -->
   <mat-card class="card">
     <div class="header">
-      <h2
+      <p
         *ngIf="!isDateChanged"
         (click)="showCalender()"
         class="pointer"
         [style.color]="selectedTheme"
       >
         Today
-      </h2>
-      <h2
+      </p>
+      <p
         *ngIf="isDateChanged"
         (click)="showCalender()"
         class="pointer"
         [style.color]="selectedTheme"
       >
         {{ selectedDate | date : "MMM d, y" }}
-      </h2>
+      </p>
+      <button
+        *ngIf="showPageRefreshIcon"
+        mat-icon-button
+        color="warn"
+        aria-label="page refresh"
+        matTooltip="Stale data on page. Refresh to get today's tasks"
+        (click)="reloadPage()"
+      >
+        <mat-icon class="icon-big">refresh</mat-icon>
+      </button>
       <div class="calender" *ngIf="isShowingCalender">
         <mat-calendar
           class="calender-card"
@@ -211,9 +55,10 @@
       <input
         cdkFocusInitial
         class="text-input"
+        [style.margin-top]="'1rem'"
         name="taskText"
         type="email"
-        placeholder="Call Sam for discussion"
+        placeholder="Enter task here (eg. Call Sam for discussion)"
         [(ngModel)]="taskText"
         autocomplete="off"
         (keyup.enter)="onEnter()"
@@ -221,7 +66,7 @@
         [disabled]="isDateChanged"
       />
       <!-- <textarea (select)="selectionchange($event)"></textarea> -->
-      <div class="progress-section">
+      <div class="progress-section" *ngIf="percentageComplete > 0">
         <span [style.font-weight]="'900'" [style.color]="selectedTheme"
           >{{ percentageComplete }}%</span
         >
@@ -242,6 +87,8 @@
             <mat-icon
               aria-hidden="false"
               aria-label="unchecked"
+              matTooltip="mark complete"
+              class="height-40"
               *ngIf="!task.status"
               (click)="changeStatus(task, 'DAILY')"
               >radio_button_unchecked</mat-icon
@@ -250,21 +97,21 @@
               [style.color]="selectedTheme"
               aria-hidden="false"
               aria-label="checked"
+              matTooltip="mark incomplete"
+              class="height-40"
               *ngIf="task.status"
               (click)="changeStatus(task, 'DAILY')"
               >check</mat-icon
             >
             <input
               [(ngModel)]="task.text"
-              class="input"
-              *ngIf="!task.status && showInputField"
-              (focus)="focusBoardTitle(task)"
-              (focusout)="focusOutBoardTitle(task, 'DAILY')"
+              class="input height-40"
+              *ngIf="!task.status && task.isEdit"
             />
             <p
               class="task-text"
-              (click)="enableEdit()"
-              *ngIf="!task.status && !showInputField"
+              *ngIf="!task.status && !task.isEdit"
+              [style.color]="task.isPermanent ? '#daa520' : '#969696'"
             >
               {{ task.text }}
             </p>
@@ -272,168 +119,359 @@
               <s>{{ task.text }}</s>
             </p>
 
-            <div class="actions">
-              <span>
+            <!-- Task Actions for Bigger Screen -->
+            <div class="actions" *ngIf="!(isSmallScreen | async)!.matches">
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
+                matTooltip="edit task"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
+                (click)="editTask(task)"
+              >
+                <mat-icon *ngIf="!task.isEdit">edit</mat-icon>
+                <mat-icon *ngIf="task.isEdit">done</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
+                [matTooltip]="
+                  task.isPermanent ? 'remove permanent' : 'make permanent'
+                "
+                (click)="markTaskPermanent(task)"
+              >
                 <mat-icon
-                  matTooltip="add label"
-                  [style.color]="selectedTheme"
+                  class="material-icons-outlined"
+                  [style.color]="!task.status ? iconColor : disabledTheme"
+                  *ngIf="!task.isPermanent"
+                  >star</mat-icon
+                >
+                <mat-icon class="permanent" *ngIf="task.isPermanent"
+                  >star</mat-icon
+                >
+              </button>
+
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
+                [matTooltip]="
+                  task.showSubtaskInput ? 'close subtask' : 'add subtask'
+                "
+                (click)="showSubtaskInput(task)"
+              >
+                <mat-icon *ngIf="!task.showSubtaskInput">add</mat-icon>
+                <mat-icon *ngIf="task.showSubtaskInput">remove</mat-icon>
+              </button>
+
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                aria-hidden="false"
+                aria-label="close"
+                matTooltip="add label"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
+                (click)="addLabel(task, 'DAILY')"
+              >
+                <mat-icon>label</mat-icon>
+              </button>
+
+              <button
+                [disabled]="task.status"
+                mat-icon-button
+                *ngIf="!task.start && !task.end"
+                matTooltip="schedule task"
+                [style.color]="!task.status ? selectedTheme : disabledTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="scheduleTask(task, 'DAILY')"
+              >
+                <span #createBoardElm></span>
+                <mat-icon>schedule</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                matTooltip="delete task"
+                [style.color]="selectedTheme"
+                aria-hidden="false"
+                aria-label="close"
+                (click)="deleteTask(task)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <!-- Task Actions for Smaller Screen -->
+
+            <div *ngIf="(isSmallScreen | async)!.matches">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="task actions"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
                   aria-hidden="false"
                   aria-label="close"
-                  (click)="addLabel(task, 'DAILY')"
-                  >label</mat-icon
+                  matTooltip="edit task"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  (click)="editTask(task)"
                 >
-              </span>
-              <span #createBoardElm>
-                <mat-icon
+                  <mat-icon *ngIf="!task.isEdit">edit</mat-icon>
+                  <mat-icon *ngIf="task.isEdit">done</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  [matTooltip]="
+                    task.isPermanent ? 'remove permanent' : 'make permanent'
+                  "
+                  (click)="markTaskPermanent(task)"
+                >
+                  <mat-icon
+                    class="material-icons-outlined"
+                    [style.color]="!task.status ? iconColor : disabledTheme"
+                    *ngIf="!task.isPermanent"
+                    >star</mat-icon
+                  >
+                  <mat-icon class="permanent" *ngIf="task.isPermanent"
+                    >star</mat-icon
+                  >
+                </button>
+
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  [matTooltip]="
+                    task.showSubtaskInput ? 'close subtask' : 'add subtask'
+                  "
+                  (click)="showSubtaskInput(task)"
+                >
+                  <mat-icon *ngIf="!task.showSubtaskInput">add</mat-icon>
+                  <mat-icon *ngIf="task.showSubtaskInput">remove</mat-icon>
+                </button>
+
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  aria-hidden="false"
+                  aria-label="close"
+                  matTooltip="add label"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                  (click)="addLabel(task, 'DAILY')"
+                >
+                  <mat-icon>label</mat-icon>
+                </button>
+
+                <button
+                  [disabled]="task.status"
+                  mat-icon-button
+                  *ngIf="!task.start && !task.end"
                   matTooltip="schedule task"
-                  [style.color]="selectedTheme"
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
                   aria-hidden="false"
                   aria-label="close"
                   (click)="scheduleTask(task, 'DAILY')"
-                  >schedule</mat-icon
                 >
-              </span>
-              <span>
-                <mat-icon
+                  <span #createBoardElm></span>
+                  <mat-icon>schedule</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
                   matTooltip="delete task"
                   [style.color]="selectedTheme"
                   aria-hidden="false"
                   aria-label="close"
                   (click)="deleteTask(task)"
-                  >delete</mat-icon
                 >
-              </span>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-menu>
             </div>
-            <span>
-              <mat-icon
-                matTooltip="options"
-                [style.color]="selectedTheme"
-                aria-hidden="false"
-                aria-label="close"
-                [matMenuTriggerFor]="menu"
-                >more_vert</mat-icon
-              >
-            </span>
-            <mat-menu #menu="matMenu" class="custom-menu">
-              <button mat-menu-item (click)="convertToPermanentTask(task)">
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >star</mat-icon
-                >
-                <span class="menu-text">Convert to permanent task</span>
-              </button>
-              <button
-                mat-menu-item
-                (click)="moveTaskForToday(task, 'DAILY')"
-                *ngIf="isDateChanged"
-              >
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >redo</mat-icon
-                >
-                <span class="menu-text">Move task for today</span>
-              </button>
-
-              <button mat-menu-item (click)="moveTaskToDate(task, 'DAILY')">
-                <mat-icon
-                  [style.color]="selectedTheme"
-                  aria-hidden="false"
-                  aria-label="close"
-                  >calendar_month</mat-icon
-                >
-                <span class="menu-text">Move task to date</span>
-              </button>
-            </mat-menu>
           </div>
-          <div class="chip-container" *ngIf="task.start || task.end">
+
+          <div class="chip-container">
             <mat-chip-list>
-              <mat-chip
-                class="my-chip"
-                [style.border-color]="selectedTheme"
-                *ngIf="!task.status"
-              >
-                <span>{{ task.start }}</span>
-                <span
-                  [style.color]="selectedTheme"
-                  class="separate"
-                  *ngIf="task.end"
-                  >-</span
+              <span *ngIf="task.start || task.end" class="flex">
+                <mat-chip
+                  class="my-chip"
+                  [style.border-color]="task.status ? '#969696' : selectedTheme"
+                  [style.background-color]="
+                    task.status ? '#f1f1f1' : selectedTheme
+                  "
                 >
-                <span>{{ task.end }}</span>
-              </mat-chip>
-              <mat-chip
-                class="my-chip"
-                [style.border-color]="'#969696'"
-                *ngIf="task.status"
-              >
-                <span [style.color]="'#969696'">{{ task.start }}</span>
-                <span
-                  class="separate"
-                  [style.color]="'#969696'"
-                  *ngIf="task.end"
-                  >-</span
-                >
-                <span [style.color]="'#969696'">{{ task.end }}</span>
-              </mat-chip>
-              <div *ngFor="let label of task.labels">
-                <span>
-                  <mat-chip
-                    [style.background-color]="label.color"
-                    class="single-label my-chip"
+                  <span *ngIf="!task.start && task.end">Now</span>
+                  <span [style.color]="task.status ? '#969696' : ''">{{
+                    task.start
+                  }}</span>
+                  <span
+                    [ngClass]="task.status ? 'separate-disabled' : 'separate'"
+                    *ngIf="task.end"
+                    >-</span
                   >
-                    {{ label.name }}
-                  </mat-chip>
-                </span>
-              </div>
+                  <span [style.color]="task.status ? '#969696' : ''">{{
+                    task.end
+                  }}</span>
+                </mat-chip>
+              </span>
+              <span
+                [style.color]="selectedTheme"
+                *ngIf="(task.start || task.end) && !task.status"
+                class="flex"
+                ><mat-icon
+                  matTooltip="remove"
+                  aria-hidden="false"
+                  aria-label="close"
+                  class="material-symbols-outlined mat-click schedule-remove"
+                  (click)="deleteSchedule(task)"
+                  >cancel</mat-icon
+                ></span
+              >
+              <span *ngFor="let label of task.labels">
+                <mat-chip
+                  [style.color]="label.color"
+                  class="single-label my-chip flex"
+                >
+                  {{ label.name }}
+                </mat-chip>
+              </span>
             </mat-chip-list>
           </div>
+
+          <!-- Subtak Section: Start-->
+
+          <input
+            cdkFocusInitial
+            class="text-input subtask-section"
+            name="subtaskText"
+            type="email"
+            placeholder="Enter sub task here (eg. complete document review)"
+            [(ngModel)]="task.subtaskText"
+            autocomplete="off"
+            (keyup.enter)="onSubtaskEnter(task)"
+            (keydown)="onKeyDown($event)"
+            *ngIf="task.showSubtaskInput"
+            [disabled]="isDateChanged"
+          />
+
+          <mat-accordion
+            *ngIf="task.subtasks && task.subtasks.length > 0"
+            class="subtask-section"
+          >
+            <mat-expansion-panel
+              hideToggle
+              class="bkgrnd"
+              [style.border]="'1px solid'"
+              [style.border-color]="
+                !task.status ? selectedTheme : disabledTheme
+              "
+              [expanded]="task.subtasks.length > 0 && task.status == false"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title
+                  [style.color]="!task.status ? selectedTheme : disabledTheme"
+                >
+                  SUBTASKS({{ task.subtasks.length }})
+                </mat-panel-title>
+                <!-- <mat-panel-description>
+                  This is a summary of the content
+                </mat-panel-description> -->
+              </mat-expansion-panel-header>
+              <div cdkDropList (cdkDropListDropped)="dropSubtask($event, task)">
+                <div
+                  class="subtask"
+                  *ngFor="let subtask of task.subtasks"
+                  cdkDrag
+                >
+                  <div class="subtask-data">
+                    <mat-icon
+                      [style.color]="'#969696'"
+                      aria-hidden="false"
+                      aria-label="unchecked"
+                      matTooltip="mark complete"
+                      class="height-40"
+                      *ngIf="!subtask.status"
+                      (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
+                      >radio_button_unchecked</mat-icon
+                    >
+                    <mat-icon
+                      [style.color]="selectedTheme"
+                      aria-hidden="false"
+                      aria-label="checked"
+                      matTooltip="mark incomplete"
+                      class="height-40"
+                      *ngIf="subtask.status"
+                      (click)="changeSubtaskStatus(task, subtask, 'DAILY')"
+                      >check</mat-icon
+                    >
+                    <input
+                      [(ngModel)]="subtask.text"
+                      class="input height-40"
+                      *ngIf="!subtask.status && subtask.isEdit"
+                    />
+                    <p
+                      class="task-text"
+                      *ngIf="!subtask.status && !subtask.isEdit"
+                    >
+                      {{ subtask.text }}
+                    </p>
+                    <p *ngIf="subtask.status" class="task-text">
+                      <s>{{ subtask.text }}</s>
+                    </p>
+
+                    <div class="sub-actions">
+                      <button
+                        [disabled]="subtask.status"
+                        mat-icon-button
+                        aria-hidden="false"
+                        aria-label="close"
+                        matTooltip="edit task"
+                        [style.color]="
+                          !subtask.status ? selectedTheme : disabledTheme
+                        "
+                        (click)="editSubtask(task, subtask)"
+                      >
+                        <mat-icon *ngIf="!subtask.isEdit">edit</mat-icon>
+                        <mat-icon *ngIf="subtask.isEdit">done</mat-icon>
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        matTooltip="delete task"
+                        [style.color]="selectedTheme"
+                        aria-hidden="false"
+                        aria-label="close"
+                        (click)="deleteSubtask(task, subtask)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <!-- Subtak Section: End-->
         </div>
       </div>
-    </div>
-    <div class="theme-section">
-      <!-- <svg viewBox="0 0 36 36" class="circular-chart">
-        <path
-          class="circle"
-          [attr.stroke-dasharray]="percentage"
-          d="M18 2.0845
-      a 15.9155 15.9155 0 0 1 0 31.831
-      a 15.9155 15.9155 0 0 1 0 -31.831"
-        />
-      </svg> -->
-
-      <span>
-        <mat-icon
-          *ngIf="enableTheme"
-          [style.color]="selectedTheme"
-          aria-hidden="false"
-          aria-label="close"
-          class="icon mat-click"
-          matTooltip="change theme"
-          [style.color]="selectedTheme"
-          (click)="toggleTheme()"
-          >add_circle</mat-icon
-        >
-      </span>
-      <span *ngIf="!enableTheme" class="color-select">
-        <color-icon-list
-          (themeSelected)="selectTheme($event)"
-        ></color-icon-list>
-
-        <span [style.color]="selectedTheme" [style.marginLeft.px]="10"
-          ><mat-icon
-            matTooltip="cancel"
-            aria-hidden="false"
-            aria-label="close"
-            class="icon mat-click"
-            (click)="toggleTheme()"
-            >cancel</mat-icon
-          ></span
-        >
-      </span>
     </div>
   </mat-card>
 </div>

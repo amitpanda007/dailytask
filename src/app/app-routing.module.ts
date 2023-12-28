@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './core/home/home.component';
-import { TaskListComponent } from './tasks/task-list/task.list.component';
+import {
+  AngularFireAuthGuard,
+  redirectUnauthorizedTo,
+  redirectLoggedInTo,
+} from '@angular/fire/compat/auth-guard';
+import { TaskComponent } from './tasks/task/task.component';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectLoggedInToTasks = () => redirectLoggedInTo(['tasks']);
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-  },
-  // {
-  //   path: 'tasks',
-  //   loadChildren: () =>
-  //     import('./tasks/tasks.module').then((m) => m.TasksModule),
-  // },
-  // {
-  //   path: 'diary',
-  //   loadChildren: () =>
-  //     import('./diary/diary.module').then((m) => m.DiaryModule),
-  // },
+    component: TaskComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: {
+      authGuardPipe: redirectUnauthorizedToLogin,
+    },
+  }
 ];
 
 @NgModule({

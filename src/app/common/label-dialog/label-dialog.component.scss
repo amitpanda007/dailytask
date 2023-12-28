@@ -3,8 +3,8 @@
 }
 
 ::ng-deep.mat-dialog-container {
-  background: #191919 !important;
-  color: #969696 !important;
+  background: var(--popupBgColor) !important;
+  color: var(--textColor) !important;
 }
 
 .header {
@@ -78,7 +78,6 @@
 
 .label-options {
   cursor: pointer;
-  // color: black;
 }
 
 .new-label-options {
