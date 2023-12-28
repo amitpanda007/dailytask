@@ -65,6 +65,7 @@ export class TaskComponent implements OnInit {
   private paramSubscription!: Subscription;
   labels: Label[] = [];
   iconColor: string = 'white';
+  deleteTakInprogress: boolean = false;
   deleteSubtakInprogress: boolean = false;
   appHidden: boolean = false;
   showPageRefreshIcon: boolean = false;
@@ -361,6 +362,7 @@ export class TaskComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
+    this.deleteTakInprogress = true;
     const tasksBackup = cloneDeep(this.tasks);
     let undoClicked: boolean = false;
     let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
@@ -374,7 +376,7 @@ export class TaskComponent implements OnInit {
     }
 
     snackBarRef.afterDismissed().subscribe(() => {
-      console.log(undoClicked);
+      this.deleteTakInprogress = false;
       if (undoClicked) {
         return;
       } else {
@@ -566,25 +568,27 @@ export class TaskComponent implements OnInit {
 
   markTaskPermanent(task: Task) {
     task.isPermanent = !task.isPermanent;
-    let undoClicked: boolean = false;
-    let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
-      duration: 3000,
-    });
+    if (!task.isPermanent) {
+      let undoClicked: boolean = false;
+      let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {
+        duration: 3000,
+      });
 
-    snackBarRef.afterDismissed().subscribe(() => {
-      console.log(undoClicked);
-      if (undoClicked) {
-        return;
-      } else {
-        this.taskService.updateTask(task, 'DAILY');
-      }
-    });
+      snackBarRef.afterDismissed().subscribe(() => {
+        if (undoClicked) {
+          return;
+        } else {
+          this.taskService.updateTask(task, 'DAILY');
+        }
+      });
 
-    snackBarRef.onAction().subscribe(() => {
-      console.log('The snackbar action was triggered!');
-      undoClicked = true;
-      task.isPermanent = !task.isPermanent;
-    });
+      snackBarRef.onAction().subscribe(() => {
+        undoClicked = true;
+        task.isPermanent = !task.isPermanent;
+      });
+    } else {
+      this.taskService.updateTask(task, 'DAILY');
+    }
   }
 
   editSubtask(task: Task, subtask: Subtask) {
