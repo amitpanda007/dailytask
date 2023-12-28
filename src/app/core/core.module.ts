@@ -10,8 +10,7 @@ import { TaskService } from './services/task.service';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from '../home/home.component';
 import { CommonService } from './services/common.service';
-import { MODE_STORAGE_SERVICE, ModeLocalStorageService } from './services/mode-storage.service';
-import { ModeToggleService } from './services/mode-toggle.service';
+import { DiaryService } from './services/diary.service';
 
 @NgModule({
   imports: [CommonModule, SharedModule],
