@@ -196,9 +196,12 @@
               </button>
 
               <button
+                [disabled]="deleteTakInprogress"
                 mat-icon-button
                 matTooltip="delete task"
-                [style.color]="selectedTheme"
+                [style.color]="
+                  !deleteTakInprogress ? selectedTheme : disabledTheme
+                "
                 aria-hidden="false"
                 aria-label="close"
                 (click)="deleteTask(task)"
@@ -294,9 +297,12 @@
                 </button>
 
                 <button
+                  [disabled]="deleteTakInprogress"
                   mat-icon-button
                   matTooltip="delete task"
-                  [style.color]="selectedTheme"
+                  [style.color]="
+                    !deleteTakInprogress ? selectedTheme : disabledTheme
+                  "
                   aria-hidden="false"
                   aria-label="close"
                   (click)="deleteTask(task)"
