@@ -45,7 +45,7 @@
 
 .container {
   width: 70%;
-  margin: 0 0 0 1rem;
+  margin: 0 1rem 0 1rem;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -354,6 +354,8 @@
   border: 2px solid;
   margin: 1px !important;
   font-size: 10px;
+  font-weight: 700;
+  padding: 8px;
 }
 
 .separate {
@@ -382,7 +384,11 @@
 
 @media screen and (max-width: 575px) {
   .container {
-    width: 100%;
+    width: auto;
+  }
+
+  .card {
+    width: auto;
   }
 
   .text-input {

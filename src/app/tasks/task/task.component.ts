@@ -110,6 +110,7 @@ export class TaskComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.selectedDate = new Date();
     const theme = localStorage.getItem('themeColor');
     if (theme) {
       this.selectedTheme = theme;
@@ -338,6 +339,16 @@ export class TaskComponent implements OnInit {
   }
 
   checkStaleContent() {
+    // Check if page is not updated from yesterday
+    if (
+      this.selectedDate?.toLocaleDateString('en-US') !=
+      new Date().toLocaleDateString('en-US')
+    ) {
+      this.isDateChanged = true;
+      console.log('Date change detected');
+    }
+
+    // Check if date was modified and page is showing data for older days
     if (
       this.selectedDate == undefined ||
       this.selectedDate.toLocaleDateString('en-US') ==
