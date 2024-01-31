@@ -70,17 +70,29 @@ export class TaskService {
   //     }
   //   );
 
+  addDays(date: Date, days: number) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
   getTasksByDate(date: Date) {
     const startDate = new Date(
       date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
     );
-    const endDate = new Date(
-      date.getFullYear() +
-        '-' +
-        (date.getMonth() + 1) +
-        '-' +
-        (date.getDate() + 1)
-    );
+
+    // const endDate = new Date(
+    //   date.getFullYear() +
+    //     '-' +
+    //     (date.getMonth() + 1) +
+    //     '-' +
+    //     (date.getDate() + 1)
+    // );
+
+    const endDate = this.addDays(date, 1);
+
+    console.log(startDate);
+    console.log(endDate);
 
     const uid = this.authService.getUID();
     this.tasksCollection = this.afs.collection<Task>(
