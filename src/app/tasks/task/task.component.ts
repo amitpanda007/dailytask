@@ -532,27 +532,6 @@ export class TaskComponent implements OnInit {
     task.showSubtaskInput = !task.showSubtaskInput;
   }
 
-  // convertToPermanentTask(task: Task) {
-  //   console.log(task);
-
-  //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-  //     width: '270px',
-  //     height: '210px',
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result: ConfirmationDialogResult) => {
-  //     console.log(result);
-  //     if (!result) {
-  //       return;
-  //     }
-
-  //     // Logic for moving task to long term
-  //     if (result.confirm) {
-  //       this.taskService.moveTaskToLongRun(task);
-  //     }
-  //   });
-  // }
-
   getNextDay(): Date {
     const today = new Date();
     var tomorrow = new Date(today.getTime() + 86400000);
@@ -579,6 +558,8 @@ export class TaskComponent implements OnInit {
 
   markTaskPermanent(task: Task) {
     task.isPermanent = !task.isPermanent;
+    task.created = new Date();
+    task.modified = new Date();
     if (!task.isPermanent) {
       let undoClicked: boolean = false;
       let snackBarRef = this.snackBar.open('undo last action?', 'Undo', {

@@ -26,11 +26,9 @@ export class TaskService {
 
   items!: Observable<Task[]>;
   private tasksSubscription!: Subscription;
-  private permanentTasksSubscription!: Subscription;
   private labelsSubscription!: Subscription;
 
   private allTasks: Task[] = [];
-  private allPermanentTasks: Task[] = [];
   private allLabels: Label[] = [];
 
   public tasksChanged = new Subject<Task[]>();
@@ -50,26 +48,6 @@ export class TaskService {
     });
   }
 
-  // getTasksByDate(date: Date) {
-  //   const startDate = new Date(
-  //     date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-  //   );
-  //   const endDate = new Date(
-  //     date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDate() + 1)
-  //   );
-
-  //   const uid = this.authService.getUID();
-  //   this.tasksCollection = this.afs.collection<Task>(
-  //     `tasks/${uid}/usertask`,
-  //     (ref) => {
-  //       let query = ref
-  //         .where('created', '>=', startDate)
-  //         .where('created', '<', endDate)
-  //         .orderBy('created');
-  //       return query;
-  //     }
-  //   );
-
   addDays(date: Date, days: number) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
@@ -81,19 +59,7 @@ export class TaskService {
       date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
     );
 
-    // const endDate = new Date(
-    //   date.getFullYear() +
-    //     '-' +
-    //     (date.getMonth() + 1) +
-    //     '-' +
-    //     (date.getDate() + 1)
-    // );
-
     const endDate = this.addDays(date, 1);
-
-    console.log(startDate);
-    console.log(endDate);
-
     const uid = this.authService.getUID();
     this.tasksCollection = this.afs.collection<Task>(
       `tasks/${uid}/usertask`,
@@ -117,15 +83,6 @@ export class TaskService {
       }
     );
 
-    // this.tasksCollection = this.afs.collection<Task>(`tasks/${uid}/usertask`);
-
-    // this.tasksSubscription = this.tasksCollection
-    //   .valueChanges({ idField: 'id' })
-    //   .subscribe((tasks) => {
-    //     this.allTasks = tasks;
-    //     this.tasksChanged.next([...this.allTasks]);
-    //   });
-
     this.tasksCollection
       .valueChanges({ idField: 'id' })
       .pipe(
@@ -144,24 +101,6 @@ export class TaskService {
       this.tasksSubscription.unsubscribe();
     }
   }
-
-  // getPermanentTasks() {
-  //   const uid = this.authService.getUID();
-  //   this.permanentTasksCollection = this.afs.collection<Task>(
-  //     `tasks/${uid}/longrunningtask`,
-  //     (ref) => {
-  //       let query = ref.orderBy('created');
-  //       return query;
-  //     }
-  //   );
-
-  //   this.permanentTasksSubscription = this.permanentTasksCollection
-  //     .valueChanges({ idField: 'id' })
-  //     .subscribe((permanentTasks) => {
-  //       this.allPermanentTasks = permanentTasks;
-  //       this.permanentTasksChanged.next([...this.allPermanentTasks]);
-  //     });
-  // }
 
   addTask(task: Task) {
     const uid = this.authService.getUID();
